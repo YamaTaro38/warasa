@@ -1,0 +1,146 @@
+<?php
+// app/Http/Controllers/ProfileController.php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log; // Tambahkan ini
+use App\Models\User;
+
+class ProfileController extends Controller
+{
+    public function edit()
+    {
+        return view('profile.edit');
+    }
+
+    public function update(Request $request)
+    {
+        $user = Auth::user();
+
+        // Validasi name selalu required
+        $rules = [
+            'name' => 'required|string|max:255',
+        ];
+
+        // Hanya validasi email jika email tidak disabled dan ada perubahan
+        // Cek apakah email dikirim dari form (tidak disabled)
+        if ($request->has('email') && $request->email !== null) {
+            $rules['email'] = 'required|email|unique:users,email,' . $user->id;
+        }
+
+        $request->validate($rules);
+
+        // Update name
+        $user->name = $request->name;
+
+        // Update email hanya jika email dikirim dan berbeda
+        if ($request->has('email') && $request->email !== null && $user->email !== $request->email) {
+            $oldEmail = $user->email;
+            $newEmail = $request->email;
+
+            $user->email = $newEmail;
+
+            // Reset verifikasi jika email berubah
+            if ($user->hasVerifiedEmail()) {
+                $user->email_verified_at = null;
+                $user->save();
+
+                // Kirim verifikasi ke email baru
+                $user->sendEmailVerificationNotification();
+
+                return back()->with('warning', 'Email changed! Please verify your new email address. A verification link has been sent to ' . $newEmail);
+            } else {
+                $user->save();
+
+                // Kirim verifikasi ke email baru
+                $user->sendEmailVerificationNotification();
+
+                return back()->with('warning', 'Email changed! A verification link has been sent to ' . $newEmail);
+            }
+        }
+
+        // Jika hanya update name
+        $user->save();
+
+        return back()->with('success', 'Profile updated successfully!');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required|current_password',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        Auth::user()->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return back()->with('success', 'Password updated successfully!');
+    }
+
+    public function destroy(Request $request)
+    {
+        $request->validate([
+            'password' => ['required', 'current_password'],
+        ]);
+
+        $user = $request->user();
+        Auth::logout();
+        $user->delete();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/')->with('success', 'Your account has been deleted successfully.');
+    }
+
+    public function resendVerification(Request $request)
+    {
+        try {
+            $user = $request->user();
+
+            // Log untuk debugging
+            Log::info('Resend verification requested for user: ' . $user->email);
+
+            if ($user->hasVerifiedEmail()) {
+                Log::warning('User already verified: ' . $user->email);
+                if ($request->wantsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Email already verified.'
+                    ], 400);
+                }
+                return back()->with('error', 'Email already verified.');
+            }
+
+            // Kirim ulang verifikasi
+            $user->sendEmailVerificationNotification();
+
+            Log::info('Verification email resent successfully to: ' . $user->email);
+
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Verification link has been sent to ' . $user->email
+                ], 200);
+            }
+
+            return back()->with('success', 'Verification link has been sent to ' . $user->email);
+        } catch (\Exception $e) {
+            Log::error('Error sending verification email: ' . $e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to send verification email. Error: ' . $e->getMessage()
+                ], 500);
+            }
+
+            return back()->with('error', 'Failed to send verification email. Please try again later.');
+        }
+    }
+}
