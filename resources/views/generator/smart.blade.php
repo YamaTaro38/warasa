@@ -1050,7 +1050,7 @@
                             <label class="block text-xs font-medium mb-1">Info Tambahan</label>
                             <textarea id="additionalInfo" rows="2" class="input-solid w-full" placeholder="Instruksi khusus untuk AI..."></textarea>
                         </div>
-                        <div>
+                        <!-- <div>
                             <label class="block text-xs font-medium mb-1">Project</label>
                             <select id="projectId" class="input-solid w-full">
                                 <option value="">Tanpa Project</option>
@@ -1058,7 +1058,7 @@
                                     <option value="{{ $project->id }}">{{ $project->name }}</option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
 
@@ -1109,6 +1109,15 @@
                     <div id="compKeywords" class="flex flex-wrap gap-1"></div>
                 </div>
 
+                @php
+                    $seoScoreVisible = true;
+                    $competitorVisible = true;
+                    try {
+                        $seoScoreVisible = \App\Models\MenuVisibility::where('menu_key', 'seo_score')->first()->is_visible ?? true;
+                        $competitorVisible = \App\Models\MenuVisibility::where('menu_key', 'competitor_analyze')->first()->is_visible ?? true;
+                    } catch (\Exception $e) {}
+                @endphp
+                @if($seoScoreVisible)
                 <!-- SEO Score Panel -->
                 <div class="seo-score-panel" id="seoScorePanel" style="display: none;">
                     <div class="flex justify-between items-start mb-2">
@@ -1134,6 +1143,7 @@
                         <div id="seoRecommendations" class="space-y-1"></div>
                     </div>
                 </div>
+                @endif
 
                 <!-- Preview Section -->
                 <div class="form-section">

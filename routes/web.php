@@ -13,7 +13,13 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\ImageUploadController;
+use App\Http\Controllers\ShopeeFeeCalculatorController;
+use App\Http\Controllers\DocumentationController as PublicDocumentationController;
+use App\Http\Controllers\Admin\DocumentationController;
 use App\Http\Controllers\Admin\ApiKeyController;
+use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\Admin\ShopeeFeeConfigController;
+use App\Http\Controllers\Admin\AdminSettingController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\ProductExportController;
@@ -25,14 +31,6 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
-Route::get('/features', function () {
-    return view('features');
-})->name('features');
-
-Route::get('/pricing', function () {
-    return view('pricing');
-})->name('pricing');
-
 Route::get('/faq', function () {
     return view('faq');
 })->name('faq');
@@ -40,6 +38,14 @@ Route::get('/faq', function () {
 Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
+
+// Redirect /features and /pricing to home (hidden until launch)
+Route::redirect('/features', '/');
+Route::redirect('/pricing', '/');
+
+// ==================== PUBLIC DOCUMENTATION ====================
+Route::get('/docs', [PublicDocumentationController::class, 'index'])->name('docs');
+Route::get('/docs/{slug}', [PublicDocumentationController::class, 'show'])->name('docs.show');
 
 // ==================== CUSTOM AUTH ROUTES ====================
 Route::middleware('guest')->group(function () {
@@ -73,17 +79,19 @@ Route::middleware(['auth'])->group(function () {
 
     
     // ==================== PRODUCT GENERATOR ====================
-    Route::get('/generator', [ProductGeneratorController::class, 'index'])->name('generator');
-    Route::get('/generator/quick', [ProductGeneratorController::class, 'quickGenerate'])->name('generator.quick');
-    Route::get('/generator/smart', [ProductGeneratorController::class, 'smartGenerate'])->name('generator.smart');
-    Route::post('/generator/upload-csv', [ProductGeneratorController::class, 'uploadCsv'])->name('generator.upload-csv');
-    Route::post('/generator/generate-complete', [ProductGeneratorController::class, 'generateComplete'])->name('generator.generate-complete');
-    Route::post('/generator/generate-image', [ProductGeneratorController::class, 'generateImage'])->name('generator.generate-image');
-    Route::post('/generator/save', [ProductGeneratorController::class, 'save'])->name('generator.save');
-    Route::post('/generator/upload-image', [ImageUploadController::class, 'upload'])->name('generator.upload-image');
-    Route::post('/generator/apply-watermark', [ProductGeneratorController::class, 'applyWatermark'])->name('generator.apply-watermark');
-    Route::post('/generator/analyze-competitor', [ProductGeneratorController::class, 'analyzeCompetitor'])->name('generator.analyze-competitor');
-    Route::post('/generator/seo-score', [ProductGeneratorController::class, 'seoScore'])->name('generator.seo-score');
+    Route::middleware('menu.visible')->group(function () {
+        Route::get('/generator', [ProductGeneratorController::class, 'index'])->name('generator');
+        Route::get('/generator/quick', [ProductGeneratorController::class, 'quickGenerate'])->name('generator.quick');
+        Route::get('/generator/smart', [ProductGeneratorController::class, 'smartGenerate'])->name('generator.smart');
+        Route::post('/generator/upload-csv', [ProductGeneratorController::class, 'uploadCsv'])->name('generator.upload-csv');
+        Route::post('/generator/generate-complete', [ProductGeneratorController::class, 'generateComplete'])->name('generator.generate-complete');
+        Route::post('/generator/generate-image', [ProductGeneratorController::class, 'generateImage'])->name('generator.generate-image');
+        Route::post('/generator/save', [ProductGeneratorController::class, 'save'])->name('generator.save');
+        Route::post('/generator/upload-image', [ImageUploadController::class, 'upload'])->name('generator.upload-image');
+        Route::post('/generator/apply-watermark', [ProductGeneratorController::class, 'applyWatermark'])->name('generator.apply-watermark');
+        Route::post('/generator/analyze-competitor', [ProductGeneratorController::class, 'analyzeCompetitor'])->name('generator.analyze-competitor');
+        Route::post('/generator/seo-score', [ProductGeneratorController::class, 'seoScore'])->name('generator.seo-score');
+    });
 
 
     // Projects
@@ -92,6 +100,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/projects/{project}/restore', [ProjectController::class, 'restore'])->name('projects.restore');
     
     // Products
+    Route::middleware('menu.visible')->group(function () {
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::post('/products', [ProductController::class, 'store'])->name('products.store');
@@ -107,20 +116,30 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/products/export-single/{uuid}', [ProductExportController::class, 'exportSingle'])->name('products.export.single');
 
     Route::post('/products/bulk-action', [ProductController::class, 'bulkAction'])->name('products.bulk-action');
-    Route::delete('/products/{product:uuid}', [ProductController::class, 'destroy'])->name('products.destroy');
+    Route::post('/products/{product:uuid}/toggle-status', [ProductController::class, 'toggleStatus'])->name('products.toggle-status');
+    }); // Close products menu.visible group
 
     Route::get('categories/list', [CategoryController::class, 'list'])->name('categories.list');
     
     // Chatbot
+    Route::middleware('menu.visible')->group(function () {
     Route::get('/chatbot', [ChatbotController::class, 'index'])->name('chatbot');
     Route::post('/chatbot/send', [ChatbotController::class, 'send'])->name('chatbot.send');
     Route::get('/chatbot/sessions', [ChatbotController::class, 'sessions'])->name('chatbot.sessions');
     Route::get('/chatbot/session/{session}/load', [ChatbotController::class, 'loadSession'])->name('chatbot.session.load');
     Route::delete('/chatbot/session/{session}', [ChatbotController::class, 'destroySession'])->name('chatbot.session.destroy');
     Route::get('/chatbot/session/{session}/export', [ChatbotController::class, 'exportSession'])->name('chatbot.session.export');
+    }); // Close chatbot menu.visible group
 
+    Route::middleware('menu.visible')->group(function () {
     Route::get('/roas-calculator', [RoasCalculatorController::class, 'index'])->name('roas.calculator');
     Route::post('/roas-calculator/calculate', [RoasCalculatorController::class, 'calculate'])->name('roas.calculate');
+    }); // Close roas menu.visible group
+
+    Route::middleware('menu.visible')->group(function () {
+    Route::get('/shopee-fee-calculator', [ShopeeFeeCalculatorController::class, 'index'])->name('shopee.fee.calculator');
+    Route::post('/shopee-fee-calculator/calculate', [ShopeeFeeCalculatorController::class, 'calculate'])->name('shopee.fee.calculate');
+    }); // Close shopee fee menu.visible group
 
     Route::get('/email/verify', function () {
         return view('auth.verify-email');
@@ -144,13 +163,34 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/users/{user}/suspend', [AdminController::class, 'userSuspend'])->name('users.suspend');
     Route::post('/users/{user}/activate', [AdminController::class, 'userActivate'])->name('users.activate');
     Route::delete('/users/{user}', [AdminController::class, 'userDelete'])->name('users.delete');
-    Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
-    Route::post('/settings', [AdminController::class, 'updateSettings'])->name('settings.update');
 
-    Route::resource('categories', CategoryController::class);
-    Route::post('categories/{category}/toggle-active', [CategoryController::class, 'toggleActive'])->name('categories.toggle-active');
+    Route::resource('categories', CategoryController::class)->parameters([
+        'categories' => 'category:uuid',
+    ]);
+    Route::post('categories/{category:uuid}/toggle-active', [CategoryController::class, 'toggleActive'])->name('categories.toggle-active');
 
     Route::resource('api-keys', ApiKeyController::class);
+    Route::post('api-keys/check-now', [ApiKeyController::class, 'checkNow'])->name('api-keys.check-now');
+
+    // Menu Visibility Management
+    Route::get('/menus', [MenuController::class, 'index'])->name('menus.index');
+    Route::post('/menus/{menu}/toggle', [MenuController::class, 'toggle'])->name('menus.toggle');
+    Route::put('/menus/bulk', [MenuController::class, 'updateBulk'])->name('menus.update-bulk');
+    Route::put('/menus/sort-order', [MenuController::class, 'updateSortOrder'])->name('menus.sort-order');
+
+    // Shopee Fee Configuration
+    Route::get('/shopee-fees', [ShopeeFeeConfigController::class, 'index'])->name('shopee-fees.index');
+    Route::put('/shopee-fees', [ShopeeFeeConfigController::class, 'update'])->name('shopee-fees.update');
+    Route::delete('/shopee-fees/reset', [ShopeeFeeConfigController::class, 'reset'])->name('shopee-fees.reset');
+
+    // Admin Settings
+    Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');
+    Route::put('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
+
+    // Documentation Management
+    Route::resource('documentations', DocumentationController::class);
+    Route::post('documentations/{documentation}/toggle', [DocumentationController::class, 'togglePublished'])->name('documentations.toggle');
+    Route::post('documentations/upload-image', [DocumentationController::class, 'uploadImage'])->name('documentations.upload-image');
 });
 
 Route::get('/image-tools', function () {

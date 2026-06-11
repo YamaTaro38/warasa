@@ -4,19 +4,34 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo; // <-- Tambahkan ini
-use Illuminate\Database\Eloquent\Relations\HasMany;   // <-- Tambahkan ini
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProductCategory extends Model
 {
     protected $fillable = [
-        'name', 'slug', 'shopee_code', 'description', 'spec_template', 'is_active', 'sort_order', 'parent_id'
+        'uuid', 'name', 'slug', 'shopee_code', 'description', 'spec_template', 'is_active', 'sort_order', 'parent_id'
     ];
     
     protected $casts = [
         'spec_template' => 'array',
         'is_active' => 'boolean',
     ];
+
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
+
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class, 'category_id');
+    }
+
+    public function hasProducts(): bool
+    {
+        return $this->products()->count() > 0;
+    }
     
     /**
      * Relasi ke sub-kategori (child categories)
@@ -32,13 +47,5 @@ class ProductCategory extends Model
     public function parent(): BelongsTo
     {
         return $this->belongsTo(ProductCategory::class, 'parent_id');
-    }
-    
-    /**
-     * Relasi ke produk
-     */
-    public function products(): HasMany
-    {
-        return $this->hasMany(Product::class, 'category_id');
     }
 }

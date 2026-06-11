@@ -1,151 +1,199 @@
 @extends('layouts.dashboard')
 
+@section('page-title', 'ROAS Calculator')
+@section('breadcrumb', 'Generator / ROAS Calculator')
+
 @section('content')
 <style>
-    .roas-card {
-        transition: all 0.3s ease;
-    }
-    .roas-card:hover {
-        transform: translateY(-2px);
-    }
-    .result-badge {
-        padding: 8px 16px;
+    .form-section {
+        background: white;
+        border: 1px solid var(--shopee-border, #e2e8f0);
         border-radius: 12px;
-        font-weight: 600;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    .dark .form-section { border-color: #334155; background: #1e293b; }
+    .section-title {
         font-size: 14px;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 16px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eef2f6;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .dark .section-title { color: #f1f5f9; border-color: #334155; }
+    .section-title i { color: #ee4d2d; font-size: 14px; }
+    .input-solid {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 13px;
+        transition: all 0.2s;
+        background: white;
+    }
+    .dark .input-solid { background: #0f172a; border-color: #475569; color: #e2e8f0; }
+    .input-solid:focus {
+        outline: none;
+        border-color: #ee4d2d;
+        box-shadow: 0 0 0 3px rgba(238, 77, 45, 0.1);
+    }
+    label {
+        display: block;
+        font-size: 12px;
+        font-weight: 500;
+        color: #334155;
+        margin-bottom: 6px;
+    }
+    .dark label { color: #cbd5e1; }
+    .btn-primary {
+        background: #ee4d2d;
+        color: white;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+    }
+    .btn-primary:hover { background: #d63e1f; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .roas-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 24px;
+    }
+    @media (max-width: 992px) {
+        .roas-grid { grid-template-columns: 1fr; }
     }
     .recommendation-item {
         padding: 10px 12px;
         border-radius: 8px;
         background: #f9fafb;
         margin-bottom: 8px;
-        font-size: 13px;
+        font-size: 12px;
     }
-    .dark .recommendation-item {
-        background: #1e1e2e;
-    }
-    .profit-card {
-        transition: all 0.2s ease;
-    }
-    .profit-card:hover {
-        transform: translateY(-2px);
-    }
+    .dark .recommendation-item { background: #1e1e2e; }
+    .sticky-top { position: sticky; top: 80px; }
 </style>
 
 <div class="max-w-full">
-    <!-- Header -->
-    <div class="mb-4">
-        <h1 class="text-lg font-semibold text-gray-800 dark:text-white">ROAS & Profitability Calculator - Shopee</h1>
-        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Hitung ROAS, profit bersih, dan ACOS untuk campaign iklan Shopee Anda</p>
-    </div>
-
-    <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+    <div class="roas-grid">
         <!-- Input Section -->
-        <div class="bg-white dark:bg-dark-card rounded-lg p-4 shadow-sm border border-gray-100 dark:border-dark-border">
-            <h2 class="text-sm font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
-                <i class="fas fa-calculator text-warasa-orange text-sm"></i>
+        <div class="form-section">
+            <div class="section-title">
+                <i class="fas fa-calculator"></i>
                 Masukkan Data Campaign
-            </h2>
-            
-            <div class="space-y-4">
-                <!-- Info Produk -->
-                <div class="border-b border-gray-200 dark:border-dark-border pb-3">
-                    <p class="text-xs font-medium text-gray-500 mb-2">Informasi Produk</p>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Nama Produk</label>
-                            <input type="text" id="productName" class="input-warasa w-full text-sm" placeholder="Contoh: Baju Koko Premium">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Nama Campaign</label>
-                            <input type="text" id="campaignName" class="input-warasa w-full text-sm" placeholder="Shopee Ads">
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Biaya & Harga -->
-                <div class="border-b border-gray-200 dark:border-dark-border pb-3">
-                    <p class="text-xs font-medium text-gray-500 mb-2">Harga & Biaya Produk</p>
-                    <div class="space-y-3">
-                        <div>
-                            <label class="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Harga Jual Produk (Rp)</label>
-                            <input type="number" id="sellingPrice" class="input-warasa w-full text-sm" placeholder="0" value="0">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Modal Produk (Rp)</label>
-                            <input type="number" id="productCost" class="input-warasa w-full text-sm" placeholder="0" value="0">
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Biaya Iklan & Promosi -->
-                <div class="border-b border-gray-200 dark:border-dark-border pb-3">
-                    <p class="text-xs font-medium text-gray-500 mb-2">Biaya Iklan & Promosi</p>
-                    <div class="space-y-3">
-                        <div>
-                            <label class="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Biaya Promosi (Ad Spend) - Rp</label>
-                            <input type="number" id="adSpend" class="input-warasa w-full text-sm" placeholder="0" value="0">
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Target ACOS (%)</label>
-                                <input type="number" id="targetAcos" class="input-warasa w-full text-sm" placeholder="30" value="30">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">% Fee Marketplace</label>
-                                <input type="number" id="marketplaceFee" class="input-warasa w-full text-sm" placeholder="10" value="10">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Biaya Lain-lain & Pendapatan -->
-                <div class="border-b border-gray-200 dark:border-dark-border pb-3">
-                    <p class="text-xs font-medium text-gray-500 mb-2">Pendapatan & Biaya Lain</p>
-                    <div class="space-y-3">
-                        <div>
-                            <label class="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Total Pendapatan (Revenue) - Rp</label>
-                            <input type="number" id="revenue" class="input-warasa w-full text-sm" placeholder="0" value="0">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Biaya Lain-lain (Rp)</label>
-                            <input type="number" id="otherCosts" class="input-warasa w-full text-sm" placeholder="0" value="0">
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Periode</label>
-                                <select id="period" class="input-warasa w-full text-sm">
-                                    <option value="hari">Harian</option>
-                                    <option value="minggu">Mingguan</option>
-                                    <option value="bulan">Bulanan</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Estimasi Unit Terjual</label>
-                                <input type="number" id="unitsSold" class="input-warasa w-full text-sm" placeholder="0" value="0">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <button id="calculateBtn" class="btn-primary w-full py-2.5 text-sm font-semibold flex items-center justify-center gap-2">
-                    <i class="fas fa-chart-line"></i> Hitung ROAS & Profitabilitas
-                </button>
             </div>
+            <div class="space-y-4">
+                    <!-- Info Produk -->
+                    <div class="border-b border-gray-200 dark:border-gray-700 pb-3">
+                        <p class="text-xs font-medium text-gray-500 mb-2">Informasi Produk</p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Nama Produk</label>
+                                <input type="text" id="productName" class="input-solid w-full" placeholder="Contoh: Baju Koko Premium">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Nama Campaign</label>
+                                <input type="text" id="campaignName" class="input-solid w-full" placeholder="Shopee Ads">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Biaya & Harga -->
+                    <div class="border-b border-gray-200 dark:border-gray-700 pb-3">
+                        <p class="text-xs font-medium text-gray-500 mb-2">Harga & Biaya Produk</p>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Harga Jual Produk (Rp)</label>
+                                <input type="number" id="sellingPrice" class="input-solid w-full" placeholder="0" value="0">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Modal Produk (Rp)</label>
+                                <input type="number" id="productCost" class="input-solid w-full" placeholder="0" value="0">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Biaya Iklan & Promosi -->
+                    <div class="border-b border-gray-200 dark:border-gray-700 pb-3">
+                        <p class="text-xs font-medium text-gray-500 mb-2">Biaya Iklan & Promosi</p>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Biaya Promosi (Ad Spend) - Rp</label>
+                                <input type="number" id="adSpend" class="input-solid w-full" placeholder="0" value="0">
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Target ACOS (%)</label>
+                                    <input type="number" id="targetAcos" class="input-solid w-full" placeholder="30" value="30">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">% Fee Marketplace</label>
+                                    <input type="number" id="marketplaceFee" class="input-solid w-full" placeholder="10" value="10">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Biaya Lain-lain & Pendapatan -->
+                    <div class="border-b border-gray-200 dark:border-gray-700 pb-3">
+                        <p class="text-xs font-medium text-gray-500 mb-2">Pendapatan & Biaya Lain</p>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Total Pendapatan (Revenue) - Rp</label>
+                                <input type="number" id="revenue" class="input-solid w-full" placeholder="0" value="0">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Biaya Lain-lain (Rp)</label>
+                                <input type="number" id="otherCosts" class="input-solid w-full" placeholder="0" value="0">
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Periode</label>
+                                    <select id="period" class="input-solid w-full">
+                                        <option value="hari">Harian</option>
+                                        <option value="minggu">Mingguan</option>
+                                        <option value="bulan">Bulanan</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Estimasi Unit Terjual</label>
+                                    <input type="number" id="unitsSold" class="input-solid w-full" placeholder="0" value="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button id="calculateBtn" class="btn-primary">
+                        <i class="fas fa-chart-line"></i> Hitung ROAS & Profitabilitas
+                    </button>
+                </div>
         </div>
         
         <!-- Result Section -->
-        <div class="bg-white dark:bg-dark-card rounded-lg p-4 shadow-sm border border-gray-100 dark:border-dark-border">
-            <h2 class="text-sm font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
-                <i class="fas fa-chart-pie text-warasa-orange text-sm"></i>
-                Hasil Perhitungan
-            </h2>
-            
-            <div id="resultContainer" class="space-y-4">
-                <div class="text-center text-gray-500 py-8">
-                    <i class="fas fa-chart-line text-4xl mb-3 opacity-50"></i>
-                    <p class="text-sm">Masukkan data campaign di samping</p>
-                    <p class="text-xs mt-1">Klik "Hitung ROAS & Profitabilitas" untuk melihat hasil</p>
+        <div class="sticky-top">
+            <div class="form-section" style="margin-bottom: 0;">
+                <div class="section-title">
+                    <i class="fas fa-chart-pie"></i>
+                    Hasil Perhitungan
+                </div>
+                <div id="resultContainer">
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fas fa-chart-line text-4xl mb-3 opacity-50"></i>
+                        <p class="text-sm">Masukkan data campaign di samping</p>
+                        <p class="text-xs mt-1">Klik "Hitung ROAS & Profitabilitas" untuk melihat hasil</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -306,22 +354,22 @@ function displayResult(data) {
     const profitColor = getColorClass(data.profitInterpretation.color);
     
     let html = `
-        <div class="bg-gray-50 dark:bg-dark-bg/50 rounded-lg p-4 space-y-4">
+        <div class="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 space-y-4">
             <!-- Summary ROAS & ACOS -->
             <div class="grid grid-cols-2 gap-3">
                 <div class="text-center p-3 rounded-lg ${roasColor}">
-                    <i class="fas ${data.roasInterpretation.icon} text-lg"></i>
-                    <p class="text-[10px] uppercase mt-1">ROAS</p>
-                    <p class="text-xl font-bold">${data.roas.toFixed(2)}x</p>
-                    <p class="text-[10px]">(${data.roasPercent.toFixed(1)}%)</p>
-                    <p class="text-[9px] mt-1">${data.roasInterpretation.grade}</p>
+                    <i class="fas ${data.roasInterpretation.icon} text-base"></i>
+                    <p class="text-xs uppercase mt-1 font-semibold">ROAS</p>
+                    <p class="text-lg font-bold">${data.roas.toFixed(2)}x</p>
+                    <p class="text-xs">(${data.roasPercent.toFixed(1)}%)</p>
+                    <p class="text-xs mt-1">${data.roasInterpretation.grade}</p>
                 </div>
                 <div class="text-center p-3 rounded-lg ${acosColor}">
-                    <i class="fas fa-chart-simple text-lg"></i>
-                    <p class="text-[10px] uppercase mt-1">ACOS</p>
-                    <p class="text-xl font-bold">${data.acos.toFixed(1)}%</p>
-                    <p class="text-[9px]">Target: ${data.targetAcos}%</p>
-                    <p class="text-[9px] ${data.isAcosGood ? 'text-green-600' : 'text-red-600'}">
+                    <i class="fas fa-chart-simple text-base"></i>
+                    <p class="text-xs uppercase mt-1 font-semibold">ACOS</p>
+                    <p class="text-lg font-bold">${data.acos.toFixed(1)}%</p>
+                    <p class="text-xs">Target: ${data.targetAcos}%</p>
+                    <p class="text-xs ${data.isAcosGood ? 'text-green-600' : 'text-red-600'}">
                         ${data.acosDiff > 0 ? '+' : ''}${data.acosDiff.toFixed(1)}%
                     </p>
                 </div>
@@ -329,24 +377,24 @@ function displayResult(data) {
             
             <!-- Profit Summary -->
             <div class="grid grid-cols-2 gap-3">
-                <div class="bg-white dark:bg-dark-card rounded-lg p-3 text-center shadow-sm">
-                    <p class="text-[10px] text-gray-400 uppercase">Pendapatan</p>
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-3 text-center shadow-sm">
+                    <p class="text-xs text-gray-400 uppercase font-medium">Pendapatan</p>
                     <p class="text-sm font-bold text-gray-800 dark:text-white">Rp ${formatNumber(data.finalRevenue)}</p>
-                    <p class="text-[9px] text-gray-500">${data.finalUnitsSold} unit terjual</p>
+                    <p class="text-xs text-gray-500">${data.finalUnitsSold} unit terjual</p>
                 </div>
-                <div class="bg-white dark:bg-dark-card rounded-lg p-3 text-center shadow-sm">
-                    <p class="text-[10px] text-gray-400 uppercase">Biaya Iklan</p>
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-3 text-center shadow-sm">
+                    <p class="text-xs text-gray-400 uppercase font-medium">Biaya Iklan</p>
                     <p class="text-sm font-bold text-gray-800 dark:text-white">Rp ${formatNumber(data.adSpend)}</p>
-                    <p class="text-[9px] text-gray-500">${(data.adSpend / data.finalRevenue * 100).toFixed(1)}% dari revenue</p>
+                    <p class="text-xs text-gray-500">${(data.adSpend / data.finalRevenue * 100).toFixed(1)}% dari revenue</p>
                 </div>
             </div>
             
             <!-- Detail Biaya -->
-            <div class="bg-white dark:bg-dark-card rounded-lg p-3">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-3">
                 <p class="text-xs font-semibold mb-2 flex items-center gap-1">
-                    <i class="fas fa-receipt text-warasa-orange"></i> Rincian Biaya
+                    <i class="fas fa-receipt text-[#ee4d2d]"></i> Rincian Biaya
                 </p>
-                <div class="space-y-1 text-[11px]">
+                <div class="space-y-1 text-xs">
                     <div class="flex justify-between">
                         <span class="text-gray-500">HPP (${data.finalUnitsSold} unit)</span>
                         <span>Rp ${formatNumber(data.totalProductCost)}</span>
@@ -363,7 +411,7 @@ function displayResult(data) {
                         <span class="text-gray-500">Biaya Lain-lain</span>
                         <span>Rp ${formatNumber(data.otherCosts)}</span>
                     </div>
-                    <div class="border-t border-gray-200 dark:border-dark-border pt-1 mt-1">
+                    <div class="border-t border-gray-200 dark:border-gray-700 pt-1 mt-1">
                         <div class="flex justify-between font-semibold">
                             <span>Total Biaya</span>
                             <span>Rp ${formatNumber(data.totalProductCost + data.marketplaceFeeAmount + data.adSpend + data.otherCosts)}</span>
@@ -374,22 +422,22 @@ function displayResult(data) {
             
             <!-- Profit Bersih -->
             <div class="text-center p-3 rounded-lg ${profitColor}">
-                <i class="fas fa-dollar-sign text-lg"></i>
-                <p class="text-[10px] uppercase mt-1">${data.profitInterpretation.status}</p>
-                <p class="text-xl font-bold">${data.grossProfit >= 0 ? '+' : ''}Rp ${formatNumber(Math.abs(data.grossProfit))}</p>
-                <p class="text-[10px]">Margin: ${data.grossProfitMargin.toFixed(1)}%</p>
-                <p class="text-[9px] mt-1">${data.profitInterpretation.message}</p>
+                <i class="fas fa-dollar-sign text-base"></i>
+                <p class="text-xs uppercase mt-1 font-semibold">${data.profitInterpretation.status}</p>
+                <p class="text-lg font-bold">${data.grossProfit >= 0 ? '+' : ''}Rp ${formatNumber(Math.abs(data.grossProfit))}</p>
+                <p class="text-xs">Margin: ${data.grossProfitMargin.toFixed(1)}%</p>
+                <p class="text-xs mt-1">${data.profitInterpretation.message}</p>
             </div>
             
             <!-- Rekomendasi -->
             <div>
                 <p class="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1">
-                    <i class="fas fa-lightbulb text-warasa-orange"></i> Rekomendasi
+                    <i class="fas fa-lightbulb text-[#ee4d2d]"></i> Rekomendasi
                 </p>
                 <div class="space-y-2">
                     ${generateRecommendations(data).map(rec => `
                         <div class="recommendation-item">
-                            <i class="fas fa-check-circle text-warasa-orange text-xs mr-2"></i>
+                            <i class="fas fa-check-circle text-[#ee4d2d] text-xs mr-2"></i>
                             <span class="text-xs">${rec}</span>
                         </div>
                     `).join('')}
@@ -397,7 +445,7 @@ function displayResult(data) {
             </div>
             
             <!-- Note -->
-            <div class="text-[10px] text-gray-400 text-center border-t border-gray-200 dark:border-dark-border pt-3">
+            <div class="text-xs text-gray-400 text-center border-t border-gray-200 dark:border-gray-700 pt-3">
                 <i class="fas fa-chart-simple mr-1"></i> Hitung secara rutin untuk memantau performa campaign Anda.
             </div>
         </div>
@@ -436,14 +484,6 @@ function generateRecommendations(data) {
     
     // Batasi 5 rekomendasi
     return recs.slice(0, 5);
-}
-
-function showToast(message, type) {
-    const toast = document.createElement('div');
-    toast.className = `fixed bottom-4 right-4 px-3 py-2 rounded-lg text-white z-50 text-xs ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
 }
 </script>
 @endsection

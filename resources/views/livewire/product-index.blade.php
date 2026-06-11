@@ -159,67 +159,66 @@
                 <tbody class="divide-y divide-gray-100">
                     @forelse($products as $product)
                     <tr class="hover:bg-gray-50 transition" wire:key="{{ $product->uuid }}">
-                        <td class="px-4 py-3">
-                            <input type="checkbox" value="{{ $product->uuid }}" wire:model="selectedProducts" class="rounded border-gray-300 w-4 h-4">
-                        </td>
-                        <td class="px-4 py-3">
-                            <div class="flex items-center gap-3">
-                                @php $firstImage = optional($product->images)->first(); @endphp
-                                @if($firstImage && $firstImage->path)
-                                <img src="{{ asset($firstImage->path) }}" class="w-10 h-10 rounded-lg object-cover border border-gray-200" onerror="this.src='https://placehold.co/40x40/e5e7eb/9ca3af?text=?'">
-                                @else
-                                <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                                    <i class="fas fa-box text-gray-400"></i>
+                        <a href="{{ route('products.show', $product->uuid) }}" class="absolute inset-0 z-10">
+                            <td class="px-4 py-3">
+                                <input type="checkbox" value="{{ $product->uuid }}" wire:model="selectedProducts" class="rounded border-gray-300 w-4 h-4">
+                            </td>
+                            <td class="px-4 py-3">
+                                <div class="flex items-center gap-3">
+                                    @php $firstImage = optional($product->images)->first(); @endphp
+                                    @if($firstImage && $firstImage->path)
+                                    <img src="{{ asset($firstImage->path) }}" class="w-10 h-10 rounded-lg object-cover border border-gray-200" onerror="this.src='https://placehold.co/40x40/e5e7eb/9ca3af?text=?'">
+                                    @else
+                                    <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-box text-gray-400"></i>
+                                    </div>
+                                    @endif
+                                    <div>
+                                        <div class="font-medium text-gray-800">{{ $product->name }}</div>
+                                        <div class="text-xs text-gray-400">{{ \illuminate\support\Str::limit($product->ai_generated_title ?? $product->name, 40) }}</div>
+                                    </div>
                                 </div>
+                            </td>
+                            <td class="px-4 py-3 text-gray-600">
+                                {{ $product->category->name ?? '—' }}
+                                @if($product->category && $product->category->shopee_code)
+                                <div class="text-xs text-orange-500">{{ $product->category->shopee_code }}</div>
                                 @endif
-                                <div>
-                                    <div class="font-medium text-gray-800">{{ $product->name }}</div>
-                                    <div class="text-xs text-gray-400">{{ \illuminate\support\Str::limit($product->ai_generated_title ?? $product->name, 40) }}</div>
+                            </td>
+                            <td class="px-4 py-3 font-medium text-gray-800">
+                                Rp {{ number_format($product->price, 0, ',', '.') }}
+                            </td>
+                            <td class="px-4 py-3 text-gray-600">
+                                {{ number_format($product->stock) }}
+                            </td>
+                            <td class="px-4 py-3">
+                                @if($product->status === 'published')
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    <i class="fas fa-check-circle mr-1 text-xs"></i> Published
+                                </span>
+                                @else
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    <i class="fas fa-pen mr-1 text-xs"></i> Draft
+                                </span>
+                                @endif
+                            </td>
+                            <td class="px-4 py-3 text-gray-500 whitespace-nowrap">
+                                {{ $product->created_at->format('d/m/Y') }}
+                            </td>
+                            <td class="px-4 py-3 text-center">
+                                <div class="flex items-center justify-center gap-1">
+                                    <a href="{{ route('products.edit', $product->uuid) }}" class="p-1.5 text-gray-500 hover:text-orange-500 rounded hover:bg-gray-100" title="Edit">
+                                        <i class="fas fa-edit text-sm"></i>
+                                    </a>
+                                    <button type="button" wire:click="exportSingle('{{ $product->uuid }}')" class="p-1.5 text-gray-500 hover:text-green-600 rounded hover:bg-gray-100" title="Export Shopee">
+                                        <i class="fas fa-file-excel text-sm"></i>
+                                    </button>
+                                    <button type="button" wire:click="confirmDelete('{{ $product->uuid }}')" class="p-1.5 text-gray-500 hover:text-red-600 rounded hover:bg-gray-100" title="Hapus">
+                                        <i class="fas fa-trash-alt text-sm"></i>
+                                    </button>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="px-4 py-3 text-gray-600">
-                            {{ $product->category->name ?? '—' }}
-                            @if($product->category && $product->category->shopee_code)
-                            <div class="text-xs text-orange-500">{{ $product->category->shopee_code }}</div>
-                            @endif
-                        </td>
-                        <td class="px-4 py-3 font-medium text-gray-800">
-                            Rp {{ number_format($product->price, 0, ',', '.') }}
-                        </td>
-                        <td class="px-4 py-3 text-gray-600">
-                            {{ number_format($product->stock) }}
-                        </td>
-                        <td class="px-4 py-3">
-                            @if($product->status === 'published')
-                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                <i class="fas fa-check-circle mr-1 text-xs"></i> Published
-                            </span>
-                            @else
-                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                <i class="fas fa-pen mr-1 text-xs"></i> Draft
-                            </span>
-                            @endif
-                        </td>
-                        <td class="px-4 py-3 text-gray-500 whitespace-nowrap">
-                            {{ $product->created_at->format('d/m/Y') }}
-                        </td>
-                        <td class="px-4 py-3 text-center">
-                            <div class="flex items-center justify-center gap-1">
-                                <a href="{{ route('products.show', $product->uuid) }}" class="p-1.5 text-gray-500 hover:text-orange-500 rounded hover:bg-gray-100" title="Lihat">
-                                    <i class="fas fa-eye text-sm"></i>
-                                </a>
-                                <a href="{{ route('products.edit', $product->uuid) }}" class="p-1.5 text-gray-500 hover:text-orange-500 rounded hover:bg-gray-100" title="Edit">
-                                    <i class="fas fa-edit text-sm"></i>
-                                </a>
-                                <button type="button" wire:click="exportSingle('{{ $product->uuid }}')" class="p-1.5 text-gray-500 hover:text-green-600 rounded hover:bg-gray-100" title="Export Shopee">
-                                    <i class="fas fa-file-excel text-sm"></i>
-                                </button>
-                                <button type="button" wire:click="confirmDelete('{{ $product->uuid }}')" class="p-1.5 text-gray-500 hover:text-red-600 rounded hover:bg-gray-100" title="Hapus">
-                                    <i class="fas fa-trash-alt text-sm"></i>
-                                </button>
-                            </div>
-                        </td>
+                            </td>
+                        </a>
                     </tr>
                     @empty
                     <tr>

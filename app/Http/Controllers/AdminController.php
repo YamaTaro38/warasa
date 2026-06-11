@@ -11,16 +11,6 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware(function ($request, $next) {
-            if (!auth()->user() || !auth()->user()->isAdmin()) {
-                abort(403, 'Unauthorized access.');
-            }
-            return $next($request);
-        });
-    }
-
     public function dashboard()
     {
         $totalUsers = User::count();

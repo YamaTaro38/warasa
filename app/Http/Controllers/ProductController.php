@@ -45,7 +45,9 @@ class ProductController extends Controller
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
-        $products = $query->with('category:id,name')->orderBy('id', 'desc')->paginate(15);
+        $products = $query->with(['category:id,name', 'images' => function($q) {
+            $q->orderBy('is_primary', 'desc')->orderBy('sort_order');
+        }])->orderBy('id', 'desc')->paginate(15);
 
         $projects = Project::where('user_id', Auth::id())
             ->where('is_archived', false)
@@ -319,17 +321,35 @@ class ProductController extends Controller
     /**
      * Remove the specified product.
      */
+    /**
+     * Toggle product status between draft and published.
+     */
+    public function toggleStatus(Product $product)
+    {
+        if ($product->user_id !== Auth::id()) {
+            return redirect()->route('products.index')->with('error', 'Unauthorized');
+        }
+
+        $product->update([
+            'status' => $product->status === 'published' ? 'draft' : 'published',
+        ]);
+
+        $newStatus = $product->status === 'published' ? 'Published' : 'Draft';
+        return back()->with('success', "Status produk berhasil diubah ke {$newStatus}.");
+    }
+
     public function destroy(Product $product)
     {
         // Cek kepemilikan
         if ($product->user_id !== Auth::id()) {
-            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
+            return redirect()->route('products.index')
+                ->with('error', 'Unauthorized');
         }
 
         try {
             // Hapus gambar dari storage
             $images = ProductImage::where('product_id', $product->id)->get();
-            
+
             foreach ($images as $image) {
                 $path = str_replace('/storage/', '', $image->path);
                 $fullPath = storage_path('app/public/' . $path);
@@ -342,16 +362,11 @@ class ProductController extends Controller
             // Hapus produk
             $product->delete();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Product deleted successfully'
-            ]);
-            
+            return redirect()->route('products.index')
+                ->with('success', 'Product deleted successfully');
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 500);
+            return redirect()->route('products.index')
+                ->with('error', $e->getMessage());
         }
     }
 
@@ -405,10 +420,6 @@ class ProductController extends Controller
     {
         $productIds = $request->input('product_ids', []);
 
-        if (is_string($productIds)) {
-            $productIds = json_decode($productIds, true);
-        }
-
         if (empty($productIds)) {
             return back()->with('error', 'No products selected for export.');
         }
@@ -457,7 +468,7 @@ class ProductController extends Controller
     }
 
     public function exportSelected()
-{
-    return $this->exportToShopee();
-}
+    {
+        return $this->exportToShopee();
+    }
 }

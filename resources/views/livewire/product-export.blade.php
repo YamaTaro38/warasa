@@ -31,12 +31,6 @@
     </style>
 
     <div class="export-container">
-        <!-- Header -->
-        <div class="mb-6">
-            <h1 class="text-xl font-bold text-gray-800">Export Produk ke Shopee</h1>
-            <p class="text-sm text-gray-500 mt-1">Pilih produk yang akan di-export ke format Excel Shopee (.xlsx)</p>
-        </div>
-
         <!-- Stats -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div class="stat-card">

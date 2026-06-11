@@ -247,71 +247,71 @@
 
     <!-- Profile Information Card -->
     <div class="settings-card">
-    <div class="settings-card-header">
-        <i class="fas fa-user-circle"></i>
-        <div>
-            <h2>Profile Information</h2>
-            <p>Update your account profile information</p>
-        </div>
-    </div>
-    <div class="settings-card-body">
-        <form method="POST" action="{{ route('profile.update') }}">
-            @csrf
-            @method('PATCH')
-            
-            <div class="form-group">
-                <label>Full Name <span class="required">*</span></label>
-                <input type="text" name="name" value="{{ old('name', auth()->user()->name) }}" 
-                    class="form-control @error('name') is-invalid @enderror" required>
-                @error('name')
-                    <div class="form-text" style="color: #ef4444;">{{ $message }}</div>
-                @enderror
+        <div class="settings-card-header">
+            <i class="fas fa-user-circle"></i>
+            <div>
+                <h2>Profile Information</h2>
+                <p>Update your account profile information</p>
             </div>
-            
-            <div class="form-group">
-                <label>Email Address <span class="required">*</span></label>
-                <input type="email" name="email" value="{{ old('email', auth()->user()->email) }}" 
-                    class="form-control @error('email') is-invalid @enderror" 
-                    {{ auth()->user()->hasVerifiedEmail() ? 'disabled' : '' }}>
-                @error('email')
+        </div>
+        <div class="settings-card-body">
+            <form method="POST" action="{{ route('profile.update') }}">
+                @csrf
+                @method('PATCH')
+
+                <div class="form-group">
+                    <label>Full Name <span class="required">*</span></label>
+                    <input type="text" name="name" value="{{ old('name', auth()->user()->name) }}"
+                        class="form-control @error('name') is-invalid @enderror" required>
+                    @error('name')
                     <div class="form-text" style="color: #ef4444;">{{ $message }}</div>
-                @enderror
-                
-                @if(auth()->user()->hasVerifiedEmail())
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address <span class="required">*</span></label>
+                    <input type="email" name="email" value="{{ old('email', auth()->user()->email) }}"
+                        class="form-control @error('email') is-invalid @enderror"
+                        {{ auth()->user()->hasVerifiedEmail() ? 'disabled' : '' }}>
+                    @error('email')
+                    <div class="form-text" style="color: #ef4444;">{{ $message }}</div>
+                    @enderror
+
+                    @if(auth()->user()->hasVerifiedEmail())
                     <div class="form-text" style="color: #f59e0b; margin-top: 8px;">
-                        <i class="fas fa-info-circle"></i> 
+                        <i class="fas fa-info-circle"></i>
                         Email sudah terverifikasi. Untuk mengubah email, silahkan hubungi admin.
                     </div>
-                @else
+                    @else
                     <div class="form-text">
-                        <i class="fas fa-info-circle"></i> 
+                        <i class="fas fa-info-circle"></i>
                         Email belum diverifikasi. Anda dapat mengubah email kapan saja.
                     </div>
-                @endif
-            </div>
-            
-            @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! auth()->user()->hasVerifiedEmail())
-            <div class="info-box">
-                <i class="fas fa-envelope"></i>
-                <div class="info-box-content">
-                    <div class="info-box-title">Email Unverified</div>
-                    <div class="info-box-text">Please verify your email address to access all features</div>
+                    @endif
                 </div>
-                <button type="button" id="resendVerificationBtn" class="btn-outline" style="padding: 6px 12px; font-size: 11px;">
-                    Resend Verification
+
+                @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! auth()->user()->hasVerifiedEmail())
+                <div class="info-box">
+                    <i class="fas fa-envelope"></i>
+                    <div class="info-box-content">
+                        <div class="info-box-title">Email Unverified</div>
+                        <div class="info-box-text">Please verify your email address to access all features</div>
+                    </div>
+                    <button type="button" id="resendVerificationBtn" class="btn-outline" style="padding: 6px 12px; font-size: 11px;">
+                        Resend Verification
+                    </button>
+                </div>
+                @endif
+
+                <div class="divider"></div>
+
+                <!-- Tombol Save tetap aktif, tidak di-disable -->
+                <button type="submit" class="btn-save">
+                    <i class="fas fa-save"></i> Save Changes
                 </button>
-            </div>
-            @endif
-            
-            <div class="divider"></div>
-            
-            <!-- Tombol Save tetap aktif, tidak di-disable -->
-            <button type="submit" class="btn-save">
-                <i class="fas fa-save"></i> Save Changes
-            </button>
-        </form>
+            </form>
+        </div>
     </div>
-</div>
 
     <!-- Change Password Card -->
     <div class="settings-card">

@@ -2,200 +2,59 @@
 
 namespace App\Services;
 
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use Illuminate\Support\Facades\Log;
 
 class ExportService
 {
+    /**
+     * Export products to Shopee Mass Upload Excel format.
+     * 
+     * Strategy: Copy the original Shopee template file and fill in product data
+     * into the "Template" and "Contoh Upload" sheets starting from row 7.
+     * Each variation option gets its own row.
+     */
     public function exportToShopeeExcel($products)
     {
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setTitle('Shopee Mass Upload');
+        $templatePath = base_path('Shopee_mass_upload_2026-06-12_basic_template.xlsx');
         
-        // Headers sesuai template Shopee
-        $headers = [
-            'A' => 'Kategori',
-            'B' => 'Nama Produk',
-            'C' => 'Deskripsi Produk',
-            'D' => 'SKU Induk',
-            'E' => 'Kode Integrasi Variasi',
-            'F' => 'Nama Variasi 1',
-            'G' => 'Varian untuk Variasi 1',
-            'H' => 'Foto Produk per Varian',
-            'I' => 'Nama Variasi 2',
-            'J' => 'Varian untuk Variasi 2',
-            'K' => 'Harga',
-            'L' => 'Stok',
-            'M' => 'Kode Variasi',
-            'N' => 'HS Code',
-            'O' => 'Tax Code',
-            'P' => 'Foto Sampul',
-            'Q' => 'Foto Produk 1',
-            'R' => 'Foto Produk 2',
-            'S' => 'Foto Produk 3',
-            'T' => 'Foto Produk 4',
-            'U' => 'Foto Produk 5',
-            'V' => 'Foto Produk 6',
-            'W' => 'Foto Produk 7',
-            'X' => 'Foto Produk 8',
-            'Y' => 'Berat',
-            'Z' => 'Panjang',
-            'AA' => 'Lebar',
-            'AB' => 'Tinggi',
-            'AC' => 'Jasa Kirim 1',
-            'AD' => 'Jasa Kirim 2',
-            'AE' => 'Jasa Kirim 3',
-            'AF' => 'Jangka Dikirim Dalam',
-            'AG' => 'Dikirim Dalam Pre-order',
-            'AH' => 'Merek',
-        ];
-        
-        // Define header rows metadata (Row 1: Title, Row 2: Mandatory status, Row 3: Description, Row 4: Constraint)
-        $headersMetadata = [
-            'A' => ['Kategori', 'Wajib', 'Kategori yang tepat membantu pembeli menemukan produk Anda dengan mudah.', 'Karakter (Min 1, Maks 19, Angka saja)'],
-            'B' => ['Nama Produk', 'Wajib', 'Tulis nama produk yang lengkap, jelas, dan informatif.', 'Karakter (Min 10, Maks 120)'],
-            'C' => ['Deskripsi Produk', 'Wajib', 'Berikan informasi detail mengenai produk Anda.', 'Karakter (Min 20, Maks 3000)'],
-            'D' => ['SKU Induk', 'Pilihan', 'Kode unik untuk mengelompokkan produk utama.', 'Karakter (Min 0, Maks 40)'],
-            'E' => ['Kode Integrasi Variasi', 'Pilihan', 'Kode integrasi variasi untuk produk.', 'Karakter (Min 0, Maks 40)'],
-            'F' => ['Nama Variasi 1', 'Pilihan', 'Nama variasi pertama (misal: Ukuran, Warna).', 'Karakter (Min 0, Maks 14)'],
-            'G' => ['Varian untuk Variasi 1', 'Pilihan', 'Pilihan nilai variasi pertama (misal: S, M, L / Merah, Biru).', 'Karakter (Min 0, Maks 20)'],
-            'H' => ['Foto Produk per Varian', 'Pilihan', 'Tautan URL foto untuk setiap pilihan variasi pertama.', 'Tautan Gambar (Maks 1)'],
-            'I' => ['Nama Variasi 2', 'Pilihan', 'Nama variasi kedua (misal: Warna).', 'Karakter (Min 0, Maks 14)'],
-            'J' => ['Varian untuk Variasi 2', 'Pilihan', 'Pilihan nilai variasi kedua (misal: Merah, Biru).', 'Karakter (Min 0, Maks 20)'],
-            'K' => ['Harga', 'Wajib', 'Harga jual produk dalam Rupiah.', 'Angka saja'],
-            'L' => ['Stok', 'Wajib', 'Jumlah stok produk yang tersedia.', 'Angka saja'],
-            'M' => ['Kode Variasi', 'Pilihan', 'SKU khusus untuk variasi tertentu.', 'Karakter (Min 0, Maks 40)'],
-            'N' => ['HS Code', 'Pilihan', 'Harmonized System Code untuk perdagangan internasional.', 'Karakter (Min 0, Maks 10)'],
-            'O' => ['Tax Code', 'Pilihan', 'Kode pajak produk.', 'Karakter (Min 0, Maks 10)'],
-            'P' => ['Foto Sampul', 'Wajib', 'Foto utama produk (URL publik).', 'Tautan Gambar (Wajib 1)'],
-            'Q' => ['Foto Produk 1', 'Pilihan', 'Foto tambahan produk ke-1.', 'Tautan Gambar (Pilihan)'],
-            'R' => ['Foto Produk 2', 'Pilihan', 'Foto tambahan produk ke-2.', 'Tautan Gambar (Pilihan)'],
-            'S' => ['Foto Produk 3', 'Pilihan', 'Foto tambahan produk ke-3.', 'Tautan Gambar (Pilihan)'],
-            'T' => ['Foto Produk 4', 'Pilihan', 'Foto tambahan produk ke-4.', 'Tautan Gambar (Pilihan)'],
-            'U' => ['Foto Produk 5', 'Pilihan', 'Foto tambahan produk ke-5.', 'Tautan Gambar (Pilihan)'],
-            'V' => ['Foto Produk 6', 'Pilihan', 'Foto tambahan produk ke-6.', 'Tautan Gambar (Pilihan)'],
-            'W' => ['Foto Produk 7', 'Pilihan', 'Foto tambahan produk ke-7.', 'Tautan Gambar (Pilihan)'],
-            'X' => ['Foto Produk 8', 'Pilihan', 'Foto tambahan produk ke-8.', 'Tautan Gambar (Pilihan)'],
-            'Y' => ['Berat', 'Wajib', 'Berat produk dalam kilogram.', 'Desimal (maksimal 2 desimal)'],
-            'Z' => ['Panjang', 'Pilihan', 'Panjang paket dalam sentimeter.', 'Desimal (maksimal 2 desimal)'],
-            'AA' => ['Lebar', 'Pilihan', 'Lebar paket dalam sentimeter.', 'Desimal (maksimal 2 desimal)'],
-            'AB' => ['Tinggi', 'Pilihan', 'Tinggi paket dalam sentimeter.', 'Desimal (maksimal 2 desimal)'],
-            'AC' => ['Jasa Kirim 1', 'Pilihan', 'Pengaturan jasa kirim ke-1 (Aktif/Nonaktif).', 'Pilihan'],
-            'AD' => ['Jasa Kirim 2', 'Pilihan', 'Pengaturan jasa kirim ke-2 (Aktif/Nonaktif).', 'Pilihan'],
-            'AE' => ['Jasa Kirim 3', 'Pilihan', 'Pengaturan jasa kirim ke-3 (Aktif/Nonaktif).', 'Pilihan'],
-            'AF' => ['Jangka Dikirim Dalam', 'Pilihan', 'Lama waktu pengemasan.', 'Angka saja'],
-            'AG' => ['Dikirim Dalam Pre-order', 'Pilihan', 'Status Pre-order (Aktif/Nonaktif).', 'Pilihan'],
-            'AH' => ['Merek', 'Wajib', 'Merek produk. Isi \'Tidak Ada Merek\' jika tidak ada merek.', 'Pilihan'],
-        ];
-
-        // Apply headers metadata
-        foreach ($headersMetadata as $col => $metadata) {
-            $sheet->setCellValue($col . '1', $metadata[0]);
-            $sheet->setCellValue($col . '2', $metadata[1]);
-            $sheet->setCellValue($col . '3', $metadata[2]);
-            $sheet->setCellValue($col . '4', $metadata[3]);
-
-            // Style Row 1: Header names
-            $sheet->getStyle($col . '1')->applyFromArray([
-                'font' => ['bold' => true, 'size' => 11, 'color' => ['rgb' => 'FFFFFF']],
-                'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '1F4E78']], // Dark Blue
-                'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'vertical' => Alignment::VERTICAL_CENTER]
-            ]);
-
-            // Style Row 2: Requirement status (Wajib/Pilihan)
-            $isWajib = ($metadata[1] === 'Wajib');
-            $sheet->getStyle($col . '2')->applyFromArray([
-                'font' => [
-                    'bold' => $isWajib, 
-                    'size' => 10, 
-                    'color' => ['rgb' => $isWajib ? 'C00000' : '595959'] // Red for Wajib, Grey for Pilihan
-                ],
-                'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'vertical' => Alignment::VERTICAL_CENTER],
-                'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'FFFFFF']]
-            ]);
-
-            // Style Row 3: Column Description
-            $sheet->getStyle($col . '3')->applyFromArray([
-                'font' => ['size' => 9, 'color' => ['rgb' => '595959']],
-                'alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT, 'vertical' => Alignment::VERTICAL_CENTER, 'wrapText' => true],
-                'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'F2F2F2']] // Light Grey
-            ]);
-
-            // Style Row 4: Formatting constraints
-            $sheet->getStyle($col . '4')->applyFromArray([
-                'font' => ['size' => 9, 'italic' => true, 'color' => ['rgb' => '7F7F7F']],
-                'alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT, 'vertical' => Alignment::VERTICAL_CENTER, 'wrapText' => true],
-                'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'F2F2F2']] // Light Grey
-            ]);
+        if (!file_exists($templatePath)) {
+            throw new \RuntimeException('Shopee template file not found: ' . $templatePath);
         }
-
-        // Set row heights for visual balance
-        $sheet->getRowDimension(1)->setRowHeight(28);
-        $sheet->getRowDimension(2)->setRowHeight(20);
-        $sheet->getRowDimension(3)->setRowHeight(35);
-        $sheet->getRowDimension(4)->setRowHeight(25);
         
-        $row = 5;
-        foreach ($products as $product) {
-            $images = $product->images()->orderBy('sort_order')->get();
-            $categoryCode = optional($product->category)->shopee_code ?? '';
+        $spreadsheet = IOFactory::load($templatePath);
+        
+        // Write data to both "Template" and "Contoh Upload" sheets
+        foreach (['Template', 'Contoh Upload'] as $sheetName) {
+            $sheet = $spreadsheet->getSheetByName($sheetName);
+            if (!$sheet) {
+                continue;
+            }
             
-            // Parse dimension
-            $dimension = ['length' => '', 'width' => '', 'height' => ''];
-            if ($product->dimension) {
-                $parts = explode('x', $product->dimension);
-                if (count($parts) === 3) {
-                    $dimension['length'] = floatval($parts[0]);
-                    $dimension['width'] = floatval($parts[1]);
-                    $dimension['height'] = floatval($parts[2]);
+            // Clear existing data rows (keep rows 1-6 which are metadata)
+            if ($sheetName === 'Contoh Upload') {
+                $highestRow = $sheet->getHighestRow();
+                $highestColIndex = Coordinate::columnIndexFromString($sheet->getHighestColumn());
+                for ($r = 7; $r <= $highestRow; $r++) {
+                    for ($ci = 1; $ci <= $highestColIndex; $ci++) {
+                        $sheet->setCellValue(Coordinate::stringFromColumnIndex($ci) . $r, null);
+                    }
                 }
             }
             
-            // Shipping options
-            $shippingOptions = $product->shipping_options ?? ['jne', 'jnt', 'sicepat'];
-            if (is_string($shippingOptions)) {
-                $shippingOptions = json_decode($shippingOptions, true) ?: ['jne', 'jnt', 'sicepat'];
+            $row = 7;
+            foreach ($products as $product) {
+                $rows = $this->expandProductToRows($product);
+                foreach ($rows as $rowData) {
+                    $this->writeRow($sheet, $row, $rowData);
+                    $row++;
+                }
             }
-            
-            // Main product row
-            $sheet->setCellValue("A{$row}", $categoryCode);
-            $sheet->setCellValue("B{$row}", $product->ai_generated_title ?: $product->name);
-            $sheet->setCellValue("C{$row}", strip_tags($product->description ?? ''));
-            $sheet->setCellValue("D{$row}", $product->sku ?: 'SKU-' . $product->id);
-            $sheet->setCellValue("K{$row}", $product->price);
-            $sheet->setCellValue("L{$row}", $product->stock ?: 100);
-            $sheet->setCellValue("M{$row}", 'VAR-' . $product->id . '-001');
-            $sheet->setCellValue("P{$row}", $images[0]->path ?? '');
-            $sheet->setCellValue("Q{$row}", $images[1]->path ?? '');
-            $sheet->setCellValue("R{$row}", $images[2]->path ?? '');
-            $sheet->setCellValue("S{$row}", $images[3]->path ?? '');
-            $sheet->setCellValue("T{$row}", $images[4]->path ?? '');
-            $sheet->setCellValue("U{$row}", $images[5]->path ?? '');
-            $sheet->setCellValue("V{$row}", $images[6]->path ?? '');
-            $sheet->setCellValue("W{$row}", $images[7]->path ?? '');
-            $sheet->setCellValue("X{$row}", $images[8]->path ?? '');
-            $sheet->setCellValue("Y{$row}", ($product->weight ?? 250) / 1000);
-            $sheet->setCellValue("Z{$row}", $dimension['length']);
-            $sheet->setCellValue("AA{$row}", $dimension['width']);
-            $sheet->setCellValue("AB{$row}", $dimension['height']);
-            $sheet->setCellValue("AC{$row}", in_array('jne', $shippingOptions) ? 'Aktif' : '');
-            $sheet->setCellValue("AD{$row}", in_array('jnt', $shippingOptions) ? 'Aktif' : '');
-            $sheet->setCellValue("AE{$row}", in_array('sicepat', $shippingOptions) ? 'Aktif' : '');
-            $sheet->setCellValue("AH{$row}", $product->brand ?? 'Tidak Ada Merek');
-            
-            $row++;
         }
         
-        // Auto-size columns
-        foreach (range('A', 'AH') as $column) {
-            $sheet->getColumnDimension($column)->setAutoSize(true);
-        }
-        
-        // Save file
+        // Save to temporary file
         $filename = 'exports/shopee_export_' . date('Ymd_His') . '.xlsx';
         $fullPath = storage_path('app/public/' . $filename);
         
@@ -206,6 +65,304 @@ class ExportService
         $writer = new Xlsx($spreadsheet);
         $writer->save($fullPath);
         
-        return $filename;
+        return $fullPath;
+    }
+    
+    /**
+     * Expand a product into one or more rows based on its variations.
+     * 
+     * - No variations: 1 row
+     * - 1 variation level: N rows (one per option)
+     * - 2 variation levels: N*M rows (one per combination)
+     */
+    protected function expandProductToRows($product)
+    {
+        $images = $product->images()->orderBy('sort_order')->get();
+        $categoryCode = optional($product->category)->shopee_code ?? '';
+        
+        // Parse dimension
+        $dimension = ['length' => '', 'width' => '', 'height' => ''];
+        if ($product->dimension) {
+            $parts = preg_split('/\s*x\s*/i', $product->dimension);
+            if (count($parts) === 3) {
+                $dimension['length'] = floatval(trim($parts[0]));
+                $dimension['width'] = floatval(trim($parts[1]));
+                $dimension['height'] = floatval(trim($parts[2]));
+            }
+        }
+        
+        // Shipping options
+        $shippingOptions = $product->shipping_options ?? ['jne', 'jnt', 'sicepat'];
+        if (is_string($shippingOptions)) {
+            $shippingOptions = json_decode($shippingOptions, true) ?: ['jne', 'jnt', 'sicepat'];
+        }
+        
+        // Weight in kg
+        $weightKg = round(($product->weight ?? 250) / 1000, 2);
+        
+        // Product name
+        $productName = $product->ai_generated_title ?: $product->name;
+        
+        // Description
+        $description = strip_tags($product->description ?? '');
+        
+        // SKU parent
+        $skuParent = $product->sku ?: 'SKU-' . $product->id;
+        
+        // Cover image URL
+        $coverImage = $images->first();
+        $coverImageUrl = ($coverImage && $coverImage->path) ? $this->getFullImageUrl($coverImage->path) : '';
+        
+        // Additional image URLs (Foto Produk 1-8)
+        $additionalImages = [];
+        for ($i = 1; $i <= 8; $i++) {
+            $img = $images[$i] ?? null;
+            $additionalImages[] = ($img && $img->path) ? $this->getFullImageUrl($img->path) : '';
+        }
+        
+        // Parse variations
+        $variations = $product->variations ?? [];
+        if (is_string($variations)) {
+            $variations = json_decode($variations, true) ?: [];
+        }
+        
+        $var1 = $variations[0] ?? null;
+        $var2 = $variations[1] ?? null;
+        
+        $rows = [];
+        
+        // Get variation 1 options
+        $var1Options = [];
+        if ($var1 && !empty($var1['options'])) {
+            foreach ($var1['options'] as $opt) {
+                $value = is_array($opt) ? ($opt['value'] ?? '') : $opt;
+                $image = is_array($opt) ? ($opt['image'] ?? null) : null;
+                if (!empty($value)) {
+                    $var1Options[] = ['value' => $value, 'image' => $image];
+                }
+            }
+        }
+        
+        // Get variation 2 options
+        $var2Options = [];
+        if ($var2 && !empty($var2['options'])) {
+            foreach ($var2['options'] as $opt) {
+                $value = is_array($opt) ? ($opt['value'] ?? '') : $opt;
+                $image = is_array($opt) ? ($opt['image'] ?? null) : null;
+                if (!empty($value)) {
+                    $var2Options[] = ['value' => $value, 'image' => $image];
+                }
+            }
+        }
+        
+        // If no variations, create a single row
+        if (empty($var1Options)) {
+            $rows[] = $this->buildRowData(
+                $categoryCode, $productName, $description, $skuParent,
+                '', '', '', '', // No variation data
+                $product->price, $product->stock, '',
+                $coverImageUrl, $additionalImages,
+                $weightKg, $dimension, $shippingOptions, $product->id
+            );
+            return $rows;
+        }
+        
+        // If only 1 variation level
+        if (!empty($var1Options) && empty($var2Options)) {
+            $variationIntegrationCode = 'VAR-' . $product->id;
+            
+            foreach ($var1Options as $idx => $opt) {
+                $optImageUrl = '';
+                if (!empty($opt['image']) && str_contains($opt['image'], 'base64')) {
+                    // Base64 image - skip for now (not a URL)
+                } elseif (!empty($opt['image'])) {
+                    $optImageUrl = $this->getFullImageUrl($opt['image']);
+                }
+                
+                $variationSku = 'VAR-' . $product->id . '-' . str_replace(' ', '', $opt['value']);
+                
+                $rows[] = $this->buildRowData(
+                    $categoryCode, $productName, $description, $skuParent,
+                    $variationIntegrationCode,
+                    $var1['name'] ?? '',
+                    $opt['value'],
+                    $optImageUrl,
+                    $product->price, $product->stock, $variationSku,
+                    $coverImageUrl, $additionalImages,
+                    $weightKg, $dimension, $shippingOptions, $product->id
+                );
+            }
+            return $rows;
+        }
+        
+        // If 2 variation levels
+        if (!empty($var1Options) && !empty($var2Options)) {
+            $variationIntegrationCode = 'VAR-' . $product->id;
+            
+            foreach ($var1Options as $opt1) {
+                $opt1ImageUrl = '';
+                if (!empty($opt1['image']) && str_contains($opt1['image'], 'base64')) {
+                    // Skip base64
+                } elseif (!empty($opt1['image'])) {
+                    $opt1ImageUrl = $this->getFullImageUrl($opt1['image']);
+                }
+                
+                foreach ($var2Options as $opt2) {
+                    $opt2ImageUrl = '';
+                    if (!empty($opt2['image']) && str_contains($opt2['image'], 'base64')) {
+                        // Skip base64
+                    } elseif (!empty($opt2['image'])) {
+                        $opt2ImageUrl = $this->getFullImageUrl($opt2['image']);
+                    }
+                    
+                    $variationSku = 'VAR-' . $product->id . '-' . str_replace(' ', '', $opt1['value']) . '-' . str_replace(' ', '', $opt2['value']);
+                    
+                    $rows[] = $this->buildRowData(
+                        $categoryCode, $productName, $description, $skuParent,
+                        $variationIntegrationCode,
+                        $var1['name'] ?? '',
+                        $opt1['value'],
+                        $opt1ImageUrl,
+                        $product->price, $product->stock, $variationSku,
+                        $coverImageUrl, $additionalImages,
+                        $weightKg, $dimension, $shippingOptions, $product->id,
+                        $var2['name'] ?? '',
+                        $opt2['value']
+                    );
+                }
+            }
+            return $rows;
+        }
+        
+        return $rows;
+    }
+    
+    /**
+     * Build a row data array for a single product/variation row.
+     */
+    protected function buildRowData(
+        $categoryCode, $productName, $description, $skuParent,
+        $variationIntegrationCode, $variationName1, $variationOption1, $variationImageUrl,
+        $price, $stock, $variationSku,
+        $coverImageUrl, $additionalImages,
+        $weightKg, $dimension, $shippingOptions, $productId,
+        $variationName2 = '', $variationOption2 = ''
+    ) {
+        return [
+            'kategori' => $categoryCode,
+            'nama_produk' => mb_substr($productName, 0, 255),
+            'deskripsi' => mb_substr($description, 0, 3000),
+            'sku_induk' => mb_substr($skuParent, 0, 100),
+            'kode_integrasi_variasi' => $variationIntegrationCode,
+            'nama_variasi_1' => mb_substr($variationName1, 0, 14),
+            'varian_variasi_1' => mb_substr($variationOption1, 0, 20),
+            'foto_per_varian' => $variationImageUrl,
+            'nama_variasi_2' => mb_substr($variationName2, 0, 14),
+            'varian_variasi_2' => mb_substr($variationOption2, 0, 20),
+            'harga' => max(99, intval($price ?? 99)),
+            'stok' => min(10000000, max(0, intval($stock ?? 0))),
+            'kode_variasi' => $variationSku ?: 'SKU-' . $productId,
+            'foto_sampul' => $coverImageUrl,
+            'foto_produk' => $additionalImages,
+            'berat' => $weightKg,
+            'panjang' => $dimension['length'],
+            'lebar' => $dimension['width'],
+            'tinggi' => $dimension['height'],
+            'next_day' => in_array('jne', $shippingOptions) ? 'Aktif' : 'Nonaktif',
+            'reguler' => in_array('jnt', $shippingOptions) ? 'Aktif' : 'Nonaktif',
+            'hemat_kargo' => in_array('sicepat', $shippingOptions) ? 'Aktif' : 'Nonaktif',
+        ];
+    }
+    
+    /**
+     * Write a single row to the worksheet.
+     */
+    protected function writeRow($sheet, $row, $data)
+    {
+        // A = Kategori
+        $sheet->setCellValue("A{$row}", $data['kategori']);
+        // B = Nama Produk
+        $sheet->setCellValue("B{$row}", $data['nama_produk']);
+        // C = Deskripsi Produk
+        $sheet->setCellValue("C{$row}", $data['deskripsi']);
+        // D = Maks. Jumlah Pembelian (leave empty)
+        // E = Maks. Jumlah Pembelian - Tanggal Mulai (leave empty)
+        // F = Maks. Jumlah Pembelian - Jumlah Hari (leave empty)
+        // G = Maks. Jumlah Pembelian - Tanggal Berakhir (leave empty)
+        // H = Min. Jumlah Pembelian (leave empty)
+        // I = SKU Induk
+        $sheet->setCellValue("I{$row}", $data['sku_induk']);
+        // J = Produk Berbahaya (leave empty)
+        // K = Kode Integrasi Variasi
+        $sheet->setCellValue("K{$row}", $data['kode_integrasi_variasi']);
+        // L = Nama Variasi 1
+        $sheet->setCellValue("L{$row}", $data['nama_variasi_1']);
+        // M = Varian untuk Variasi 1
+        $sheet->setCellValue("M{$row}", $data['varian_variasi_1']);
+        // N = Foto Produk per Varian
+        $sheet->setCellValue("N{$row}", $data['foto_per_varian']);
+        // O = Nama Variasi 2
+        $sheet->setCellValue("O{$row}", $data['nama_variasi_2']);
+        // P = Varian untuk Variasi 2
+        $sheet->setCellValue("P{$row}", $data['varian_variasi_2']);
+        // Q = Harga
+        $sheet->setCellValue("Q{$row}", $data['harga']);
+        // R = Stok
+        $sheet->setCellValue("R{$row}", $data['stok']);
+        // S = Kode Variasi
+        $sheet->setCellValue("S{$row}", $data['kode_variasi']);
+        // T = Template Panduan Ukuran (leave empty)
+        // U = Foto Panduan Ukuran (leave empty)
+        // V = GTIN (leave empty)
+        // W = Foto Sampul
+        $sheet->setCellValue("W{$row}", $data['foto_sampul']);
+        // X = Foto Produk 1
+        $sheet->setCellValue("X{$row}", $data['foto_produk'][0] ?? '');
+        // Y = Foto Produk 2
+        $sheet->setCellValue("Y{$row}", $data['foto_produk'][1] ?? '');
+        // Z = Foto Produk 3
+        $sheet->setCellValue("Z{$row}", $data['foto_produk'][2] ?? '');
+        // AA = Foto Produk 4
+        $sheet->setCellValue("AA{$row}", $data['foto_produk'][3] ?? '');
+        // AB = Foto Produk 5
+        $sheet->setCellValue("AB{$row}", $data['foto_produk'][4] ?? '');
+        // AC = Foto Produk 6
+        $sheet->setCellValue("AC{$row}", $data['foto_produk'][5] ?? '');
+        // AD = Foto Produk 7
+        $sheet->setCellValue("AD{$row}", $data['foto_produk'][6] ?? '');
+        // AE = Foto Produk 8
+        $sheet->setCellValue("AE{$row}", $data['foto_produk'][7] ?? '');
+        // AF = Berat
+        $sheet->setCellValue("AF{$row}", $data['berat']);
+        // AG = Panjang
+        $sheet->setCellValue("AG{$row}", $data['panjang'] !== '' ? $data['panjang'] : '');
+        // AH = Lebar
+        $sheet->setCellValue("AH{$row}", $data['lebar'] !== '' ? $data['lebar'] : '');
+        // AI = Tinggi
+        $sheet->setCellValue("AI{$row}", $data['tinggi'] !== '' ? $data['tinggi'] : '');
+        // AJ = Next Day
+        $sheet->setCellValue("AJ{$row}", $data['next_day']);
+        // AK = Reguler (Cashless)
+        $sheet->setCellValue("AK{$row}", $data['reguler']);
+        // AL = Hemat Kargo
+        $sheet->setCellValue("AL{$row}", $data['hemat_kargo']);
+        // AM = Dikirim Dalam Pre-order (leave empty)
+        // AN = Alasan Gagal (leave empty)
+    }
+    
+    /**
+     * Get the full image URL from a relative path.
+     */
+    protected function getFullImageUrl($path)
+    {
+        if (empty($path)) {
+            return '';
+        }
+        
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+        
+        return url($path);
     }
 }

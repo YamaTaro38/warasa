@@ -70,6 +70,13 @@
                     </button>
                 </div>
                 
+                @php
+                    $watermarkVisible = true;
+                    try {
+                        $watermarkVisible = \App\Models\MenuVisibility::where('menu_key', 'watermark')->first()->is_visible ?? true;
+                    } catch (\Exception $e) {}
+                @endphp
+                @if($watermarkVisible)
                 <!-- Add Watermark -->
                 <div class="bg-warasa-card/30 rounded-2xl p-6 border border-warasa-primary/20">
                     <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
@@ -82,6 +89,7 @@
                         Tambah Watermark
                     </button>
                 </div>
+                @endif
                 
                 <!-- Batch Processing -->
                 <div class="bg-warasa-card/30 rounded-2xl p-6 border border-warasa-primary/20">

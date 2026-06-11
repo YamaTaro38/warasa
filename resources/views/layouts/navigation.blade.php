@@ -3,9 +3,7 @@
         <div class="flex justify-between items-center h-16">
             <!-- Logo -->
             <a href="{{ url('/') }}" class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-warasa-orange rounded-lg flex items-center justify-center">
-                    <i class="fas fa-store text-white text-sm"></i>
-                </div>
+                <img src="/images/icon.ico" alt="Warasa" class="w-8 h-8 rounded-lg object-contain">
                 <span class="text-xl font-bold text-warasa-orange">Warasa</span>
                 <span class="text-xs text-gray-400 hidden sm:inline">| AI-Powered</span>
             </a>
@@ -13,8 +11,7 @@
             <!-- Desktop Navigation -->
             <div class="hidden md:flex items-center gap-6">
                 <a href="{{ url('/') }}" class="text-gray-600 dark:text-gray-300 hover:text-warasa-orange transition">Home</a>
-                <a href="{{ url('/features') }}" class="text-gray-600 dark:text-gray-300 hover:text-warasa-orange transition">Fitur</a>
-                <a href="{{ url('/pricing') }}" class="text-gray-600 dark:text-gray-300 hover:text-warasa-orange transition">Harga</a>
+                <a href="{{ url('/docs') }}" class="text-gray-600 dark:text-gray-300 hover:text-warasa-orange transition"><i class="fas fa-book mr-1"></i>Dokumentasi</a>
                 <a href="{{ url('/faq') }}" class="text-gray-600 dark:text-gray-300 hover:text-warasa-orange transition">FAQ</a>
             </div>
             

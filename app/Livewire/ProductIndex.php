@@ -414,40 +414,40 @@ class ProductIndex extends Component
         ]);
     }
 
-public function exportSelected()
-{
-    if (empty($this->selectedProducts)) {
-        session()->flash('error', 'Pilih minimal 1 produk untuk diexport!');
-        return;
-    }
-
-    $this->exporting = true;
-    
-    try {
-        $products = Product::whereIn('uuid', $this->selectedProducts)
-            ->where('user_id', auth()->id())
-            ->with(['category', 'images'])
-            ->get();
-
-        if ($products->isEmpty()) {
-            session()->flash('error', 'Tidak ada produk yang ditemukan!');
-            $this->exporting = false;
+    public function exportSelected()
+    {
+        if (empty($this->selectedProducts)) {
+            session()->flash('error', 'Pilih minimal 1 produk untuk diexport!');
             return;
         }
 
-        $exportService = new \App\Services\ExportService();
-        $filePath = $exportService->exportToShopeeExcel($products);
-        
-        $this->exporting = false;
-        $this->showExportModal = false;
-        
-        $this->dispatch('download-export', path: $filePath);
-        
-        session()->flash('message', count($products) . ' produk berhasil diexport!');
-    } catch (\Exception $e) {
-        \Illuminate\Support\Facades\Log::error('Export failed: ' . $e->getMessage());
-        session()->flash('error', 'Gagal export: ' . $e->getMessage());
-        $this->exporting = false;
+        $this->exporting = true;
+
+        try {
+            $products = Product::whereIn('uuid', $this->selectedProducts)
+                ->where('user_id', auth()->id())
+                ->with(['category', 'images'])
+                ->get();
+
+            if ($products->isEmpty()) {
+                session()->flash('error', 'Tidak ada produk yang ditemukan!');
+                $this->exporting = false;
+                return;
+            }
+
+            $exportService = new \App\Services\ExportService();
+            $filePath = $exportService->exportToShopeeExcel($products);
+
+            $this->exporting = false;
+            $this->showExportModal = false;
+
+            $this->dispatch('download-export', path: $filePath);
+
+            session()->flash('message', count($products) . ' produk berhasil diexport!');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Export failed: ' . $e->getMessage());
+            session()->flash('error', 'Gagal export: ' . $e->getMessage());
+            $this->exporting = false;
+        }
     }
-}
 }

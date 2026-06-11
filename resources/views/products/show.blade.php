@@ -806,7 +806,8 @@
         <div class="compact-section-body">
             <div class="product-description">
                 @if($product->description && trim($product->description) !== '')
-                    {!! $product->description !!}
+                    <div id="markdown-description" style="display:none;">{{ $product->description }}</div>
+                    <div id="rendered-description"></div>
                 @else
                     <div class="empty-description">
                         <i class="fas fa-edit"></i> No description provided.
@@ -894,6 +895,7 @@
     <img id="lightboxImage" src="" alt="Preview">
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
 // Gallery Functions
 let currentImageIndex = 0;
@@ -907,6 +909,18 @@ let imageUrls = [];
 @endphp
 
 imageUrls = {!! json_encode($imageUrlsArray) !!};
+
+// Render Markdown Description
+(function() {
+    var mdEl = document.getElementById('markdown-description');
+    var renderedEl = document.getElementById('rendered-description');
+    if (mdEl && renderedEl) {
+        var mdText = mdEl.textContent || mdEl.innerText || '';
+        if (mdText.trim()) {
+            renderedEl.innerHTML = marked.parse(mdText);
+        }
+    }
+})();
 
 function changeImage(src, index) {
     const mainImage = document.getElementById('mainImage');

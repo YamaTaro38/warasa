@@ -1,0 +1,28 @@
+1. Struktur file tidak sama dengan template Shopee (Penyebab paling besar)
+Template Shopee memiliki:
+Sheet Panduan
+Sheet Template
+Sheet Contoh Upload
+Sheet lainnya yang digunakan Shopee
+Sedangkan file export Anda hanya memiliki:
+Shopee Mass Upload
+Biasanya Shopee mengharapkan file yang diupload berasal dari template mereka dan menggunakan sheet Template sebagai sumber data.
+Jadi meskipun kolom-kolomnya mirip, jika Anda membuat workbook baru sendiri, Shopee sering menganggap file tersebut bukan format Mass Upload yang valid.
+2. Kolom wajib Shopee masih belum ada
+Pada template Shopee terdapat kolom seperti:
+Kolom Shopee	Status
+Maks. Jumlah Pembelian	Tidak ada
+Produk Berbahaya	Tidak ada
+Template Panduan Ukuran	Tidak ada
+Beberapa atribut kategori	Tidak ada
+Meskipun sebagian bersifat opsional, ada kategori tertentu yang mewajibkan atribut tambahan.
+3. Kategori kosong
+Pada data export Anda:
+Kategori = NULL
+Padahal pada template Shopee:
+Kategori
+harus berisi kode kategori Shopee.
+Contoh:
+100630
+atau kode kategori lain yang valid.
+Jika kategori kosong, biasanya Shopee akan langsung menolak data.

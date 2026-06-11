@@ -4,6 +4,8 @@
 @section('breadcrumb', 'Edit Product')
 
 @section('content')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+<script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
 <style>
     /* Premium Form Styles - Compact Dashboard-aligned Sizing */
     .form-container {
@@ -550,15 +552,16 @@
             <p class="text-xs text-gray-400 mt-3">Click on image to remove. Supports JPG, PNG (max 5MB)</p>
         </div>
 
-        <!-- Description - Simple Textarea (No HTML) -->
+        <!-- Description - Markdown Editor -->
         <div class="form-section">
             <div class="section-title">
                 <i class="fas fa-align-left"></i>
                 <span>Product Description</span>
+                <span style="font-size:10px;color:#94a3b8;font-weight:400;margin-left:auto;">Supports Markdown</span>
             </div>
             <div class="form-group">
-                <textarea name="description" id="productDescription" class="input-solid" rows="10">{{ $product->description }}</textarea>
-                <p class="text-xs text-gray-400 mt-2">Plain text description. You can use basic formatting.</p>
+                <textarea name="description" id="productDescription">{{ $product->description }}</textarea>
+                <p class="text-xs text-gray-400 mt-2">Use Markdown formatting: <code>**bold**</code>, <code>*italic*</code>, <code># heading</code>, <code>- list</code>, <code>| table |</code>, etc.</p>
             </div>
         </div>
 
@@ -1246,5 +1249,22 @@ loadCategories();
 setupCategoryAutocomplete();
 initKeywords();
 renderGallery();
+
+// ==================== EasyMDE Markdown Editor ====================
+var easyMDE = new EasyMDE({
+    element: document.getElementById('productDescription'),
+    spellChecker: false,
+    status: false,
+    minHeight: '250px',
+    placeholder: 'Write product description using Markdown...',
+    toolbar: [
+        'bold', 'italic', 'heading', '|',
+        'quote', 'unordered-list', 'ordered-list', '|',
+        'link', 'table', 'horizontal-rule', '|',
+        'preview', 'side-by-side', '|',
+        'undo', 'redo', '|',
+        'guide'
+    ]
+});
 </script>
 @endsection

@@ -154,7 +154,7 @@ class ImageService
         }
         
         // Tambahkan quality keywords
-        $qualityKeywords = "high quality, 4k resolution, sharp focus, professional photography, clean background, well lit, commercial product shot, bold typography, highly legible text, sharp clear lettering, prominent text overlay, 3d rendered text for clarity, thick embossed letters";
+        $qualityKeywords = "high quality, 4k resolution, sharp focus, professional photography, clean background, well lit, commercial product shot, bold typography";
         
         return $enhanced . " " . $qualityKeywords;
     }

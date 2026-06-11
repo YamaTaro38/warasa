@@ -526,11 +526,6 @@
 </style>
 
 <div class="quick-generate-container">
-    <div class="mb-4">
-        <h1 class="text-xl font-bold text-gray-900">Quick Generate</h1>
-        <p class="text-xs text-gray-500 mt-1">Buat referensi produk dengan cepat menggunakan AI</p>
-    </div>
-
     <div class="grid-2">
         <!-- INPUT SECTION -->
         <div id="inputSection">
@@ -557,7 +552,7 @@
                         <label>Informasi Tambahan</label>
                         <textarea id="additionalInfo" rows="3" class="input-solid w-full" placeholder="Jelaskan produk secara detail..."></textarea>
                     </div>
-                    <div>
+                    <!-- <div>
                         <label>Project</label>
                         <select id="projectId" class="input-solid w-full">
                             <option value="">Tanpa Project</option>
@@ -565,10 +560,17 @@
                                 <option value="{{ $project->id }}">{{ $project->name }}</option>
                             @endforeach
                         </select>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
+            @php
+                $aiImageVisible = true;
+                try {
+                    $aiImageVisible = \App\Models\MenuVisibility::where('menu_key', 'ai_image_generate')->first()->is_visible ?? true;
+                } catch (\Exception $e) {}
+            @endphp
+            @if($aiImageVisible)
             <div class="form-section">
                 <div class="section-title">
                     <i class="fas fa-palette"></i>
@@ -590,6 +592,7 @@
                     </select>
                 </div>
             </div>
+            @endif
 
             <button id="generateBtn" class="btn-primary py-2">
                 <i class="fas fa-magic"></i> Generate Produk
