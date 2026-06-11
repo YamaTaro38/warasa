@@ -111,11 +111,11 @@
 </div>
 
 <!-- Features Section -->
-<div class="w-full bg-gray-50 dark:bg-dark-bg py-16 md:py-20">
+<div class="w-full bg-gray-50 py-16 md:py-20">
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold font-poppins mb-4 text-gray-900 dark:text-white">Fitur Unggulan</h2>
-            <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Semua yang Anda butuhkan untuk jualan online ada di sini</p>
+            <h2 class="text-3xl md:text-4xl font-bold font-poppins mb-4 text-gray-900">Fitur Unggulan</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Semua yang Anda butuhkan untuk jualan online ada di sini</p>
         </div>
         
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -132,12 +132,12 @@
                 ['icon' => 'fa-tags', 'color' => 'text-rose-500', 'title' => 'Kategori Produk', 'desc' => 'Kelola kategori produk untuk memudahkan pencarian dan filter'],
                 ['icon' => 'fa-book', 'color' => 'text-amber-500', 'title' => 'Dokumentasi', 'desc' => 'Panduan lengkap penggunaan semua fitur Warasa'],
             ] as $feature)
-            <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 dark:border-dark-border">
+            <div class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100">
                 <div class="w-14 h-14 rounded-xl bg-warasa-orange/10 flex items-center justify-center mb-4">
                     <i class="fas {{ $feature['icon'] }} {{ $feature['color'] }} text-2xl"></i>
                 </div>
-                <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">{{ $feature['title'] }}</h3>
-                <p class="text-gray-600 dark:text-gray-400 leading-relaxed">{{ $feature['desc'] }}</p>
+                <h3 class="text-xl font-semibold mb-2 text-gray-900">{{ $feature['title'] }}</h3>
+                <p class="text-gray-600 leading-relaxed">{{ $feature['desc'] }}</p>
             </div>
             @endforeach
         </div>
@@ -145,11 +145,11 @@
 </div>
 
 <!-- How It Works Section -->
-<div class="w-full bg-white dark:bg-dark-card py-16 md:py-20">
+<div class="w-full bg-white py-16 md:py-20">
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold font-poppins mb-4 text-gray-900 dark:text-white">Cara Kerja</h2>
-            <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Mudah, cepat, dan efisien</p>
+            <h2 class="text-3xl md:text-4xl font-bold font-poppins mb-4 text-gray-900">Cara Kerja</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Mudah, cepat, dan efisien</p>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -157,89 +157,89 @@
                 <div class="w-20 h-20 bg-warasa-orange/20 rounded-full flex items-center justify-center mx-auto mb-4">
                     <i class="fas fa-upload text-3xl text-warasa-orange"></i>
                 </div>
-                <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Input Produk</h3>
-                <p class="text-gray-600 dark:text-gray-400">Upload file CSV atau input manual produk Anda</p>
+                <h3 class="text-lg font-semibold mb-2 text-gray-900">Input Produk</h3>
+                <p class="text-gray-600">Upload file CSV atau input manual produk Anda</p>
             </div>
             <div class="text-center">
                 <div class="w-20 h-20 bg-warasa-orange/20 rounded-full flex items-center justify-center mx-auto mb-4">
                     <i class="fas fa-wand-magic-sparkles text-3xl text-warasa-orange"></i>
                 </div>
-                <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Generate dengan AI</h3>
-                <p class="text-gray-600 dark:text-gray-400">AI akan generate judul, deskripsi, dan gambar</p>
+                <h3 class="text-lg font-semibold mb-2 text-gray-900">Generate dengan AI</h3>
+                <p class="text-gray-600">AI akan generate judul, deskripsi, dan gambar</p>
             </div>
             <div class="text-center">
                 <div class="w-20 h-20 bg-warasa-orange/20 rounded-full flex items-center justify-center mx-auto mb-4">
                     <i class="fas fa-file-export text-3xl text-warasa-orange"></i>
                 </div>
-                <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Export & Jual</h3>
-                <p class="text-gray-600 dark:text-gray-400">Ekspor ke Excel dan upload ke Shopee</p>
+                <h3 class="text-lg font-semibold mb-2 text-gray-900">Export & Jual</h3>
+                <p class="text-gray-600">Ekspor ke Excel dan upload ke Shopee</p>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Tools & Calculators Section -->
-<div class="w-full bg-gray-50 dark:bg-dark-bg py-16 md:py-20">
+<div class="w-full bg-gray-50 py-16 md:py-20">
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold font-poppins mb-4 text-gray-900 dark:text-white">Tools & Kalkulator</h2>
-            <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Hitung biaya, analisis pasar, dan optimasi bisnis Anda</p>
+            <h2 class="text-3xl md:text-4xl font-bold font-poppins mb-4 text-gray-900">Tools & Kalkulator</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Hitung biaya, analisis pasar, dan optimasi bisnis Anda</p>
         </div>
         
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border text-center hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                <div class="w-16 h-16 bg-orange-100 dark:bg-orange-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100 text-center hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <i class="fas fa-calculator text-3xl text-orange-500"></i>
                 </div>
-                <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">ROAS Calculator</h3>
-                <p class="text-gray-600 dark:text-gray-400 text-sm">Hitung Return on Advertising Spend untuk optimasi iklan Anda</p>
+                <h3 class="text-lg font-semibold mb-2 text-gray-900">ROAS Calculator</h3>
+                <p class="text-gray-600 text-sm">Hitung Return on Advertising Spend untuk optimasi iklan Anda</p>
             </div>
             
-            <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border text-center hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                <div class="w-16 h-16 bg-yellow-100 dark:bg-yellow-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100 text-center hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <i class="fas fa-coins text-3xl text-yellow-500"></i>
                 </div>
-                <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Shopee Fee Calc</h3>
-                <p class="text-gray-600 dark:text-gray-400 text-sm">Hitung biaya provisi, admin, dan estimasi pendapatan bersih</p>
+                <h3 class="text-lg font-semibold mb-2 text-gray-900">Shopee Fee Calc</h3>
+                <p class="text-gray-600 text-sm">Hitung biaya provisi, admin, dan estimasi pendapatan bersih</p>
             </div>
             
-            <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border text-center hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                <div class="w-16 h-16 bg-purple-100 dark:bg-purple-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100 text-center hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <i class="fas fa-users-between-lines text-3xl text-purple-500"></i>
                 </div>
-                <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Analisis Kompetitor</h3>
-                <p class="text-gray-600 dark:text-gray-400 text-sm">Analisis harga & strategi kompetitor dengan AI</p>
+                <h3 class="text-lg font-semibold mb-2 text-gray-900">Analisis Kompetitor</h3>
+                <p class="text-gray-600 text-sm">Analisis harga & strategi kompetitor dengan AI</p>
             </div>
             
-            <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border text-center hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                <div class="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100 text-center hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <i class="fas fa-magnifying-glass-chart text-3xl text-emerald-500"></i>
                 </div>
-                <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">SEO Score</h3>
-                <p class="text-gray-600 dark:text-gray-400 text-sm">Cek dan optimasi skor SEO produk Anda</p>
+                <h3 class="text-lg font-semibold mb-2 text-gray-900">SEO Score</h3>
+                <p class="text-gray-600 text-sm">Cek dan optimasi skor SEO produk Anda</p>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Testimonials Section -->
-<div class="w-full bg-white dark:bg-dark-card py-16 md:py-20">
+<div class="w-full bg-white py-16 md:py-20">
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold font-poppins mb-4 text-gray-900 dark:text-white">Apa Kata Mereka?</h2>
-            <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Lebih dari 10.000+ penjual online percaya dengan Warasa</p>
+            <h2 class="text-3xl md:text-4xl font-bold font-poppins mb-4 text-gray-900">Apa Kata Mereka?</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Lebih dari 10.000+ penjual online percaya dengan Warasa</p>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-gray-50 dark:bg-dark-bg rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border">
+            <div class="bg-gray-50 rounded-xl p-6 shadow-lg border border-gray-100">
                 <div class="flex items-center gap-3 mb-4">
                     <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="User" class="w-12 h-12 rounded-full object-cover">
                     <div>
-                        <h4 class="font-semibold text-gray-900 dark:text-white">Sarah Dewi</h4>
+                        <h4 class="font-semibold text-gray-900">Sarah Dewi</h4>
                         <p class="text-xs text-gray-500">Penjual Fashion</p>
                     </div>
                 </div>
-                <p class="text-gray-600 dark:text-gray-400 italic">"Warasa membantu saya menghemat waktu 80% untuk membuat deskripsi produk. Kalkulator ROAS-nya juga sangat membantu!"</p>
+                <p class="text-gray-600 italic">"Warasa membantu saya menghemat waktu 80% untuk membuat deskripsi produk. Kalkulator ROAS-nya juga sangat membantu!"</p>
                 <div class="flex items-center gap-1 mt-3">
                     <i class="fas fa-star text-yellow-400"></i>
                     <i class="fas fa-star text-yellow-400"></i>
@@ -248,15 +248,15 @@
                     <i class="fas fa-star text-yellow-400"></i>
                 </div>
             </div>
-            <div class="bg-gray-50 dark:bg-dark-bg rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border">
+            <div class="bg-gray-50 rounded-xl p-6 shadow-lg border border-gray-100">
                 <div class="flex items-center gap-3 mb-4">
                     <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="User" class="w-12 h-12 rounded-full object-cover">
                     <div>
-                        <h4 class="font-semibold text-gray-900 dark:text-white">Andi Wijaya</h4>
+                        <h4 class="font-semibold text-gray-900">Andi Wijaya</h4>
                         <p class="text-xs text-gray-500">Dropshipper</p>
                     </div>
                 </div>
-                <p class="text-gray-600 dark:text-gray-400 italic">"Bulk export ke Shopee sangat praktis! Sekali klik langsung jadi file Excel siap upload."</p>
+                <p class="text-gray-600 italic">"Bulk export ke Shopee sangat praktis! Sekali klik langsung jadi file Excel siap upload."</p>
                 <div class="flex items-center gap-1 mt-3">
                     <i class="fas fa-star text-yellow-400"></i>
                     <i class="fas fa-star text-yellow-400"></i>
@@ -265,15 +265,15 @@
                     <i class="fas fa-star text-yellow-400"></i>
                 </div>
             </div>
-            <div class="bg-gray-50 dark:bg-dark-bg rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border">
+            <div class="bg-gray-50 rounded-xl p-6 shadow-lg border border-gray-100">
                 <div class="flex items-center gap-3 mb-4">
                     <img src="https://randomuser.me/api/portraits/women/3.jpg" alt="User" class="w-12 h-12 rounded-full object-cover">
                     <div>
-                        <h4 class="font-semibold text-gray-900 dark:text-white">Rina Kartika</h4>
+                        <h4 class="font-semibold text-gray-900">Rina Kartika</h4>
                         <p class="text-xs text-gray-500">UMKM Pemula</p>
                     </div>
                 </div>
-                <p class="text-gray-600 dark:text-gray-400 italic">"Gratis dan mudah digunakan! Fitur Smart Generation dari CSV dan kalkulator ROAS sangat membantu pemula."</p>
+                <p class="text-gray-600 italic">"Gratis dan mudah digunakan! Fitur Smart Generation dari CSV dan kalkulator ROAS sangat membantu pemula."</p>
                 <div class="flex items-center gap-1 mt-3">
                     <i class="fas fa-star text-yellow-400"></i>
                     <i class="fas fa-star text-yellow-400"></i>
@@ -287,11 +287,11 @@
 </div>
 
 <!-- FAQ Section -->
-<div class="w-full bg-gray-50 dark:bg-dark-bg py-16 md:py-20">
+<div class="w-full bg-gray-50 py-16 md:py-20">
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold font-poppins mb-4 text-gray-900 dark:text-white">Pertanyaan Umum</h2>
-            <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Yang sering ditanyakan tentang Warasa</p>
+            <h2 class="text-3xl md:text-4xl font-bold font-poppins mb-4 text-gray-900">Pertanyaan Umum</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Yang sering ditanyakan tentang Warasa</p>
         </div>
         
         <div class="max-w-3xl mx-auto space-y-4">
@@ -303,13 +303,13 @@
                 ['q' => 'Apakah data saya aman?', 'a' => 'Tentu! Semua data Anda terenkripsi dan aman. Kami tidak akan membagikan data Anda ke pihak ketiga.'],
                 ['q' => 'Bisakah saya upload produk dari CSV?', 'a' => 'Ya! Fitur Smart Generation memungkinkan Anda upload file CSV berisi data produk untuk di-generate massal.'],
             ] as $faq)
-            <div class="bg-white dark:bg-dark-card rounded-xl shadow-sm border border-gray-100 dark:border-dark-border overflow-hidden">
-                <button class="faq-toggle w-full px-6 py-4 text-left flex items-center justify-between gap-4 hover:bg-gray-50 dark:hover:bg-dark-bg transition" onclick="toggleFaq(this)">
-                    <span class="font-semibold text-gray-900 dark:text-white text-sm">{{ $faq['q'] }}</span>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <button class="faq-toggle w-full px-6 py-4 text-left flex items-center justify-between gap-4 hover:bg-gray-50 transition" onclick="toggleFaq(this)">
+                    <span class="font-semibold text-gray-900 text-sm">{{ $faq['q'] }}</span>
                     <i class="fas fa-chevron-down text-gray-400 text-xs transition-transform duration-300"></i>
                 </button>
                 <div class="faq-answer px-6 pb-4 hidden">
-                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{{ $faq['a'] }}</p>
+                    <p class="text-gray-600 text-sm leading-relaxed">{{ $faq['a'] }}</p>
                 </div>
             </div>
             @endforeach
