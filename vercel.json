@@ -37,7 +37,7 @@
         "POLLINATIONS_DEFAULT_TEXT_MODEL": "openai",
         "POLLINATIONS_DEFAULT_IMAGE_MODEL": "flux",
         "MAIL_MAILER": "smtp",
-        "MAIL_SCHEME": null,
+        "MAIL_SCHEME": "tls",
         "MAIL_HOST": "smtp.gmail.com",
         "MAIL_PORT": 587,
         "MAIL_USERNAME": "2311102227@ittelkom-pwt.ac.id",
