@@ -39,7 +39,7 @@
         "MAIL_MAILER": "smtp",
         "MAIL_SCHEME": "tls",
         "MAIL_HOST": "smtp.gmail.com",
-        "MAIL_PORT": 587,
+        "MAIL_PORT": "587",
         "MAIL_USERNAME": "2311102227@ittelkom-pwt.ac.id",
         "MAIL_FROM_ADDRESS": "2311102227@ittelkom-pwt.ac.id",
         "MAIL_FROM_NAME": "Warasa",
