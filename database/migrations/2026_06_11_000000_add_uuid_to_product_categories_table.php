@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -14,8 +15,8 @@ return new class extends Migration
         });
 
         // Generate UUIDs for existing records
-        foreach (\DB::table('product_categories')->get() as $category) {
-            \DB::table('product_categories')
+        foreach (DB::table('product_categories')->get() as $category) {
+            DB::table('product_categories')
                 ->where('id', $category->id)
                 ->update(['uuid' => Str::uuid()->toString()]);
         }
