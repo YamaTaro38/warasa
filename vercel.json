@@ -1,7 +1,6 @@
 {
     "version": 2,
     "installCommand": "npm install --legacy-peer-deps && npm run build",
-    "buildCommand": "php artisan migrate --force",
     "functions": {
         "api/index.php": {
             "runtime": "vercel-php@0.6.2"
