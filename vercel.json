@@ -4,7 +4,6 @@
     "functions": {
         "api/index.php": { "runtime": "vercel-php@0.9.0" }
     },
-    "nodeVersion": 20,
     "routes": [
         { "src": "/build/(.*)", "dest": "/public/build/" },
         { "src": "/(.*)", "dest": "/api/index.php" }
