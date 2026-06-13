@@ -14,14 +14,11 @@ class RunMigrateSeedController extends Controller
             return "Bukan di lingkungan produksi.";
         }
 
-        // Set unlimited execution time for this critical operation
-        set_time_limit(0);
-
         $output = '';
         $success = true;
 
         try {
-            // Step 1: Run migrations
+            // Step 1: Run migrations with timeout
             $output .= "<strong>Step 1: Running migrations...</strong><br>";
             Artisan::call('migrate:fresh', [
                 "--force" => true,
@@ -67,7 +64,6 @@ class RunMigrateSeedController extends Controller
         } catch (\Exception $e) {
             $success = false;
             $output .= "<span style='color:red;font-weight:bold;'>❌ Gagal: " . $e->getMessage() . "</span>";
-            $output .= "<br><pre>" . $e->getTraceAsString() . "</pre>";
         }
 
         $status = $success ? "✅ SUKSES" : "❌ GAGAL";
