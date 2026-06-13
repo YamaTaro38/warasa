@@ -18,9 +18,22 @@ class RunMigrateSeedController extends Controller
         $success = true;
 
         try {
-            // Step 1: Run migrations with timeout
+            // Step 0: Drop all tables manually first (handle FK constraints)
+            $output .= "<strong>Step 0: Dropping all existing tables...</strong><br>";
+            DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+            $tables = DB::select('SHOW TABLES');
+            $db = config('database.connections.mysql.database');
+            foreach ($tables as $table) {
+                $tableName = $table->{"Tables_in_{$db}"};
+                DB::statement("DROP TABLE IF EXISTS `{$tableName}`");
+                $output .= "Dropped: {$tableName}<br>";
+            }
+            DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+            $output .= "<br>";
+
+            // Step 1: Run migrations
             $output .= "<strong>Step 1: Running migrations...</strong><br>";
-            Artisan::call('migrate:fresh', [
+            Artisan::call('migrate', [
                 "--force" => true,
                 "--no-interaction" => true,
                 "--quiet" => true
