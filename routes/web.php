@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\ProductExportController;
 use App\Livewire\ProductExport;
-use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\RunMigrateSeedController;
 
 
 
@@ -195,22 +195,4 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('documentations/upload-image', [DocumentationController::class, 'uploadImage'])->name('documentations.upload-image');
 });
 
-Route::get('/image-tools', function () {
-    return view('generator.image-tools');
-})->name('image-tools')->middleware('auth');
-
-Route::get('/run-migrate-seed', function () {
-    if (config('app.env') === 'production') {
-        try {
-            // Menjalankan migrasi sekaligus seeding dengan flag --force
-            Artisan::call('migrate:fresh', ["--force" => true, "--seed" => true]);
-
-            // Mengambil output log dari artisan untuk memastikan sukses
-            $output = Artisan::output();
-            return "Sukses!<br><pre>" . $output . "</pre>";
-        } catch (\Exception $e) {
-            return "Gagal: " . $e->getMessage();
-        }
-    }
-    return "Bukan di lingkungan produksi.";
-});
+Route::get('/run-migrate-seed', RunMigrateSeedController::class);
