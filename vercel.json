@@ -46,7 +46,6 @@
         "MAIL_FROM_ADDRESS": "2311102227@ittelkom-pwt.ac.id",
         "MAIL_FROM_NAME": "Warasa",
         "GOOGLE_REDIRECT_URI": "https://warasa.vercel.app/auth/google/callback",
-        "CACHE_STORE": "array",
-        "MYSQL_ATTR_SSL_CA": "/etc/ssl/cert.pem"
+        "CACHE_STORE": "array"
     }
 }
