@@ -14,7 +14,7 @@
     "outputDirectory": "public",
     "env": {
         "APP_ENV": "production",
-        "APP_DEBUG": "true",
+        "APP_DEBUG": "false",
         "APP_URL": "https://warasa.vercel.app",
         "ASSET_URL": "https://warasa.vercel.app",
         "APP_KEY": "base64:TGaVaXwhWgjn9akhE4SCSIjGG/cQqvICUQ+PgLA3Bs0=",
@@ -25,7 +25,7 @@
         "APP_SERVICES_CACHE": "/tmp/services.php",
         "VIEW_COMPILED_PATH": "/tmp",
         "CACHE_DRIVER": "array",
-        "LOG_CHANNEL": "stderr",
+        "LOG_CHANNEL": "errorlog",
         "SESSION_DRIVER": "cookie",
         "DB_CONNECTION": "mysql",
         "DB_HOST": "mysql-26317fe5-yamadotaro38-14ef.c.aivencloud.com",
