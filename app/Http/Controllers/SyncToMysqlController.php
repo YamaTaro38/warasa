@@ -33,13 +33,13 @@ class SyncToMysqlController extends Controller
                        'admin_settings', 'menu_visibilities', 'shopee_fee_configs',
                        'documentations', 'migrations'];
 
-            // Konfigurasi koneksi MySQL dari env Vercel
+            // Konfigurasi koneksi MySQL Aiven (host/port/db/user not secret, password from Vercel env)
             Config::set('database.connections.mysql_sync', [
                 'driver' => 'mysql',
-                'host' => env('DB_HOST'),
-                'port' => env('DB_PORT'),
-                'database' => env('DB_DATABASE'),
-                'username' => env('DB_USERNAME'),
+                'host' => 'mysql-26317fe5-yamadotaro38-14ef.c.aivencloud.com',
+                'port' => '16252',
+                'database' => 'defaultdb',
+                'username' => 'avnadmin',
                 'password' => env('DB_PASSWORD'),
                 'charset' => 'utf8mb4',
                 'collation' => 'utf8mb4_unicode_ci',
