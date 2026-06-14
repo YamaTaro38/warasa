@@ -10,217 +10,217 @@
 </div>
 
 <!-- All Features -->
-<div class="w-full bg-gray-50 dark:bg-dark-bg py-16 md:py-20">
+<div class="w-full bg-gray-50 py-16 md:py-20">
     <div class="container mx-auto px-4">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Product Generator -->
-            <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border">
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-14 h-14 rounded-xl bg-purple-100 dark:bg-purple-900/20 flex items-center justify-center">
+                    <div class="w-14 h-14 rounded-xl bg-purple-100 flex items-center justify-center">
                         <i class="fas fa-magic text-2xl text-purple-500"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Product Generator</h3>
+                        <h3 class="text-xl font-semibold text-gray-900">Product Generator</h3>
                         <p class="text-sm text-gray-500">Quick & Smart Mode</p>
                     </div>
                 </div>
-                <p class="text-gray-600 dark:text-gray-400">Generate judul, deskripsi, keywords, dan gambar produk menggunakan AI canggih. Tersedia mode Quick untuk single product dan Smart untuk bulk generation dari CSV.</p>
+                <p class="text-gray-600">Generate judul, deskripsi, keywords, dan gambar produk menggunakan AI canggih. Tersedia mode Quick untuk single product dan Smart untuk bulk generation dari CSV.</p>
             </div>
 
             <!-- Smart Generation -->
-            <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border">
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-14 h-14 rounded-xl bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center">
+                    <div class="w-14 h-14 rounded-xl bg-blue-100 flex items-center justify-center">
                         <i class="fas fa-brain text-2xl text-blue-500"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Smart Generation</h3>
+                        <h3 class="text-xl font-semibold text-gray-900">Smart Generation</h3>
                         <p class="text-sm text-gray-500">Bulk Upload CSV</p>
                     </div>
                 </div>
-                <p class="text-gray-600 dark:text-gray-400">Upload file CSV berisi data produk Anda, dan AI akan secara otomatis generate judul, deskripsi, serta gambar untuk semua produk sekaligus.</p>
+                <p class="text-gray-600">Upload file CSV berisi data produk Anda, dan AI akan secara otomatis generate judul, deskripsi, serta gambar untuk semua produk sekaligus.</p>
             </div>
 
             <!-- Image Enhancement -->
-            <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border">
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-14 h-14 rounded-xl bg-pink-100 dark:bg-pink-900/20 flex items-center justify-center">
+                    <div class="w-14 h-14 rounded-xl bg-pink-100 flex items-center justify-center">
                         <i class="fas fa-image text-2xl text-pink-500"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Image Enhancement</h3>
+                        <h3 class="text-xl font-semibold text-gray-900">Image Enhancement</h3>
                         <p class="text-sm text-gray-500">Edit & Optimasi</p>
                     </div>
                 </div>
-                <p class="text-gray-600 dark:text-gray-400">Hapus background, resize, crop, dan edit gambar produk dengan mudah. Dilengkapi filter dan tools editing profesional.</p>
+                <p class="text-gray-600">Hapus background, resize, crop, dan edit gambar produk dengan mudah. Dilengkapi filter dan tools editing profesional.</p>
             </div>
 
             <!-- Watermark Tools -->
-            <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border">
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-14 h-14 rounded-xl bg-indigo-100 dark:bg-indigo-900/20 flex items-center justify-center">
+                    <div class="w-14 h-14 rounded-xl bg-indigo-100 flex items-center justify-center">
                         <i class="fas fa-copyright text-2xl text-indigo-500"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Watermark Tools</h3>
+                        <h3 class="text-xl font-semibold text-gray-900">Watermark Tools</h3>
                         <p class="text-sm text-gray-500">Perlindungan Gambar</p>
                     </div>
                 </div>
-                <p class="text-gray-600 dark:text-gray-400">Tambahkan watermark otomatis ke semua gambar produk Anda untuk melindungi dari penyalahgunaan oleh pihak lain.</p>
+                <p class="text-gray-600">Tambahkan watermark otomatis ke semua gambar produk Anda untuk melindungi dari penyalahgunaan oleh pihak lain.</p>
             </div>
 
             <!-- AI Chatbot -->
-            <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border">
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-14 h-14 rounded-xl bg-teal-100 dark:bg-teal-900/20 flex items-center justify-center">
+                    <div class="w-14 h-14 rounded-xl bg-teal-100 flex items-center justify-center">
                         <i class="fas fa-robot text-2xl text-teal-500"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">AI Chatbot</h3>
+                        <h3 class="text-xl font-semibold text-gray-900">AI Chatbot</h3>
                         <p class="text-sm text-gray-500">Konsultasi 24/7</p>
                     </div>
                 </div>
-                <p class="text-gray-600 dark:text-gray-400">Konsultasi bisnis dan dapatkan saran strategi dari AI kapan saja. Chatbot pintar yang siap membantu Anda 24 jam sehari, 7 hari seminggu.</p>
+                <p class="text-gray-600">Konsultasi bisnis dan dapatkan saran strategi dari AI kapan saja. Chatbot pintar yang siap membantu Anda 24 jam sehari, 7 hari seminggu.</p>
             </div>
 
             <!-- Export Shopee -->
-            <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border">
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-14 h-14 rounded-xl bg-green-100 dark:bg-green-900/20 flex items-center justify-center">
+                    <div class="w-14 h-14 rounded-xl bg-green-100 flex items-center justify-center">
                         <i class="fas fa-file-excel text-2xl text-green-500"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Export Shopee</h3>
+                        <h3 class="text-xl font-semibold text-gray-900">Export Shopee</h3>
                         <p class="text-sm text-gray-500">Bulk & Single Export</p>
                     </div>
                 </div>
-                <p class="text-gray-600 dark:text-gray-400">Ekspor produk ke Excel sesuai template Shopee untuk upload massal. Dukung single export per produk maupun bulk export banyak produk sekaligus.</p>
+                <p class="text-gray-600">Ekspor produk ke Excel sesuai template Shopee untuk upload massal. Dukung single export per produk maupun bulk export banyak produk sekaligus.</p>
             </div>
 
             <!-- ROAS Calculator -->
-            <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border">
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-14 h-14 rounded-xl bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center">
+                    <div class="w-14 h-14 rounded-xl bg-orange-100 flex items-center justify-center">
                         <i class="fas fa-calculator text-2xl text-orange-500"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">ROAS Calculator</h3>
+                        <h3 class="text-xl font-semibold text-gray-900">ROAS Calculator</h3>
                         <p class="text-sm text-gray-500">Optimasi Iklan</p>
                     </div>
                 </div>
-                <p class="text-gray-600 dark:text-gray-400">Hitung Return on Advertising Spend untuk mengoptimalkan budget iklan Anda. Dapatkan insight tentang efektivitas kampanye iklan.</p>
+                <p class="text-gray-600">Hitung Return on Advertising Spend untuk mengoptimalkan budget iklan Anda. Dapatkan insight tentang efektivitas kampanye iklan.</p>
             </div>
 
             <!-- Shopee Fee Calculator -->
-            <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border">
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-14 h-14 rounded-xl bg-yellow-100 dark:bg-yellow-900/20 flex items-center justify-center">
+                    <div class="w-14 h-14 rounded-xl bg-yellow-100 flex items-center justify-center">
                         <i class="fas fa-coins text-2xl text-yellow-500"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Shopee Fee Kalkulator</h3>
+                        <h3 class="text-xl font-semibold text-gray-900">Shopee Fee Kalkulator</h3>
                         <p class="text-sm text-gray-500">Hitung Biaya</p>
                     </div>
                 </div>
-                <p class="text-gray-600 dark:text-gray-400">Hitung biaya provisi, biaya admin, diskon, dan estimasi pendapatan bersih penjualan di Shopee dengan mudah dan akurat.</p>
+                <p class="text-gray-600">Hitung biaya provisi, biaya admin, diskon, dan estimasi pendapatan bersih penjualan di Shopee dengan mudah dan akurat.</p>
             </div>
 
             <!-- Analytics Dashboard -->
-            <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border">
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-14 h-14 rounded-xl bg-red-100 dark:bg-red-900/20 flex items-center justify-center">
+                    <div class="w-14 h-14 rounded-xl bg-red-100 flex items-center justify-center">
                         <i class="fas fa-chart-line text-2xl text-red-500"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Analytics Dashboard</h3>
+                        <h3 class="text-xl font-semibold text-gray-900">Analytics Dashboard</h3>
                         <p class="text-sm text-gray-500">Insight Bisnis</p>
                     </div>
                 </div>
-                <p class="text-gray-600 dark:text-gray-400">Pantau performa produk, lihat statistik generasi AI, aktivitas chatbot, dan dapatkan insight bisnis real-time dalam satu dashboard.</p>
+                <p class="text-gray-600">Pantau performa produk, lihat statistik generasi AI, aktivitas chatbot, dan dapatkan insight bisnis real-time dalam satu dashboard.</p>
             </div>
 
             <!-- Manajemen Project -->
-            <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border">
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-14 h-14 rounded-xl bg-cyan-100 dark:bg-cyan-900/20 flex items-center justify-center">
+                    <div class="w-14 h-14 rounded-xl bg-cyan-100 flex items-center justify-center">
                         <i class="fas fa-folder text-2xl text-cyan-500"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Manajemen Project</h3>
+                        <h3 class="text-xl font-semibold text-gray-900">Manajemen Project</h3>
                         <p class="text-sm text-gray-500">Organisasi Produk</p>
                     </div>
                 </div>
-                <p class="text-gray-600 dark:text-gray-400">Kelompokkan produk dalam project-project untuk organisasi yang lebih baik. Fitur archive, restore, dan filter memudahkan manajemen.</p>
+                <p class="text-gray-600">Kelompokkan produk dalam project-project untuk organisasi yang lebih baik. Fitur archive, restore, dan filter memudahkan manajemen.</p>
             </div>
 
             <!-- Competitor Analysis -->
-            <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border">
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-14 h-14 rounded-xl bg-violet-100 dark:bg-violet-900/20 flex items-center justify-center">
+                    <div class="w-14 h-14 rounded-xl bg-violet-100 flex items-center justify-center">
                         <i class="fas fa-users-between-lines text-2xl text-violet-500"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Competitor Analysis</h3>
+                        <h3 class="text-xl font-semibold text-gray-900">Competitor Analysis</h3>
                         <p class="text-sm text-gray-500">Analisis Pasar</p>
                     </div>
                 </div>
-                <p class="text-gray-600 dark:text-gray-400">Analisis kompetitor dan dapatkan rekomendasi harga serta strategi pemasaran yang tepat untuk produk Anda dengan bantuan AI.</p>
+                <p class="text-gray-600">Analisis kompetitor dan dapatkan rekomendasi harga serta strategi pemasaran yang tepat untuk produk Anda dengan bantuan AI.</p>
             </div>
 
             <!-- SEO Score -->
-            <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border">
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-14 h-14 rounded-xl bg-emerald-100 dark:bg-emerald-900/20 flex items-center justify-center">
+                    <div class="w-14 h-14 rounded-xl bg-emerald-100 flex items-center justify-center">
                         <i class="fas fa-magnifying-glass-chart text-2xl text-emerald-500"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">SEO Score</h3>
+                        <h3 class="text-xl font-semibold text-gray-900">SEO Score</h3>
                         <p class="text-sm text-gray-500">Optimasi Produk</p>
                     </div>
                 </div>
-                <p class="text-gray-600 dark:text-gray-400">Cek skor SEO produk Anda dan dapatkan rekomendasi optimasi agar produk mudah ditemukan oleh pembeli di marketplace.</p>
+                <p class="text-gray-600">Cek skor SEO produk Anda dan dapatkan rekomendasi optimasi agar produk mudah ditemukan oleh pembeli di marketplace.</p>
             </div>
 
             <!-- Image Tools -->
-            <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border">
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-14 h-14 rounded-xl bg-sky-100 dark:bg-sky-900/20 flex items-center justify-center">
+                    <div class="w-14 h-14 rounded-xl bg-sky-100 flex items-center justify-center">
                         <i class="fas fa-wand-magic-sparkles text-2xl text-sky-500"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Image Tools</h3>
+                        <h3 class="text-xl font-semibold text-gray-900">Image Tools</h3>
                         <p class="text-sm text-gray-500">Manipulasi Gambar</p>
                     </div>
                 </div>
-                <p class="text-gray-600 dark:text-gray-400">Tools lengkap untuk manipulasi gambar: resize, crop, convert format, kompresi, filter, dan berbagai efek menarik lainnya.</p>
+                <p class="text-gray-600">Tools lengkap untuk manipulasi gambar: resize, crop, convert format, kompresi, filter, dan berbagai efek menarik lainnya.</p>
             </div>
 
             <!-- Manajemen Kategori -->
-            <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border">
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-14 h-14 rounded-xl bg-rose-100 dark:bg-rose-900/20 flex items-center justify-center">
+                    <div class="w-14 h-14 rounded-xl bg-rose-100 flex items-center justify-center">
                         <i class="fas fa-tags text-2xl text-rose-500"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Kategori Produk</h3>
+                        <h3 class="text-xl font-semibold text-gray-900">Kategori Produk</h3>
                         <p class="text-sm text-gray-500">Filter & Organisasi</p>
                     </div>
                 </div>
-                <p class="text-gray-600 dark:text-gray-400">Kelola kategori produk untuk memudahkan pencarian dan filter. Tersedia manajemen kategori lengkap dengan status aktif/non-aktif.</p>
+                <p class="text-gray-600">Kelola kategori produk untuk memudahkan pencarian dan filter. Tersedia manajemen kategori lengkap dengan status aktif/non-aktif.</p>
             </div>
 
             <!-- Dokumentasi -->
-            <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-dark-border">
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-14 h-14 rounded-xl bg-amber-100 dark:bg-amber-900/20 flex items-center justify-center">
+                    <div class="w-14 h-14 rounded-xl bg-amber-100 flex items-center justify-center">
                         <i class="fas fa-book text-2xl text-amber-500"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Dokumentasi</h3>
+                        <h3 class="text-xl font-semibold text-gray-900">Dokumentasi</h3>
                         <p class="text-sm text-gray-500">Panduan Lengkap</p>
                     </div>
                 </div>
-                <p class="text-gray-600 dark:text-gray-400">Dokumentasi lengkap penggunaan semua fitur Warasa. Mulai dari generator produk, export, kalkulator, hingga tips & trik jualan online.</p>
+                <p class="text-gray-600">Dokumentasi lengkap penggunaan semua fitur Warasa. Mulai dari generator produk, export, kalkulator, hingga tips & trik jualan online.</p>
             </div>
         </div>
     </div>

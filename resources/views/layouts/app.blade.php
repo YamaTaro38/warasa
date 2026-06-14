@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="{{ session('theme', 'light') === 'dark' ? 'dark' : '' }}">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -20,7 +20,7 @@
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-light-bg text-light-text dark:bg-dark-bg dark:text-dark-text font-inter overflow-x-hidden">
+<body class="bg-light-bg text-light-text font-inter overflow-x-hidden">
     <div class="min-h-screen">
         @include('layouts.navigation')
         

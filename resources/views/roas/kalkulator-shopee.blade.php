@@ -21,7 +21,6 @@
         padding: 20px;
         margin-bottom: 20px;
     }
-    .dark .form-section { border-color: #334155; background: #1e293b; }
 
     .section-title {
         font-size: 14px;
@@ -34,7 +33,6 @@
         align-items: center;
         gap: 8px;
     }
-    .dark .section-title { color: #f1f5f9; border-color: #334155; }
     .section-title i { color: #ee4d2d; font-size: 14px; }
 
     .input-solid {
@@ -46,7 +44,6 @@
         transition: all 0.2s;
         background: white;
     }
-    .dark .input-solid { background: #0f172a; border-color: #475569; color: #e2e8f0; }
     .input-solid:focus {
         outline: none;
         border-color: #ee4d2d;
@@ -60,7 +57,6 @@
         color: #334155;
         margin-bottom: 6px;
     }
-    .dark label { color: #cbd5e1; }
 
     .btn-primary {
         background: #ee4d2d;
@@ -116,7 +112,6 @@
         z-index: 50;
         display: none;
     }
-    .dark .autocomplete-dropdown { background: #1e293b; border-color: #475569; }
     .autocomplete-dropdown.active { display: block; }
     .autocomplete-item {
         padding: 8px 12px;
@@ -126,10 +121,8 @@
         font-size: 12px;
         color: #334155;
     }
-    .dark .autocomplete-item { border-color: #1e293b; color: #cbd5e1; }
     .autocomplete-item:last-child { border-bottom: none; }
     .autocomplete-item:hover { background: #f8fafc; }
-    .dark .autocomplete-item:hover { background: #334155; }
 
     /* Toggle Switch */
     .toggle-row {
@@ -144,15 +137,11 @@
         transition: all 0.2s;
         margin-bottom: 8px;
     }
-    .dark .toggle-row { border-color: #334155; }
     .toggle-row:hover { background: #f8fafc; }
     .toggle-row.active { border-color: #ee4d2d; background: #fff0eb; }
-    .dark .toggle-row.active { border-color: #ee4d2d; background: rgba(238,77,45,0.08); }
     .toggle-info { flex: 1; min-width: 0; }
     .toggle-title { font-size: 13px; font-weight: 500; color: #1e293b; }
-    .dark .toggle-title { color: #e2e8f0; }
     .toggle-desc { font-size: 11px; color: #64748b; margin-top: 2px; }
-    .dark .toggle-desc { color: #94a3b8; }
     .toggle-switch {
         position: relative;
         width: 44px; height: 24px;
@@ -181,7 +170,6 @@
         color: #0f172a;
         letter-spacing: -0.5px;
     }
-    .dark .result-amount { color: #f1f5f9; }
     .result-amount.positive { color: #059669; }
 
     .breakdown-item {
@@ -192,12 +180,9 @@
         border-bottom: 1px solid #f1f5f9;
         font-size: 13px;
     }
-    .dark .breakdown-item { border-color: #1e293b; }
     .breakdown-item:last-child { border-bottom: none; }
     .breakdown-label { color: #64748b; }
-    .dark .breakdown-label { color: #94a3b8; }
     .breakdown-amount { font-weight: 600; color: #1e293b; }
-    .dark .breakdown-amount { color: #e2e8f0; }
     .breakdown-amount.negative { color: #ef4444; }
 
     .disclaimer {
@@ -237,7 +222,7 @@
                     </div>
                 </div>
 
-                <div class="border-b border-gray-200 dark:border-gray-700 pb-3">
+                <div class="border-b border-gray-200 pb-3">
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label>Kategori Produk Shopee</label>
@@ -454,8 +439,8 @@ function displayResult(data) {
         '<div class="flex items-center gap-4 mt-2"><span class="text-xs text-gray-500">Setelah diskon: ' + formatRupiah(data.harga_setelah_diskon) + '</span><span class="text-xs text-red-500">-' + data.persen_biaya + '% biaya</span></div>' +
         '</div>' +
         '<p class="text-xs font-medium text-gray-500 mb-2">Rincian Biaya</p>' +
-        '<div class="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-3">' + breakdownHtml +
-        '<div class="breakdown-item border-t-2 border-gray-200 dark:border-gray-700 mt-2 pt-2 font-semibold"><span class="breakdown-label">Total Biaya</span><span class="breakdown-amount negative" style="font-size:15px">' + formatRupiah(data.total_biaya) + '</span></div>' +
+        '<div class="bg-gray-50 rounded-lg p-3">' + breakdownHtml +
+        '<div class="breakdown-item border-t-2 border-gray-200 mt-2 pt-2 font-semibold"><span class="breakdown-label">Total Biaya</span><span class="breakdown-amount negative" style="font-size:15px">' + formatRupiah(data.total_biaya) + '</span></div>' +
         '<div class="breakdown-item font-semibold"><span class="breakdown-label">Dana Diterima</span><span style="font-weight:700;font-size:14px;color:#059669">' + formatRupiah(data.dana_diterima) + '</span></div>' +
         '</div>';
 }

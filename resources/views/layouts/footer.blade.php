@@ -1,4 +1,4 @@
-<footer class="bg-gray-900 dark:bg-dark-card border-t border-gray-800">
+<footer class="bg-gray-900 border-t border-gray-800">
     <div class="container mx-auto px-4 py-12">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
             <!-- Brand -->

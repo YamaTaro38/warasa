@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-    darkMode: 'class',
     content: [
         "./resources/**/*.blade.php",
         "./resources/**/*.js",
@@ -26,14 +25,6 @@ export default {
                     textMuted: '#666666',
                     border: '#e5e5e5',
                 },
-                // Dark Mode Colors
-                'dark': {
-                    bg: '#121212',
-                    card: '#1e1e1e',
-                    text: '#ffffff',
-                    textMuted: '#a0a0a0',
-                    border: '#2a2a2a',
-                }
             },
             fontFamily: {
                 'poppins': ['Poppins', 'sans-serif'],

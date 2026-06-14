@@ -12,7 +12,6 @@
         padding: 20px;
         margin-bottom: 20px;
     }
-    .dark .form-section { border-color: #334155; background: #1e293b; }
     .section-title {
         font-size: 14px;
         font-weight: 600;
@@ -24,7 +23,6 @@
         align-items: center;
         gap: 8px;
     }
-    .dark .section-title { color: #f1f5f9; border-color: #334155; }
     .section-title i { color: #ee4d2d; font-size: 14px; }
     .input-solid {
         width: 100%;
@@ -35,7 +33,6 @@
         transition: all 0.2s;
         background: white;
     }
-    .dark .input-solid { background: #0f172a; border-color: #475569; color: #e2e8f0; }
     .input-solid:focus {
         outline: none;
         border-color: #ee4d2d;
@@ -48,7 +45,6 @@
         color: #334155;
         margin-bottom: 6px;
     }
-    .dark label { color: #cbd5e1; }
     .btn-primary {
         background: #ee4d2d;
         color: white;
@@ -82,7 +78,6 @@
         margin-bottom: 8px;
         font-size: 12px;
     }
-    .dark .recommendation-item { background: #1e1e2e; }
     .sticky-top { position: sticky; top: 80px; }
 </style>
 
@@ -96,50 +91,50 @@
             </div>
             <div class="space-y-4">
                     <!-- Info Produk -->
-                    <div class="border-b border-gray-200 dark:border-gray-700 pb-3">
+                    <div class="border-b border-gray-200 pb-3">
                         <p class="text-xs font-medium text-gray-500 mb-2">Informasi Produk</p>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Nama Produk</label>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Nama Produk</label>
                                 <input type="text" id="productName" class="input-solid w-full" placeholder="Contoh: Baju Koko Premium">
                             </div>
                             <div>
-                                <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Nama Campaign</label>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Nama Campaign</label>
                                 <input type="text" id="campaignName" class="input-solid w-full" placeholder="Shopee Ads">
                             </div>
                         </div>
                     </div>
                     
                     <!-- Biaya & Harga -->
-                    <div class="border-b border-gray-200 dark:border-gray-700 pb-3">
+                    <div class="border-b border-gray-200 pb-3">
                         <p class="text-xs font-medium text-gray-500 mb-2">Harga & Biaya Produk</p>
                         <div class="space-y-3">
                             <div>
-                                <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Harga Jual Produk (Rp)</label>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Harga Jual Produk (Rp)</label>
                                 <input type="number" id="sellingPrice" class="input-solid w-full" placeholder="0" value="0">
                             </div>
                             <div>
-                                <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Modal Produk (Rp)</label>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Modal Produk (Rp)</label>
                                 <input type="number" id="productCost" class="input-solid w-full" placeholder="0" value="0">
                             </div>
                         </div>
                     </div>
                     
                     <!-- Biaya Iklan & Promosi -->
-                    <div class="border-b border-gray-200 dark:border-gray-700 pb-3">
+                    <div class="border-b border-gray-200 pb-3">
                         <p class="text-xs font-medium text-gray-500 mb-2">Biaya Iklan & Promosi</p>
                         <div class="space-y-3">
                             <div>
-                                <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Biaya Promosi (Ad Spend) - Rp</label>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Biaya Promosi (Ad Spend) - Rp</label>
                                 <input type="number" id="adSpend" class="input-solid w-full" placeholder="0" value="0">
                             </div>
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Target ACOS (%)</label>
+                                    <label class="block text-xs font-medium text-gray-600 mb-1">Target ACOS (%)</label>
                                     <input type="number" id="targetAcos" class="input-solid w-full" placeholder="30" value="30">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">% Fee Marketplace</label>
+                                    <label class="block text-xs font-medium text-gray-600 mb-1">% Fee Marketplace</label>
                                     <input type="number" id="marketplaceFee" class="input-solid w-full" placeholder="10" value="10">
                                 </div>
                             </div>
@@ -147,20 +142,20 @@
                     </div>
                     
                     <!-- Biaya Lain-lain & Pendapatan -->
-                    <div class="border-b border-gray-200 dark:border-gray-700 pb-3">
+                    <div class="border-b border-gray-200 pb-3">
                         <p class="text-xs font-medium text-gray-500 mb-2">Pendapatan & Biaya Lain</p>
                         <div class="space-y-3">
                             <div>
-                                <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Total Pendapatan (Revenue) - Rp</label>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Total Pendapatan (Revenue) - Rp</label>
                                 <input type="number" id="revenue" class="input-solid w-full" placeholder="0" value="0">
                             </div>
                             <div>
-                                <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Biaya Lain-lain (Rp)</label>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Biaya Lain-lain (Rp)</label>
                                 <input type="number" id="otherCosts" class="input-solid w-full" placeholder="0" value="0">
                             </div>
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Periode</label>
+                                    <label class="block text-xs font-medium text-gray-600 mb-1">Periode</label>
                                     <select id="period" class="input-solid w-full">
                                         <option value="hari">Harian</option>
                                         <option value="minggu">Mingguan</option>
@@ -168,7 +163,7 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Estimasi Unit Terjual</label>
+                                    <label class="block text-xs font-medium text-gray-600 mb-1">Estimasi Unit Terjual</label>
                                     <input type="number" id="unitsSold" class="input-solid w-full" placeholder="0" value="0">
                                 </div>
                             </div>
@@ -200,10 +195,10 @@
     </div>
     
     <!-- Info Panel -->
-    <div class="mt-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 border border-blue-200 dark:border-blue-800">
+    <div class="mt-4 bg-blue-50 rounded-lg p-3 border border-blue-200">
         <div class="flex items-start gap-2">
             <i class="fas fa-info-circle text-blue-500 text-sm mt-0.5"></i>
-            <div class="text-xs text-gray-700 dark:text-gray-300">
+            <div class="text-xs text-gray-700">
                 <p class="font-medium mb-1">Apa itu ACOS?</p>
                 <p>ACOS (Advertising Cost of Sales) = (Biaya Iklan / Pendapatan) × 100%. Target ACOS yang baik untuk Shopee: 15% - 30%.</p>
                 <p class="mt-1">Apa itu ROAS? ROAS (Return on Ad Spend) = (Pendapatan / Biaya Iklan). Target ROAS yang baik: 2x - 5x (200% - 500%).</p>
@@ -339,11 +334,11 @@ function formatNumber(num) {
 
 function getColorClass(color) {
     const colors = {
-        success: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-        primary: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
-        info: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-400',
-        warning: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
-        danger: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
+        success: 'bg-green-100 text-green-800',
+        primary: 'bg-blue-100 text-blue-800',
+        info: 'bg-cyan-100 text-cyan-800',
+        warning: 'bg-yellow-100 text-yellow-800',
+        danger: 'bg-red-100 text-red-800',
     };
     return colors[color] || colors.info;
 }
@@ -354,7 +349,7 @@ function displayResult(data) {
     const profitColor = getColorClass(data.profitInterpretation.color);
     
     let html = `
-        <div class="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 space-y-4">
+        <div class="bg-gray-50 rounded-lg p-4 space-y-4">
             <!-- Summary ROAS & ACOS -->
             <div class="grid grid-cols-2 gap-3">
                 <div class="text-center p-3 rounded-lg ${roasColor}">
@@ -377,20 +372,20 @@ function displayResult(data) {
             
             <!-- Profit Summary -->
             <div class="grid grid-cols-2 gap-3">
-                <div class="bg-white dark:bg-gray-800 rounded-lg p-3 text-center shadow-sm">
+                <div class="bg-white rounded-lg p-3 text-center shadow-sm">
                     <p class="text-xs text-gray-400 uppercase font-medium">Pendapatan</p>
-                    <p class="text-sm font-bold text-gray-800 dark:text-white">Rp ${formatNumber(data.finalRevenue)}</p>
+                    <p class="text-sm font-bold text-gray-800">Rp ${formatNumber(data.finalRevenue)}</p>
                     <p class="text-xs text-gray-500">${data.finalUnitsSold} unit terjual</p>
                 </div>
-                <div class="bg-white dark:bg-gray-800 rounded-lg p-3 text-center shadow-sm">
+                <div class="bg-white rounded-lg p-3 text-center shadow-sm">
                     <p class="text-xs text-gray-400 uppercase font-medium">Biaya Iklan</p>
-                    <p class="text-sm font-bold text-gray-800 dark:text-white">Rp ${formatNumber(data.adSpend)}</p>
+                    <p class="text-sm font-bold text-gray-800">Rp ${formatNumber(data.adSpend)}</p>
                     <p class="text-xs text-gray-500">${(data.adSpend / data.finalRevenue * 100).toFixed(1)}% dari revenue</p>
                 </div>
             </div>
             
             <!-- Detail Biaya -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg p-3">
+            <div class="bg-white rounded-lg p-3">
                 <p class="text-xs font-semibold mb-2 flex items-center gap-1">
                     <i class="fas fa-receipt text-[#ee4d2d]"></i> Rincian Biaya
                 </p>
@@ -411,7 +406,7 @@ function displayResult(data) {
                         <span class="text-gray-500">Biaya Lain-lain</span>
                         <span>Rp ${formatNumber(data.otherCosts)}</span>
                     </div>
-                    <div class="border-t border-gray-200 dark:border-gray-700 pt-1 mt-1">
+                    <div class="border-t border-gray-200 pt-1 mt-1">
                         <div class="flex justify-between font-semibold">
                             <span>Total Biaya</span>
                             <span>Rp ${formatNumber(data.totalProductCost + data.marketplaceFeeAmount + data.adSpend + data.otherCosts)}</span>
@@ -431,7 +426,7 @@ function displayResult(data) {
             
             <!-- Rekomendasi -->
             <div>
-                <p class="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1">
+                <p class="text-xs font-semibold text-gray-700 mb-2 flex items-center gap-1">
                     <i class="fas fa-lightbulb text-[#ee4d2d]"></i> Rekomendasi
                 </p>
                 <div class="space-y-2">
@@ -445,7 +440,7 @@ function displayResult(data) {
             </div>
             
             <!-- Note -->
-            <div class="text-xs text-gray-400 text-center border-t border-gray-200 dark:border-gray-700 pt-3">
+            <div class="text-xs text-gray-400 text-center border-t border-gray-200 pt-3">
                 <i class="fas fa-chart-simple mr-1"></i> Hitung secara rutin untuk memantau performa campaign Anda.
             </div>
         </div>

@@ -10,7 +10,7 @@
 </div>
 
 <!-- FAQ Content -->
-<div class="w-full bg-gray-50 dark:bg-dark-bg py-16 md:py-20">
+<div class="w-full bg-gray-50 py-16 md:py-20">
     <div class="container mx-auto px-4">
         <div class="max-w-3xl mx-auto space-y-4">
             @foreach([
@@ -27,16 +27,16 @@
                 ['icon' => 'fa-robot', 'q' => 'Apa itu AI Chatbot?', 'a' => 'AI Chatbot adalah asisten virtual yang siap membantu Anda 24/7. Anda bisa konsultasi bisnis, tanya tips jualan online, diskusi strategi marketing, atau sekedar brainstorming ide produk.'],
                 ['icon' => 'fa-folder', 'q' => 'Apa itu fitur Manajemen Project?', 'a' => 'Manajemen Project memungkinkan Anda mengelompokkan produk ke dalam project-project berbeda. Misalnya project "Baju Muslim", "Aksesoris", dll. Memudahkan organisasi dan pencarian produk.'],
             ] as $faq)
-            <div class="bg-white dark:bg-dark-card rounded-xl shadow-sm border border-gray-100 dark:border-dark-border overflow-hidden">
-                <button class="faq-toggle w-full px-6 py-4 text-left flex items-center justify-between gap-4 hover:bg-gray-50 dark:hover:bg-dark-bg transition" onclick="toggleFaq(this)">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <button class="faq-toggle w-full px-6 py-4 text-left flex items-center justify-between gap-4 hover:bg-gray-50:bg-dark-bg transition" onclick="toggleFaq(this)">
                     <div class="flex items-center gap-3">
                         <i class="fas {{ $faq['icon'] }} text-warasa-orange"></i>
-                        <span class="font-semibold text-gray-900 dark:text-white text-sm">{{ $faq['q'] }}</span>
+                        <span class="font-semibold text-gray-900 text-sm">{{ $faq['q'] }}</span>
                     </div>
                     <i class="fas fa-chevron-down text-gray-400 text-xs transition-transform duration-300"></i>
                 </button>
                 <div class="faq-answer px-6 pb-4 hidden">
-                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed pl-9">{{ $faq['a'] }}</p>
+                    <p class="text-gray-600 text-sm leading-relaxed pl-9">{{ $faq['a'] }}</p>
                 </div>
             </div>
             @endforeach
