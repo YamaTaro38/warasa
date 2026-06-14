@@ -52,9 +52,20 @@ class SyncToMysqlController extends Controller
 
             DB::purge('mysql_sync');
 
-            // Step 1: Run migrations di MySQL
-            $output .= "<strong>Step 1: Migrate MySQL...</strong><br>";
-            Artisan::call('migrate:fresh', [
+            // Step 1: Drop all tables in MySQL
+            $output .= "<strong>Step 1: Drop all MySQL tables...</strong><br>";
+            DB::connection('mysql_sync')->statement('SET FOREIGN_KEY_CHECKS = 0');
+            $mtables = DB::connection('mysql_sync')->select("SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema = 'defaultdb' AND TABLE_TYPE = 'BASE TABLE'");
+            foreach ($mtables as $t) {
+                DB::connection('mysql_sync')->statement("DROP TABLE IF EXISTS `{$t->TABLE_NAME}`");
+                $output .= "Dropped: {$t->TABLE_NAME}<br>";
+            }
+            DB::connection('mysql_sync')->statement('SET FOREIGN_KEY_CHECKS = 1');
+            $output .= "<br>";
+
+            // Step 2: Run migrations di MySQL
+            $output .= "<strong>Step 2: Migrate MySQL...</strong><br>";
+            Artisan::call('migrate', [
                 "--force" => true,
                 "--database" => "mysql_sync",
                 "--no-interaction" => true,
