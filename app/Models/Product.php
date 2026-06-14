@@ -79,8 +79,12 @@ class Product extends Model
     
     public function getPrimaryImageAttribute()
     {
-        $primary = $this->images()->where('is_primary', true)->first();
-        return $primary ? $primary->path : ($this->images->first()->path ?? null);
+        if ($this->relationLoaded('images')) {
+            $primary = $this->images->firstWhere('is_primary', true);
+            return $primary ? $primary->path : ($this->images->first()->path ?? null);
+        }
+        return $this->images()->where('is_primary', true)->value('path') 
+            ?? $this->images()->value('path');
     }
 
     public function getFormattedPriceAttribute()

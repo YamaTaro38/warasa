@@ -155,8 +155,6 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         transform: translateY(-2px);
     }
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
 
     .product-image-wrapper {
         position: relative;
@@ -452,8 +450,8 @@
                         <a href="{{ route('products.edit', $product->uuid) }}" class="product-btn product-btn-edit" onclick="event.stopPropagation();">
                             <i class="fas fa-edit"></i> Edit
                         </a>
-                        <button type="button" class="product-btn" style="background: {{ $product->status === 'published' ? '#10b981' : '#f59e0b' }}; color: white;" onclick="event.stopPropagation(); toggleStatus('{{ $product->uuid }}')">
-                            <i class="fas {{ $product->status === 'published' ? 'fa-eye' : 'fa-eye-slash' }}"></i> {{ $product->status === 'published' ? 'Published' : 'Draft' }}
+                        <button type="button" class="product-btn" style="background: {{ $product->status === 'published' ? '#f59e0b' : '#10b981' }}; color: white;" onclick="event.stopPropagation(); toggleStatus('{{ $product->uuid }}')">
+                            <i class="fas {{ $product->status === 'published' ? 'fa-eye-slash' : 'fa-eye' }}"></i> {{ $product->status === 'published' ? 'Draft' : 'Published' }}
                         </button>
                         <button type="button" class="product-btn product-btn-delete" onclick="event.stopPropagation(); deleteProduct('{{ $product->uuid }}')">
                             <i class="fas fa-trash-alt"></i> Hapus

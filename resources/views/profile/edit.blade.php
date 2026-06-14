@@ -190,9 +190,9 @@
         border: 1px solid #bae6fd;
         border-radius: 8px;
         padding: 12px;
-        margin-top: 16px;
         display: flex;
         align-items: center;
+        margin-bottom: 1rem;
         gap: 12px;
     }
 
@@ -327,6 +327,7 @@
                 @csrf
                 @method('PUT')
 
+                @if(!auth()->user()->google_id || auth()->user()->password)
                 <div class="form-group">
                     <label>Current Password <span class="required">*</span></label>
                     <input type="password" name="current_password" class="form-control @error('current_password', 'updatePassword') is-invalid @enderror" required>
@@ -334,6 +335,15 @@
                     <div class="form-text" style="color: #ef4444;">{{ $message }}</div>
                     @enderror
                 </div>
+                @else
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <div class="info-box-content">
+                        <div class="info-box-title">Set Password</div>
+                        <div class="info-box-text">You signed in with Google. Set a password to enable password login.</div>
+                    </div>
+                </div>
+                @endif
 
                 <div class="form-row">
                     <div class="form-group">

@@ -1578,23 +1578,41 @@ saveBtn.addEventListener('click', async function() {
         dimension: dimensionInput.value || '',
         shipping_options: getSelectedShipping(),
         variations: cleanedVariations,
-        project_id: projectSelect.value || null,
+        project_id: (projectSelect ? projectSelect.value : null) || null,
         images: imagesToSend
     };
     
     try {
+        console.log('Saving product...', payload);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
+        
         const res = await fetch('{{ route("generator.save") }}', {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
+            signal: controller.signal
         });
         
-        const data = await res.json();
+        clearTimeout(timeoutId);
+        console.log('Save response status:', res.status);
+        
+        const text = await res.text();
+        console.log('Save response text:', text.substring(0, 500));
+        
+        let data;
+        try { data = JSON.parse(text); } catch(parseErr) {
+            console.error('JSON parse error:', parseErr);
+            alert('Server mengembalikan respons tidak valid. Status: ' + res.status);
+            return;
+        }
+        
         if (data.success) { 
-            showToast('Produk berhasil disimpan!', 'success', 1500);
+            if (typeof showToast === 'function') showToast('Produk berhasil disimpan!', 'success', 1500);
+            else alert('Produk berhasil disimpan!');
             setTimeout(() => {
                 if (data.product && data.product.uuid) {
                     window.location.href = '/products/' + data.product.uuid;
@@ -1603,12 +1621,17 @@ saveBtn.addEventListener('click', async function() {
                 }
             }, 1500);
         } else {
-            showToast('Gagal menyimpan: ' + (data.message || 'Unknown error'), 'error', 3000);
+            var msg = 'Gagal menyimpan: ' + (data.message || 'Unknown error');
+            if (typeof showToast === 'function') showToast(msg, 'error', 3000);
+            else alert(msg);
             console.error('Error response:', data);
         }
     } catch(e) { 
         console.error('Save error:', e);
-        showToast('Error: ' + e.message, 'error', 3000);
+        var errMsg = 'Error: ' + e.message;
+        if (e.name === 'AbortError') errMsg = 'Request timeout - server terlalu lama merespon';
+        if (typeof showToast === 'function') showToast(errMsg, 'error', 3000);
+        else alert(errMsg);
     } finally { 
         this.disabled = false; 
         this.innerHTML = '<i class="fas fa-save"></i> Simpan Produk'; 
