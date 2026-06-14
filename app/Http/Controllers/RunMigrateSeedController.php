@@ -21,10 +21,9 @@ class RunMigrateSeedController extends Controller
             // Step 0: Drop all tables manually first (handle FK constraints)
             $output .= "<strong>Step 0: Dropping all existing tables...</strong><br>";
             DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-            $tables = DB::select('SHOW TABLES');
-            $db = config('database.connections.mysql.database');
+            $tables = DB::select("SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema IN ('defaultdb', (SELECT DATABASE()))");
             foreach ($tables as $table) {
-                $tableName = $table->{"Tables_in_{$db}"};
+                $tableName = $table->TABLE_NAME;
                 DB::statement("DROP TABLE IF EXISTS `{$tableName}`");
                 $output .= "Dropped: {$tableName}<br>";
             }
