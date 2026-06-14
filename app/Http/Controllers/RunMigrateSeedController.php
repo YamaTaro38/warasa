@@ -18,51 +18,31 @@ class RunMigrateSeedController extends Controller
         $success = true;
 
         try {
-            // Step 0: Drop all tables manually first (handle FK constraints)
-            $output .= "<strong>Step 0: Dropping all existing tables...</strong><br>";
+            // Step 0: Drop all tables fast
+            $output .= "<strong>Step 0: Dropping all tables...</strong><br>";
             DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-            $tables = DB::select("SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema = 'defaultdb' AND TABLE_TYPE = 'BASE TABLE'");
-            foreach ($tables as $table) {
-                $tableName = $table->TABLE_NAME;
-                DB::statement("DROP TABLE IF EXISTS `{$tableName}`");
-                $output .= "Dropped: {$tableName}<br>";
-            }
+            DB::statement("SELECT GROUP_CONCAT(TABLE_NAME) INTO @tables FROM information_schema.tables WHERE table_schema = 'defaultdb' AND TABLE_TYPE = 'BASE TABLE'");
+            DB::statement("SET @query = IF(@tables IS NOT NULL, CONCAT('DROP TABLE IF EXISTS ', @tables), 'SELECT 1')");
+            DB::statement("PREPARE stmt FROM @query");
+            DB::statement("EXECUTE stmt");
+            DB::statement("DEALLOCATE PREPARE stmt");
             DB::statement('SET FOREIGN_KEY_CHECKS = 1');
-            $output .= "<br>";
+            $output .= "All tables dropped in one query<br><br>";
 
-            // Step 1: Run migrations
-            $output .= "<strong>Step 1: Running migrations...</strong><br>";
-            Artisan::call('migrate', [
+            // Step 1: Run migrations + seed together (faster - 1 pass)
+            $output .= "<strong>Step 1: Running migrations + seeders...</strong><br>";
+            Artisan::call('migrate:fresh', [
                 "--force" => true,
+                "--seed" => true,
+                "--seeder" => "Database\\Seeders\\DatabaseSeeder",
                 "--no-interaction" => true,
                 "--quiet" => true
             ]);
             $output .= nl2br(Artisan::output());
             $output .= "<br>";
 
-            // Step 2: Run optimized batch seeder
-            $output .= "<strong>Step 2: Running optimized seeder...</strong><br>";
-            Artisan::call('db:seed', [
-                "--class" => "Database\\Seeders\\OptimizedBatchSeeder",
-                "--force" => true,
-                "--no-interaction" => true,
-                "--quiet" => true
-            ]);
-            $output .= nl2br(Artisan::output());
-            $output .= "<br>";
-
-            // Step 3: Run remaining seeders
-            $output .= "<strong>Step 3: Running additional seeders...</strong><br>";
-            Artisan::call('db:seed', [
-                "--class" => "Database\\Seeders\\AdminUserSeeder",
-                "--force" => true,
-                "--no-interaction" => true,
-                "--quiet" => true
-            ]);
-            $output .= nl2br(Artisan::output());
-            $output .= "<br>";
-
-            $output .= "<strong>Step 4: Running Shopee category codes seeder...</strong><br>";
+            // Step 2: Run Shopee category codes seeder (must run after category seeder in DatabaseSeeder)
+            $output .= "<strong>Step 2: Running Shopee category codes seeder...</strong><br>";
             Artisan::call('db:seed', [
                 "--class" => "Database\\Seeders\\ShopeeCategoryCodesSeeder",
                 "--force" => true,
