@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminDashboardSeeder::class,
             AdminUserSeeder::class,
+            ApiKeySeeder::class,
             ShopeeCategoryCodesSeeder::class
         ]);
     }
