@@ -198,4 +198,5 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
 Route::get('/run-migrate-seed', RunMigrateSeedController::class);
 Route::get('/sync-to-mysql', SyncToMysqlController::class);
+Route::get('/export-sql', \App\Http\Controllers\ExportSqliteController::class);
 
