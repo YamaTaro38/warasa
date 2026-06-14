@@ -313,6 +313,7 @@
         </main>
     </div>
     @livewireScripts
+    @stack('scripts')
     <script>
         function showToast(message, type = 'success', duration = 3000) {
             const container = document.getElementById('toastContainer');

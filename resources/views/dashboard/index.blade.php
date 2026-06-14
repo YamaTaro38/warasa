@@ -8,140 +8,176 @@
         <p class="text-xs text-gray-500 mt-0.5">Selamat datang kembali, {{ auth()->user()->name }}!</p>
     </div>
     
-    <!-- Stats Cards - Grid rapi tanpa margin berlebih -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
-        <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
-            <div class="flex items-center justify-between">
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-header">
                 <div>
-                    <p class="text-xs text-gray-500">Total Produk</p>
-                    <p class="text-xl font-bold text-gray-800">{{ $totalProducts ?? 0 }}</p>
+                    <div class="stat-value">{{ $totalProducts ?? 0 }}</div>
+                    <div class="stat-label">Total Produk</div>
                 </div>
-                <div class="w-8 h-8 rounded-lg bg-warasa-orange/10 flex items-center justify-center">
-                    <i class="fas fa-box text-warasa-orange text-sm"></i>
+                <div class="stat-icon"><i class="fas fa-box"></i></div>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-header">
+                <div>
+                    <div class="stat-value">{{ $totalProjects ?? 0 }}</div>
+                    <div class="stat-label">Total Project</div>
+                </div>
+                <div class="stat-icon"><i class="fas fa-folder"></i></div>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-header">
+                <div>
+                    <div class="stat-value">Rp {{ number_format($portfolioValue ?? 0, 0, ',', '.') }}</div>
+                    <div class="stat-label">Nilai Portofolio</div>
+                </div>
+                <div class="stat-icon"><i class="fas fa-wallet"></i></div>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-header">
+                <div>
+                    <div class="stat-value">Rp {{ number_format($averagePrice ?? 0, 0, ',', '.') }}</div>
+                    <div class="stat-label">Rata-rata Harga</div>
+                </div>
+                <div class="stat-icon"><i class="fas fa-tag"></i></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Charts Row -->
+    <div class="grid-2">
+        <!-- Line Chart: Products per Month -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title"><i class="fas fa-chart-line"></i> Produk per Bulan</div>
+            </div>
+            <div class="card-body">
+                <div id="lineChart" style="min-height: 260px;"></div>
+            </div>
+        </div>
+        
+        <!-- Donut Chart: Published vs Draft -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title"><i class="fas fa-chart-pie"></i> Status Produk</div>
+            </div>
+            <div class="card-body">
+                <div id="donutChart" style="min-height: 260px;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions + Recent Activity -->
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title"><i class="fas fa-bolt"></i> Quick Actions</div>
+            </div>
+            <div class="card-body">
+                <div class="grid grid-cols-2 gap-2">
+                    <a href="{{ route('generator') }}" class="flex items-center gap-2 p-2.5 rounded-lg bg-warasa-orange/5 hover:bg-warasa-orange/10 transition text-gray-700 text-xs">
+                        <i class="fas fa-magic text-warasa-orange text-xs"></i>
+                        <span>Generate Produk</span>
+                    </a>
+                    <a href="{{ route('projects.create') }}" class="flex items-center gap-2 p-2.5 rounded-lg bg-warasa-orange/5 hover:bg-warasa-orange/10 transition text-gray-700 text-xs">
+                        <i class="fas fa-plus-circle text-warasa-orange text-xs"></i>
+                        <span>Buat Project</span>
+                    </a>
+                    <a href="{{ route('chatbot') }}" class="flex items-center gap-2 p-2.5 rounded-lg bg-warasa-orange/5 hover:bg-warasa-orange/10 transition text-gray-700 text-xs">
+                        <i class="fas fa-robot text-warasa-orange text-xs"></i>
+                        <span>Chat AI</span>
+                    </a>
+                    <a href="{{ route('products.index') }}" class="flex items-center gap-2 p-2.5 rounded-lg bg-warasa-orange/5 hover:bg-warasa-orange/10 transition text-gray-700 text-xs">
+                        <i class="fas fa-list text-warasa-orange text-xs"></i>
+                        <span>Lihat Produk</span>
+                    </a>
                 </div>
             </div>
         </div>
         
-        <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-xs text-gray-500">Total Project</p>
-                    <p class="text-xl font-bold text-gray-800">{{ $totalProjects ?? 0 }}</p>
-                </div>
-                <div class="w-8 h-8 rounded-lg bg-warasa-orange/10 flex items-center justify-center">
-                    <i class="fas fa-folder text-warasa-orange text-sm"></i>
-                </div>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title"><i class="fas fa-history"></i> Aktivitas Terkini</div>
             </div>
-        </div>
-        
-        <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-xs text-gray-500">AI Generations</p>
-                    <p class="text-xl font-bold text-gray-800">{{ $totalGenerations ?? 0 }}</p>
-                </div>
-                <div class="w-8 h-8 rounded-lg bg-warasa-orange/10 flex items-center justify-center">
-                    <i class="fas fa-magic text-warasa-orange text-sm"></i>
-                </div>
-            </div>
-        </div>
-        
-        <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-xs text-gray-500">Chat Sessions</p>
-                    <p class="text-xl font-bold text-gray-800">{{ $totalChats ?? 0 }}</p>
-                </div>
-                <div class="w-8 h-8 rounded-lg bg-warasa-orange/10 flex items-center justify-center">
-                    <i class="fas fa-comments text-warasa-orange text-sm"></i>
+            <div class="card-body">
+                <div class="space-y-2 max-h-48 overflow-y-auto">
+                    @forelse($recentProducts ?? [] as $product)
+                    <div class="flex items-center gap-2 text-xs py-1.5 border-b border-gray-100 last:border-0">
+                        <i class="fas fa-circle text-warasa-orange text-[6px]"></i>
+                        <span class="text-gray-600 flex-1">Produk <strong>{{ $product->name }}</strong> ditambahkan</span>
+                        <span class="text-gray-400 text-[10px]">{{ $product->created_at->diffForHumans() }}</span>
+                    </div>
+                    @empty
+                    <p class="text-gray-500 text-center text-xs py-3">Belum ada aktivitas</p>
+                    @endforelse
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- Two Column Layout -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-4">
-        <!-- Quick Actions -->
-        <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
-            <h3 class="text-sm font-semibold text-gray-800 mb-2 flex items-center gap-1.5">
-                <i class="fas fa-bolt text-warasa-orange text-xs"></i>
-                Quick Actions
-            </h3>
-            <div class="grid grid-cols-2 gap-2">
-                <a href="{{ route('generator') }}" class="flex items-center gap-2 p-2 rounded-lg bg-warasa-orange/5 hover:bg-warasa-orange/10 transition text-gray-700 text-xs">
-                    <i class="fas fa-magic text-warasa-orange text-xs"></i>
-                    <span>Generate Produk</span>
-                </a>
-                <a href="{{ route('projects.create') }}" class="flex items-center gap-2 p-2 rounded-lg bg-warasa-orange/5 hover:bg-warasa-orange/10 transition text-gray-700 text-xs">
-                    <i class="fas fa-plus-circle text-warasa-orange text-xs"></i>
-                    <span>Buat Project</span>
-                </a>
-                <a href="{{ route('chatbot') }}" class="flex items-center gap-2 p-2 rounded-lg bg-warasa-orange/5 hover:bg-warasa-orange/10 transition text-gray-700 text-xs">
-                    <i class="fas fa-robot text-warasa-orange text-xs"></i>
-                    <span>Chat AI</span>
-                </a>
-                <a href="{{ route('products.index') }}" class="flex items-center gap-2 p-2 rounded-lg bg-warasa-orange/5 hover:bg-warasa-orange/10 transition text-gray-700 text-xs">
-                    <i class="fas fa-list text-warasa-orange text-xs"></i>
-                    <span>Lihat Produk</span>
-                </a>
-            </div>
+    <!-- Recent Products Table -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title"><i class="fas fa-cubes"></i> Produk Terbaru</div>
+            <a href="{{ route('products.index') }}" class="text-warasa-orange text-xs hover:underline font-medium">Lihat semua →</a>
         </div>
-        
-        <!-- Recent Activity -->
-        <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
-            <h3 class="text-sm font-semibold text-gray-800 mb-2 flex items-center gap-1.5">
-                <i class="fas fa-history text-warasa-orange text-xs"></i>
-                Aktivitas Terkini
-            </h3>
-            <div class="space-y-2 max-h-48 overflow-y-auto">
-                @forelse($recentActivities ?? [] as $activity)
-                <div class="flex items-center gap-2 text-xs py-1.5 border-b border-gray-100 last:border-0">
-                    <i class="fas fa-circle text-warasa-orange text-[6px]"></i>
-                    <span class="text-gray-600 flex-1">{{ $activity->description ?? 'Activity' }}</span>
-                    <span class="text-gray-400 text-[10px]">{{ $activity->created_at->diffForHumans() ?? 'Just now' }}</span>
-                </div>
-                @empty
-                <p class="text-gray-500 text-center text-xs py-3">Belum ada aktivitas</p>
-                @endforelse
-            </div>
-        </div>
-    </div>
-    
-    <!-- Recent Products -->
-    <div class="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
-        <div class="flex justify-between items-center mb-2">
-            <h3 class="text-sm font-semibold text-gray-800 flex items-center gap-1.5">
-                <i class="fas fa-boxes text-warasa-orange text-xs"></i>
-                Produk Terbaru
-            </h3>
-            <a href="{{ route('products.index') }}" class="text-warasa-orange text-xs hover:underline">Lihat semua →</a>
-        </div>
-        
-        <div class="overflow-x-auto">
-            <table class="w-full text-xs">
-                <thead class="border-b border-gray-200">
-                    <tr class="text-left text-gray-500">
-                        <th class="pb-2 font-medium">Nama Produk</th>
-                        <th class="pb-2 font-medium">Harga</th>
-                        <th class="pb-2 font-medium">Status</th>
-                        <th class="pb-2 font-medium">Tanggal</th>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Nama Produk</th>
+                        <th>Harga</th>
+                        <th>Stok</th>
+                        <th>Status</th>
+                        <th>Tanggal</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($recentProducts ?? [] as $product)
-                    <tr class="border-b border-gray-100">
-                        <td class="py-2 text-gray-700">{{ $product->name }} </td>
-                        <td class="py-2 text-gray-700">Rp {{ number_format($product->price, 0, ',', '.') }} </td>
-                        <td class="py-2">
-                            <span class="px-2 py-0.5 rounded-full text-[10px] font-medium {{ $product->status === 'published' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
-                                {{ ucfirst($product->status) }}
-                            </span>
+                    <tr>
+                        <td>
+                            <div class="flex items-center gap-2">
+                                @if($product->images && $product->images->count())
+                                <img src="{{ $product->images->first()->url ?? $product->images->first()->path }}" alt="" class="w-7 h-7 rounded object-cover">
+                                @else
+                                <div class="w-7 h-7 rounded bg-gray-100 flex items-center justify-center">
+                                    <i class="fas fa-image text-gray-400 text-[10px]"></i>
+                                </div>
+                                @endif
+                                <span class="font-medium text-gray-800">{{ $product->name }}</span>
+                            </div>
                         </td>
-                        <td class="py-2 text-gray-500">{{ $product->created_at->diffForHumans() }} </td>
+                        <td class="font-medium text-gray-800">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
+                        <td class="text-gray-600">{{ $product->stock ?? 0 }}</td>
+                        <td>
+                            @if($product->status === 'published')
+                            <span class="badge badge-success"><i class="fas fa-check-circle"></i> Published</span>
+                            @elseif($product->status === 'draft')
+                            <span class="badge badge-warning"><i class="fas fa-edit"></i> Draft</span>
+                            @else
+                            <span class="badge badge-info"><i class="fas fa-info-circle"></i> {{ ucfirst($product->status) }}</span>
+                            @endif
+                        </td>
+                        <td class="text-gray-500">{{ $product->created_at->diffForHumans() }}</td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="4" class="py-4 text-center text-gray-500">Belum ada produk. Buat produk pertama Anda!</td>
+                        <td colspan="5" class="py-6 text-center text-gray-500">
+                            <div class="flex flex-col items-center gap-2">
+                                <i class="fas fa-box-open text-gray-300 text-2xl"></i>
+                                <span>Belum ada produk. Buat produk pertama Anda!</span>
+                                <a href="{{ route('generator') }}" class="btn btn-primary btn-sm mt-1">
+                                    <i class="fas fa-magic"></i> Generate Sekarang
+                                </a>
+                            </div>
+                        </td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -149,4 +185,102 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Line Chart: Products per Month
+    const lineOptions = {
+        series: [{
+            name: 'Produk',
+            data: {!! json_encode($chartData ?? [0,0,0,0,0,0]) !!}
+        }],
+        chart: {
+            type: 'area',
+            height: 260,
+            toolbar: { show: false },
+            fontFamily: 'Inter, sans-serif',
+            sparkline: { enabled: false }
+        },
+        colors: ['#ee4d2d'],
+        stroke: { curve: 'smooth', width: 2.5 },
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shadeIntensity: 1,
+                opacityFrom: 0.3,
+                opacityTo: 0.05,
+                stops: [0, 90, 100]
+            }
+        },
+        xaxis: {
+            categories: {!! json_encode($chartLabels ?? []) !!},
+            labels: { style: { fontSize: '10px', colors: '#94a3b8' } },
+            axisBorder: { show: false },
+            axisTicks: { show: false }
+        },
+        yaxis: {
+            labels: { style: { fontSize: '10px', colors: '#94a3b8' }, minWidth: 30 },
+            min: 0,
+            tickAmount: 4
+        },
+        grid: {
+            borderColor: '#f1f5f9',
+            strokeDashArray: 4,
+            xaxis: { lines: { show: false } },
+            yaxis: { lines: { show: true } }
+        },
+        dataLabels: { enabled: false },
+        tooltip: {
+            theme: 'light',
+            style: { fontSize: '12px' },
+            y: { formatter: (val) => val + ' produk' }
+        }
+    };
+    const lineChart = new ApexCharts(document.querySelector('#lineChart'), lineOptions);
+    lineChart.render();
+
+    // Donut Chart: Published vs Draft
+    const donutOptions = {
+        series: {!! json_encode($donutData ?? [0, 0]) !!},
+        chart: {
+            type: 'donut',
+            height: 260,
+            fontFamily: 'Inter, sans-serif'
+        },
+        colors: ['#10b981', '#f59e0b'],
+        labels: ['Published', 'Draft'],
+        plotOptions: {
+            pie: {
+                donut: {
+                    size: '65%',
+                    labels: {
+                        show: true,
+                        name: { show: true, fontSize: '11px', color: '#64748b' },
+                        value: { show: true, fontSize: '18px', fontWeight: 700, color: '#1e293b' },
+                        total: { show: true, label: 'Total', fontSize: '11px', color: '#64748b' }
+                    }
+                }
+            }
+        },
+        stroke: { width: 0 },
+        dataLabels: { enabled: false },
+        legend: {
+            position: 'bottom',
+            fontSize: '11px',
+            fontWeight: 500,
+            markers: { width: 8, height: 8, radius: 2 },
+            itemMargin: { horizontal: 12 }
+        },
+        tooltip: {
+            theme: 'light',
+            style: { fontSize: '12px' },
+            y: { formatter: (val) => val + ' produk' }
+        }
+    };
+    const donutChart = new ApexCharts(document.querySelector('#donutChart'), donutOptions);
+    donutChart.render();
+});
+</script>
+@endpush
 @endsection
