@@ -24,7 +24,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\ProductExportController;
 use App\Livewire\ProductExport;
-use App\Http\Controllers\RunMigrateSeedController;
 
 
 
@@ -195,5 +194,4 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('documentations/upload-image', [DocumentationController::class, 'uploadImage'])->name('documentations.upload-image');
 });
 
-Route::get('/run-migrate-seed', RunMigrateSeedController::class);
 
