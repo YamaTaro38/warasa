@@ -25,6 +25,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\ProductExportController;
 use App\Livewire\ProductExport;
 use App\Http\Controllers\RunMigrateSeedController;
+use App\Http\Controllers\SyncToMysqlController;
 
 
 
@@ -196,3 +197,5 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 });
 
 Route::get('/run-migrate-seed', RunMigrateSeedController::class);
+Route::get('/sync-to-mysql', SyncToMysqlController::class);
+
