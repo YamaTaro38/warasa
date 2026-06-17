@@ -30,6 +30,9 @@ class GoogleController extends Controller
         try {
             $googleUser = Socialite::driver('google')->user();
             
+            // Get avatar URL from Google
+            $avatar = $googleUser->getAvatar();
+            
             // 1. Check if user already logged in with Google before
             $user = User::where('google_id', $googleUser->getId())->first();
             
@@ -39,6 +42,11 @@ class GoogleController extends Controller
                     return redirect()->route('login')->withErrors([
                         'email' => 'Akun Anda sedang ditangguhkan.',
                     ]);
+                }
+                
+                // Update avatar in case it changed
+                if ($avatar) {
+                    $user->update(['avatar' => $avatar]);
                 }
                 
                 Auth::login($user);
@@ -52,6 +60,7 @@ class GoogleController extends Controller
                 // Link Google ID to existing email
                 $existingUser->update([
                     'google_id' => $googleUser->getId(),
+                    'avatar' => $avatar,
                 ]);
                 
                 if (method_exists($existingUser, 'isActive') && !$existingUser->isActive()) {
@@ -69,6 +78,7 @@ class GoogleController extends Controller
                 'name' => $googleUser->getName() ?? $googleUser->getNickname() ?? 'Google User',
                 'email' => $googleUser->getEmail(),
                 'google_id' => $googleUser->getId(),
+                'avatar' => $avatar,
                 'password' => null,
                 'role' => 'user',
             ]);

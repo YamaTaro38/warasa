@@ -297,7 +297,11 @@
                 </div>
                 <div class="user-menu">
                     <span class="user-name">{{ auth()->user()->name ?? 'User' }}</span>
-                    <div class="user-avatar">{{ substr(auth()->user()->name ?? 'U', 0, 1) }}</div>
+                    @if(auth()->user()->avatar)
+                        <img src="{{ auth()->user()->avatar }}" alt="Avatar" style="width:28px;height:28px;border-radius:6px;object-fit:cover;" referrerpolicy="no-referrer">
+                    @else
+                        <div class="user-avatar">{{ substr(auth()->user()->name ?? 'U', 0, 1) }}</div>
+                    @endif
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="logout-btn">

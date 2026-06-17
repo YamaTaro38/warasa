@@ -6,7 +6,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log; // Tambahkan ini
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use App\Models\User;
 
 class ProfileController extends Controller
@@ -20,59 +22,79 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
-        // Validasi name selalu required
         $rules = [
             'name' => 'required|string|max:255',
         ];
 
-        // Hanya validasi email jika email tidak disabled dan ada perubahan
-        // Cek apakah email dikirim dari form (tidak disabled)
         if ($request->has('email') && $request->email !== null) {
             $rules['email'] = 'required|email|unique:users,email,' . $user->id;
         }
 
         $request->validate($rules);
 
-        // Update name
         $user->name = $request->name;
 
-        // Update email hanya jika email dikirim dan berbeda
         if ($request->has('email') && $request->email !== null && $user->email !== $request->email) {
             $oldEmail = $user->email;
             $newEmail = $request->email;
 
             $user->email = $newEmail;
 
-            // Reset verifikasi jika email berubah
             if ($user->hasVerifiedEmail()) {
                 $user->email_verified_at = null;
                 $user->save();
 
-                // Kirim verifikasi ke email baru
                 $user->sendEmailVerificationNotification();
 
                 return back()->with('warning', 'Email changed! Please verify your new email address. A verification link has been sent to ' . $newEmail);
             } else {
                 $user->save();
 
-                // Kirim verifikasi ke email baru
                 $user->sendEmailVerificationNotification();
 
                 return back()->with('warning', 'Email changed! A verification link has been sent to ' . $newEmail);
             }
         }
 
-        // Jika hanya update name
         $user->save();
 
         return back()->with('success', 'Profile updated successfully!');
+    }
+
+    public function updateAvatar(Request $request)
+    {
+        $request->validate([
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+
+        $user = Auth::user();
+
+        // Delete old avatar if it exists and is a local upload (not Google URL)
+        if ($user->avatar && !str_contains($user->avatar, 'googleusercontent.com')) {
+            $oldRelativePath = str_replace(asset('storage') . '/', '', $user->avatar);
+            if (Storage::disk('public')->exists($oldRelativePath)) {
+                Storage::disk('public')->delete($oldRelativePath);
+            }
+        }
+
+        // Upload new avatar
+        $image = $request->file('avatar');
+        $filename = 'avatars/' . $user->id . '/' . Str::random(20) . '.' . $image->getClientOriginalExtension();
+        
+        // Store directly to the 'public' disk (storage/app/public/)
+        Storage::disk('public')->put($filename, file_get_contents($image));
+
+        $avatarUrl = asset('storage/' . $filename);
+
+        $user->update(['avatar' => $avatarUrl]);
+
+        return back()->with('success', 'Foto profil berhasil diperbarui!');
     }
 
     public function updatePassword(Request $request)
     {
         $user = Auth::user();
         
-        // Google user (tidak punya password) tidak perlu current_password
         $rules = [
             'password' => 'required|min:8|confirmed',
         ];
@@ -110,7 +132,6 @@ class ProfileController extends Controller
         try {
             $user = $request->user();
 
-            // Log untuk debugging
             Log::info('Resend verification requested for user: ' . $user->email);
 
             if ($user->hasVerifiedEmail()) {
@@ -124,7 +145,6 @@ class ProfileController extends Controller
                 return back()->with('error', 'Email already verified.');
             }
 
-            // Kirim ulang verifikasi
             $user->sendEmailVerificationNotification();
 
             Log::info('Verification email resent successfully to: ' . $user->email);

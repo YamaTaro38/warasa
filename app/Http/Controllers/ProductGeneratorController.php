@@ -137,9 +137,16 @@ class ProductGeneratorController extends Controller
 
             $categoryName = $this->aiService->recommendCategoryName($name, $additionalInfo);
             $categoryId = null;
+            
+            // Try to find category by AI-recommended name first
             if ($categoryName) {
                 $category = ProductCategory::where('name', 'like', '%' . $categoryName . '%')->first();
                 $categoryId = $category->id ?? null;
+            }
+            
+            // If still no match, try direct ID search from database
+            if (!$categoryId) {
+                $categoryId = $this->aiService->findCategoryIdFromDatabase($name, $additionalInfo);
             }
 
             $brand = $this->aiService->recommendBrand($name, $additionalInfo);

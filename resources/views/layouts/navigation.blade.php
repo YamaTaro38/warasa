@@ -23,9 +23,13 @@
                     </a>
                     <div class="relative group">
                         <button class="flex items-center gap-2 hover:text-warasa-orange transition">
-                            <div class="w-8 h-8 rounded-full bg-warasa-orange flex items-center justify-center">
-                                <i class="fas fa-user text-white text-sm"></i>
-                            </div>
+                            @if(auth()->user()->avatar)
+                                <img src="{{ auth()->user()->avatar }}" alt="Avatar" class="w-8 h-8 rounded-full object-cover" referrerpolicy="no-referrer">
+                            @else
+                                <div class="w-8 h-8 rounded-full bg-warasa-orange flex items-center justify-center">
+                                    <i class="fas fa-user text-white text-sm"></i>
+                                </div>
+                            @endif
                             <span class="text-sm text-gray-600">{{ auth()->user()->name }}</span>
                             <i class="fas fa-chevron-down text-xs text-gray-400"></i>
                         </button>

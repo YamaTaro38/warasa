@@ -255,6 +255,35 @@
             </div>
         </div>
         <div class="settings-card-body">
+            <!-- Avatar Upload -->
+            <div class="form-group" style="text-align: center; margin-bottom: 24px;">
+                <label style="margin-bottom: 10px;">Profile Photo</label>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+                    <div style="position: relative; display: inline-block;">
+                        @if(auth()->user()->avatar)
+                            <img src="{{ auth()->user()->avatar }}" alt="Avatar"
+                                style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #ee4d2d;"
+                                referrerpolicy="no-referrer" id="avatarPreview">
+                        @else
+                            <div id="avatarPlaceholder" style="width: 100px; height: 100px; border-radius: 50%; background: #ee4d2d; display: flex; align-items: center; justify-content: center; border: 3px solid #ee4d2d;">
+                                <i class="fas fa-user" style="font-size: 36px; color: white;"></i>
+                            </div>
+                        @endif
+                        <label for="avatarInput" style="position: absolute; bottom: 0; right: 0; width: 32px; height: 32px; background: #ee4d2d; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid white;">
+                            <i class="fas fa-camera" style="color: white; font-size: 14px;"></i>
+                        </label>
+                    </div>
+                    <form id="avatarForm" method="POST" action="{{ route('profile.avatar.update') }}" enctype="multipart/form-data" style="display: none;">
+                        @csrf
+                        <input type="file" name="avatar" id="avatarInput" accept="image/jpeg,image/png,image/jpg,image/gif,image/webp" style="display: none;">
+                    </form>
+                    <div style="font-size: 11px; color: #94a3b8;">Klik ikon kamera untuk upload foto (max 2MB)</div>
+                    <div id="avatarLoading" style="display: none; font-size: 12px; color: #ee4d2d;">
+                        <i class="fas fa-spinner fa-pulse"></i> Mengupload...
+                    </div>
+                </div>
+            </div>
+
             <form method="POST" action="{{ route('profile.update') }}">
                 @csrf
                 @method('PATCH')
@@ -441,6 +470,37 @@
         }
     }
 
+    // Avatar upload
+    document.getElementById('avatarInput')?.addEventListener('change', function() {
+        const file = this.files[0];
+        if (!file) return;
+
+        // Preview
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            let preview = document.getElementById('avatarPreview');
+            const placeholder = document.getElementById('avatarPlaceholder');
+            if (!preview) {
+                if (placeholder) placeholder.remove();
+                const container = document.querySelector('#avatarInput').closest('.settings-card-body').querySelector('div[style*="position: relative"]');
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.alt = 'Avatar';
+                img.id = 'avatarPreview';
+                img.style.cssText = 'width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #ee4d2d;';
+                container?.querySelector('div[style*="position: relative"] > div:first-child')?.replaceWith(img);
+            } else {
+                preview.src = e.target.result;
+            }
+        };
+        reader.readAsDataURL(file);
+
+        // Auto submit
+        const loading = document.getElementById('avatarLoading');
+        if (loading) loading.style.display = 'block';
+        document.getElementById('avatarForm')?.submit();
+    });
+
     // Resend verification email
     document.getElementById('resendVerificationBtn')?.addEventListener('click', async function() {
         const btn = this;
@@ -483,7 +543,6 @@
     });
 
     function showToast(message, type = 'success') {
-        // Remove existing toasts
         const existingToasts = document.querySelectorAll('.toast');
         existingToasts.forEach(toast => toast.remove());
 
@@ -518,7 +577,6 @@
         }, 5000);
     }
 
-    // Add these animations to your CSS
     const style = document.createElement('style');
     style.textContent = `
     @keyframes slideIn {
@@ -531,7 +589,7 @@
             opacity: 1;
         }
     }
-    
+
     @keyframes slideOut {
         from {
             transform: translateX(0);
@@ -545,14 +603,12 @@
 `;
     document.head.appendChild(style);
 
-    // Close modal on ESC key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             closeDeleteModal();
         }
     });
 
-    // Close modal on overlay click
     document.getElementById('deleteModal')?.addEventListener('click', function(e) {
         if (e.target === this) {
             closeDeleteModal();

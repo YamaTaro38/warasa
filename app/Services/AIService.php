@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\ApiKey;
+use App\Models\ProductCategory;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -88,7 +89,7 @@ class AIService
                         Log::warning("Gemini attempt failed: HTTP {$status}");
                         if (in_array($status, [429, 403])) {
                             $this->markKeyAsLimited($apiKey);
-                            break; // stop trying this key
+                            break;
                         }
                     }
                 } catch (\Exception $e) {
@@ -142,20 +143,16 @@ class AIService
     {
         if (empty($text)) return $text;
         
-        // Bersihkan footer noise
         $text = preg_replace('/--- Support.*?---/s', '', $text);
         $text = preg_replace('/Powered by.*?Pollinations.*/s', '', $text);
         $text = preg_replace('/Like what.*?$/m', '', $text);
         $text = preg_replace('/\*{3,}/', '', $text);
         
-        // **bold** atau *bold* jadi <strong>
         $text = preg_replace('/\*\*(.+?)\*\*/', '<strong>$1</strong>', $text);
         $text = preg_replace('/\*([^*\n]+)\*/', '<strong>$1</strong>', $text);
         
-        // Heading jadi bold
         $text = preg_replace('/^#{1,3}\s+(.+)$/m', '<strong>$1:</strong>', $text);
         
-        // Proses per baris: konversi bullet, sisanya bold
         $lines = explode("\n", $text);
         $processed = [];
         foreach ($lines as $line) {
@@ -171,7 +168,6 @@ class AIService
             }
         }
         
-        // Struktur final
         $result = '';
         $inList = false;
         foreach ($processed as $line) {
@@ -189,7 +185,6 @@ class AIService
         }
         if ($inList) $result .= '</ul>';
         
-        // Cleanup
         $result = preg_replace('/<p>\s*<\/p>/', '', $result);
         $result = preg_replace('/<br>\s*<\/ul>/', '</ul>', $result);
         $result = preg_replace('/\s+/', ' ', $result);
@@ -289,39 +284,88 @@ Output langsung deskripsinya tanpa basa-basi pengantar.";
         return null;
     }
 
-    // ==================== REKOMENDASI ====================
+    // ==================== REKOMENDASI KATEGORI DINAMIS ====================
     public function recommendCategoryName($productName, $additionalInfo = null)
     {
+        // Ambil maksimal 30 kategori yang paling relevan dari database untuk menghindari prompt terlalu panjang
+        $categories = ProductCategory::where('is_active', true)
+            ->orderBy('sort_order')
+            ->limit(30)
+            ->get(['name', 'description']);
+        
+        if ($categories->isEmpty()) return null;
+
+        $categoryList = $categories->map(function($cat) {
+            $desc = $cat->description ? " - {$cat->description}" : '';
+            return "- {$cat->name}{$desc}";
+        })->implode("\n");
+
         $info = $additionalInfo ? " Informasi tambahan: {$additionalInfo}" : '';
-        $availableCategories = [
-            'Handphone', 'Elektronik', 'Fashion Pria', 'Fashion Wanita', 
-            'Makanan & Minuman', 'Kecantikan', 'Kesehatan', 'Olahraga', 
-            'Mainan', 'Buku', 'Alat Tulis', 'Otomotif', 
-            'Peralatan Rumah Tangga', 'Aksesoris', 'Lainnya'
-        ];
-        $categoryList = implode(', ', $availableCategories);
         
-        $prompt = "Berdasarkan produk \"{$productName}\" yang dijual di Indonesia.{$info}
-Berikan 1 nama kategori yang PALING TEPAT untuk produk ini. Pilih dari: {$categoryList}.
-Contoh: untuk 'samsung a16 8/128gb' -> Handphone. Output hanya nama kategori persis seperti di daftar.";
+        $prompt = "Tentukan 1 kategori yang PALING TEPAT untuk produk \"{$productName}\" yang dijual di Indonesia.{$info}
+
+Pilih dari daftar kategori berikut:
+{$categoryList}
+
+Output HANYA nama kategori persis seperti yang ada di daftar, TANPA teks lain.";
         
-        $response = $this->callAI($prompt, 30, 3);
+        $response = $this->callAI($prompt, 20, 3);
         if ($response) {
-            $categoryName = trim(preg_replace('/[^a-zA-Z\s&]/', '', $response));
-            foreach ($availableCategories as $cat) {
-                if (stripos($categoryName, $cat) !== false || stripos($cat, $categoryName) !== false) {
-                    return $cat;
+            $categoryName = trim(preg_replace('/[^a-zA-Z\s&\-\/]/', '', $response));
+            
+            foreach ($categories as $cat) {
+                if (strcasecmp(trim($categoryName), trim($cat->name)) === 0) {
+                    return $cat->name;
                 }
             }
-            if (in_array($categoryName, $availableCategories)) return $categoryName;
+            
+            // Fuzzy match
+            $bestMatch = null;
+            $bestScore = 0;
+            foreach ($categories as $cat) {
+                similar_text(strtolower($categoryName), strtolower($cat->name), $percent);
+                if ($percent > $bestScore) {
+                    $bestScore = $percent;
+                    $bestMatch = $cat->name;
+                }
+            }
+            
+            if ($bestScore > 60 && $bestMatch) {
+                return $bestMatch;
+            }
         }
         
-        // Fallback keyword
-        $lowerName = strtolower($productName);
-        if (preg_match('/(hp|handphone|samsung|iphone|xiaomi|oppo)/i', $lowerName)) return 'Handphone';
-        if (preg_match('/(laptop|komputer|notebook|pc|asus|acer)/i', $lowerName)) return 'Elektronik';
-        if (preg_match('/(baju|kemeja|kaos|celana|jaket|koko|gamis)/i', $lowerName)) return 'Fashion Pria';
-        if (preg_match('/(makanan|minuman|keripik|snack|roti)/i', $lowerName)) return 'Makanan & Minuman';
+        return null;
+    }
+
+    public function findCategoryIdFromDatabase($productName, $additionalInfo = null)
+    {
+        $categories = ProductCategory::where('is_active', true)->limit(30)->get(['id', 'name']);
+        
+        if ($categories->isEmpty()) return null;
+
+        $categoryList = $categories->map(function($cat) {
+            return "- {$cat->name} (ID: {$cat->id})";
+        })->implode("\n");
+
+        $info = $additionalInfo ? " Informasi tambahan: {$additionalInfo}" : '';
+        
+        $prompt = "Produk: \"{$productName}\" yang dijual di Indonesia.{$info}
+
+Pilih kategori yang PALING TEPAT dari daftar berikut:
+{$categoryList}
+
+Output HANYA angka ID kategori (contoh: 5). Tanpa teks lain.";
+        
+        $response = $this->callAI($prompt, 20, 1);
+        if ($response) {
+            preg_match('/\d+/', $response, $m);
+            $id = (int) ($m[0] ?? 0);
+            if ($id > 0 && $categories->contains('id', $id)) {
+                return $id;
+            }
+        }
+        
         return null;
     }
 
@@ -370,17 +414,12 @@ Output hanya format tersebut.";
 
     // ==================== ANALISIS KOMPETITOR ====================
 
-    /**
-     * Menganalisis data kompetitor (dari CSV) untuk mendapat insight SEO & pricing.
-     * Return: price range, avg price, top keywords, recommended price, gaps.
-     */
     public function analyzeCompetitor($csvData)
     {
         if (empty($csvData) || !is_array($csvData)) {
             return null;
         }
 
-        // Normalisasi data CSV
         $products = is_array($csvData) && isset($csvData[0]) ? $csvData : [$csvData];
         $prices = [];
         $soldCounts = [];
@@ -398,7 +437,6 @@ Output hanya format tersebut.";
             }
             if (!empty($p['lokasi_toko'])) $locations[] = $p['lokasi_toko'];
             if (!empty($p['nama_produk'])) {
-                // Tokenisasi kata dari nama produk
                 $words = preg_split('/[\s\-\,\.\(\)\/]+/u', strtolower($p['nama_produk']));
                 foreach ($words as $w) {
                     if (strlen($w) > 3 && !in_array($w, ['untuk', 'dengan', 'yang', 'dan', 'dari', 'pada', 'dalam'])) {
@@ -411,7 +449,6 @@ Output hanya format tersebut.";
             }
         }
 
-        // Statistik harga
         $priceStats = null;
         if (!empty($prices)) {
             sort($prices);
@@ -426,12 +463,10 @@ Output hanya format tersebut.";
             ];
         }
 
-        // Top keywords dari nama produk
         $wordFreq = array_count_values($nameWords);
         arsort($wordFreq);
         $topKeywords = array_slice(array_keys($wordFreq), 0, 10);
 
-        // Top specs
         $specFreq = array_count_values($specKeys);
         arsort($specFreq);
         $topSpecs = array_slice(array_keys($specFreq), 0, 5);
@@ -446,9 +481,6 @@ Output hanya format tersebut.";
         ];
     }
 
-    /**
-     * Generate judul SEO yang diperkaya dengan analisis kompetitor.
-     */
     public function generateCompetitorBasedTitle($productName, $competitorAnalysis, $additionalInfo = null)
     {
         $info = $additionalInfo ? " Informasi tambahan: {$additionalInfo}" : '';
@@ -478,9 +510,6 @@ ATURAN JUDUL:
         return null;
     }
 
-    /**
-     * Generate deskripsi SEO yang Beat-the-competitor.
-     */
     public function generateCompetitorBasedDescription($productName, $competitorAnalysis, $additionalInfo = null, $category = null)
     {
         $catName = $category ? $category->name : 'Produk';
@@ -530,9 +559,6 @@ ATURAN:
         return null;
     }
 
-    /**
-     * Rekomendasi harga kompetitif berdasarkan analisis.
-     */
     public function recommendCompetitivePrice($productName, $competitorAnalysis, $additionalInfo = null)
     {
         if (empty($competitorAnalysis['price_stats'])) {
@@ -554,13 +580,9 @@ Berikan 1 rekomendasi HARGA JUAL yang kompetitif (sedikit di bawah rata-rata unt
             $num = (int) preg_replace('/[^0-9]/', '', $response);
             if ($num >= 1000 && $num <= 100000000) return $num;
         }
-        // Fallback: median - 10%
         return (int) ($stats['median'] * 0.9);
     }
 
-    /**
-     * Generate keyword yang Beat-the-competitor.
-     */
     public function generateCompetitorKeywords($productName, $competitorAnalysis, $additionalInfo = null)
     {
         $info = $additionalInfo ? " Info: {$additionalInfo}" : '';
@@ -578,15 +600,11 @@ Berikan 1 rekomendasi HARGA JUAL yang kompetitif (sedikit di bawah rata-rata unt
         return null;
     }
 
-    /**
-     * Hitung SEO score (0-100) untuk validasi judul, deskripsi, dan keywords.
-     */
     public function calculateSeoScore($data)
     {
         $score = 0;
         $details = [];
 
-        // 1. Judul (max 30 poin)
         $title = $data['title'] ?? '';
         $titleLen = mb_strlen($title);
         if ($titleLen >= 40 && $titleLen <= 100) {
@@ -600,7 +618,6 @@ Berikan 1 rekomendasi HARGA JUAL yang kompetitif (sedikit di bawah rata-rata unt
             $details['title'] = ['score' => 5, 'msg' => 'Panjang judul kurang optimal (' . $titleLen . ' karakter)'];
         }
 
-        // 2. Deskripsi (max 30 poin)
         $desc = strip_tags($data['description'] ?? '');
         $descLen = mb_strlen($desc);
         if ($descLen >= 400 && $descLen <= 2000) {
@@ -614,7 +631,6 @@ Berikan 1 rekomendasi HARGA JUAL yang kompetitif (sedikit di bawah rata-rata unt
             $details['description'] = ['score' => 5, 'msg' => 'Panjang deskripsi kurang optimal (' . $descLen . ' karakter)'];
         }
 
-        // 3. Keywords (max 20 poin)
         $keywords = $data['keywords'] ?? '';
         $kwArray = array_filter(array_map('trim', explode(',', $keywords)));
         $kwCount = count($kwArray);
@@ -629,7 +645,6 @@ Berikan 1 rekomendasi HARGA JUAL yang kompetitif (sedikit di bawah rata-rata unt
             $details['keywords'] = ['score' => 4, 'msg' => 'Jumlah keyword kurang (' . $kwCount . ' keyword, ideal 8-15)'];
         }
 
-        // 4. Brand (max 5 poin)
         if (!empty($data['brand'])) {
             $score += 5;
             $details['brand'] = ['score' => 5, 'msg' => 'Brand terisi'];
@@ -637,7 +652,6 @@ Berikan 1 rekomendasi HARGA JUAL yang kompetitif (sedikit di bawah rata-rata unt
             $details['brand'] = ['score' => 0, 'msg' => 'Brand belum terisi'];
         }
 
-        // 5. Category (max 5 poin)
         if (!empty($data['category_id'])) {
             $score += 5;
             $details['category'] = ['score' => 5, 'msg' => 'Kategori terisi'];
@@ -645,7 +659,6 @@ Berikan 1 rekomendasi HARGA JUAL yang kompetitif (sedikit di bawah rata-rata unt
             $details['category'] = ['score' => 0, 'msg' => 'Kategori belum terisi'];
         }
 
-        // 6. Price & variations (max 5 poin)
         $hasVariations = !empty($data['variations']);
         $hasPrice = !empty($data['price']) && $data['price'] > 0;
         if ($hasPrice && $hasVariations) {
@@ -658,7 +671,6 @@ Berikan 1 rekomendasi HARGA JUAL yang kompetitif (sedikit di bawah rata-rata unt
             $details['price_variation'] = ['score' => 0, 'msg' => 'Harga & variasi belum terisi'];
         }
 
-        // 7. Gambar (max 5 poin)
         $imgCount = is_array($data['images'] ?? null) ? count($data['images']) : 0;
         if ($imgCount >= 3) {
             $score += 5;
@@ -670,7 +682,6 @@ Berikan 1 rekomendasi HARGA JUAL yang kompetitif (sedikit di bawah rata-rata unt
             $details['images'] = ['score' => 0, 'msg' => 'Belum ada gambar'];
         }
 
-        // Grade
         $grade = 'E';
         if ($score >= 85) $grade = 'A';
         elseif ($score >= 70) $grade = 'B';
@@ -686,9 +697,6 @@ Berikan 1 rekomendasi HARGA JUAL yang kompetitif (sedikit di bawah rata-rata unt
         ];
     }
 
-    /**
-     * Generate rekomendasi SEO berdasarkan skor yang ada.
-     */
     private function generateSeoRecommendations($details, $currentScore)
     {
         $recs = [];
@@ -736,7 +744,6 @@ Output hanya JSON valid, tanpa penjelasan lain.";
             if (!empty($matches)) {
                 $variations = json_decode($matches[0], true);
                 if (is_array($variations) && !empty($variations)) {
-                    // Validasi dan konversi options ke array of strings
                     foreach ($variations as &$v) {
                         if (!isset($v['name']) || !isset($v['options'])) {
                             return [];
@@ -752,7 +759,6 @@ Output hanya JSON valid, tanpa penjelasan lain.";
             }
         }
         
-        // Fallback cerdas
         $lowerName = strtolower($productName);
         if (preg_match('/(hp|handphone|samsung|iphone)/i', $lowerName)) {
             return [
