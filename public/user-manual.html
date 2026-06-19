@@ -1,0 +1,1982 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warasa - Panduan Pengguna Lengkap</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📘</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ===== ROOT VARIABLES ===== */
+        :root {
+            --primary: #ee4d2d;
+            --primary-dark: #c63d22;
+            --primary-light: #fff0eb;
+            --primary-glow: rgba(238, 77, 45, 0.15);
+            --accent-blue: #0055aa;
+            --accent-green: #00aa5e;
+            --accent-yellow: #f5a623;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+            --shadow-xl: 0 20px 60px rgba(0,0,0,0.15);
+            --shadow-glow: 0 4px 20px rgba(238,77,45,0.25);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ===== RESET & BASE ===== */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        ::selection { background: var(--primary); color: white; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--gray-100); }
+        ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }
+
+        /* ===== NAVIGATION ===== */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--gray-200);
+            transition: var(--transition);
+        }
+        .navbar.scrolled { box-shadow: var(--shadow-md); }
+        .nav-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 68px;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 20px;
+            color: var(--primary);
+            font-family: 'Poppins', sans-serif;
+        }
+        .nav-logo .logo-icon {
+            width: 36px; height: 36px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--gray-600);
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+        }
+        .nav-toggle span {
+            width: 24px; height: 2px;
+            background: var(--gray-700);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+        .nav-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .nav-toggle.active span:nth-child(2) { opacity: 0; }
+        .nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            padding: 140px 24px 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%; right: -20%;
+            width: 600px; height: 600px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%; left: -10%;
+            width: 400px; height: 400px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .hero-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+        .hero-text { flex: 1; }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            color: white;
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+        .hero-text h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 48px;
+            font-weight: 800;
+            color: white;
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+        .hero-text h1 span { color: #fef08a; }
+        .hero-text p {
+            font-size: 18px;
+            color: rgba(255,255,255,0.9);
+            max-width: 540px;
+            line-height: 1.7;
+            margin-bottom: 32px;
+        }
+        .hero-stats {
+            display: flex;
+            gap: 32px;
+        }
+        .hero-stat {
+            text-align: center;
+        }
+        .hero-stat .num {
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+        }
+        .hero-stat .label {
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        .hero-visual {
+            flex: 0 0 380px;
+            position: relative;
+        }
+        .hero-visual-inner {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .hero-visual-inner .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        .hero-visual-inner .icon-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: var(--radius-md);
+            padding: 16px 12px;
+            text-align: center;
+            color: white;
+            transition: var(--transition);
+        }
+        .hero-visual-inner .icon-item:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        .hero-visual-inner .icon-item i {
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+        .hero-visual-inner .icon-item span {
+            display: block;
+            font-size: 11px;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+        .floating-card {
+            position: absolute;
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: float 3s ease-in-out infinite;
+        }
+        .floating-card:nth-child(2) {
+            top: -20px; right: -20px;
+            animation-delay: 0.5s;
+        }
+        .floating-card:nth-child(3) {
+            bottom: -20px; left: -20px;
+            animation-delay: 1s;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ===== SECTION ===== */
+        .section {
+            padding: 80px 0;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 56px;
+        }
+        .section-header .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 14px;
+            border-radius: 100px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .section-header h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+        }
+        .section-header p {
+            font-size: 16px;
+            color: var(--gray-500);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .section-header .divider {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            border-radius: 2px;
+            margin: 16px auto 0;
+        }
+
+        /* ===== SECTION ALTERNATE ===== */
+        .section-alt { background: white; }
+
+        /* ===== FEATURE CARDS ===== */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 24px;
+        }
+        .feature-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            border: 1px solid var(--gray-200);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent-yellow));
+            opacity: 0;
+            transition: var(--transition);
+        }
+        .feature-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
+        }
+        .feature-card:hover::before { opacity: 1; }
+        .feature-icon {
+            width: 52px; height: 52px;
+            background: var(--primary-light);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+        .feature-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+        .feature-card p {
+            font-size: 14px;
+            color: var(--gray-500);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        .feature-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .feature-tags span {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 100px;
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+        .feature-tags .tag-primary { background: var(--primary-light); color: var(--primary); }
+        .feature-tags .tag-green { background: #ecfdf5; color: var(--accent-green); }
+        .feature-tags .tag-blue { background: #eff6ff; color: var(--accent-blue); }
+        .feature-tags .tag-yellow { background: #fffbeb; color: var(--accent-yellow); }
+
+        /* ===== DETAIL SECTION ===== */
+        .detail-section {
+            padding: 60px 0;
+        }
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+        .detail-content h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .detail-content h3 i { color: var(--primary); }
+        .detail-content p {
+            font-size: 15px;
+            color: var(--gray-600);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        .detail-steps {
+            list-style: none;
+            counter-reset: step;
+        }
+        .detail-steps li {
+            counter-increment: step;
+            display: flex;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        .detail-steps li:last-child { border-bottom: none; }
+        .detail-steps li::before {
+            content: counter(step);
+            width: 28px; height: 28px;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 13px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .detail-steps li strong {
+            display: block;
+            font-size: 14px;
+            color: var(--gray-800);
+            margin-bottom: 2px;
+        }
+        .detail-steps li span {
+            font-size: 13px;
+            color: var(--gray-500);
+            line-height: 1.6;
+        }
+        .detail-visual {
+            background: var(--gray-50);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            border: 1px solid var(--gray-200);
+            position: sticky;
+            top: 90px;
+        }
+        .detail-visual .screenshot-placeholder {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+        }
+        .screenshot-placeholder .mock-header {
+            background: var(--gray-800);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .mock-header .dots { display: flex; gap: 6px; }
+        .mock-header .dots span {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+        }
+        .mock-header .dots span:nth-child(1) { background: #ef4444; }
+        .mock-header .dots span:nth-child(2) { background: #f59e0b; }
+        .mock-header .dots span:nth-child(3) { background: #10b981; }
+        .mock-header .mock-title {
+            color: rgba(255,255,255,0.6);
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+        .mock-body { padding: 24px; }
+        .mock-body .mock-line {
+            height: 12px;
+            background: var(--gray-100);
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+        .mock-body .mock-line:nth-child(1) { width: 70%; }
+        .mock-body .mock-line:nth-child(2) { width: 90%; }
+        .mock-body .mock-line:nth-child(3) { width: 50%; }
+        .mock-body .mock-line:nth-child(4) { width: 80%; }
+        .mock-body .mock-box {
+            height: 80px;
+            background: var(--primary-light);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 14px;
+            gap: 8px;
+        }
+
+        /* ===== FEATURE LIST COMPACT ===== */
+        .feature-list-compact {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .feature-item-compact {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 20px;
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--gray-200);
+            transition: var(--transition);
+        }
+        .feature-item-compact:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+        .feature-item-compact .ficon {
+            width: 40px; height: 40px;
+            background: var(--primary-light);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .feature-item-compact h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+        .feature-item-compact p {
+            font-size: 12px;
+            color: var(--gray-500);
+            margin-top: 1px;
+        }
+
+        /* ===== TIMELINE ===== */
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gray-200);
+        }
+        .timeline-item {
+            position: relative;
+            padding: 0 0 32px 24px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -33px;
+            top: 4px;
+            width: 12px; height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+        .timeline-item h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+        .timeline-item p {
+            font-size: 13px;
+            color: var(--gray-500);
+            line-height: 1.6;
+        }
+
+        /* ===== TABLE OF CONTENTS ===== */
+        .toc {
+            background: white;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--gray-200);
+            padding: 32px;
+            margin-bottom: 40px;
+        }
+        .toc h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .toc h3 i { color: var(--primary); }
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 8px;
+        }
+        .toc-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            color: var(--gray-600);
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        .toc-item:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+        .toc-item .num {
+            width: 28px; height: 28px;
+            background: var(--gray-100);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--gray-500);
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+        .toc-item:hover .num {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* ===== ALERT / TIP BOX ===== */
+        .tip-box {
+            display: flex;
+            gap: 14px;
+            padding: 20px 24px;
+            border-radius: var(--radius-md);
+            margin: 24px 0;
+            border-left: 4px solid;
+        }
+        .tip-box.info {
+            background: #eff6ff;
+            border-color: var(--accent-blue);
+        }
+        .tip-box.info i { color: var(--accent-blue); }
+        .tip-box.warning {
+            background: #fffbeb;
+            border-color: var(--accent-yellow);
+        }
+        .tip-box.warning i { color: var(--accent-yellow); }
+        .tip-box.success {
+            background: #ecfdf5;
+            border-color: var(--accent-green);
+        }
+        .tip-box.success i { color: var(--accent-green); }
+        .tip-box i { font-size: 20px; margin-top: 2px; }
+        .tip-box h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--gray-800); }
+        .tip-box p { font-size: 13px; color: var(--gray-600); line-height: 1.6; margin: 0; }
+
+        /* ===== SECTION DIVIDER ===== */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gray-200), transparent);
+            margin: 0;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--gray-900);
+            color: rgba(255,255,255,0.7);
+            padding: 60px 24px 32px;
+        }
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-brand .nav-logo { margin-bottom: 12px; }
+        .footer-brand p { font-size: 14px; line-height: 1.7; max-width: 320px; }
+        .footer h4 {
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        .footer ul { list-style: none; }
+        .footer ul li { margin-bottom: 8px; }
+        .footer ul li a {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 13px;
+            transition: var(--transition);
+        }
+        .footer ul li a:hover { color: var(--primary); }
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+        }
+        .footer-socials { display: flex; gap: 12px; }
+        .footer-socials a {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .footer-socials a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .hero-content { flex-direction: column; text-align: center; }
+            .hero-text p { margin: 0 auto 32px; }
+            .hero-stats { justify-content: center; }
+            .hero-visual { flex: none; width: 100%; max-width: 400px; }
+            .detail-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 68px; left: 0; right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 16px;
+                border-bottom: 1px solid var(--gray-200);
+                box-shadow: var(--shadow-md);
+            }
+            .nav-links.open { display: flex; }
+            .nav-toggle { display: flex; }
+            .hero { padding: 120px 16px 60px; }
+            .hero-text h1 { font-size: 32px; }
+            .hero-stats { flex-wrap: wrap; gap: 16px; }
+            .hero-stat .num { font-size: 22px; }
+            .section { padding: 48px 0; }
+            .section-header h2 { font-size: 28px; }
+            .section-header { margin-bottom: 36px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .feature-list-compact { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+            .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+            .toc-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 480px) {
+            .hero-text h1 { font-size: 26px; }
+            .hero-stat .num { font-size: 18px; }
+            .feature-card { padding: 24px; }
+            .detail-visual { padding: 20px; }
+            .container { padding: 0 16px; }
+        }
+
+        /* ===== BACK TO TOP ===== */
+        .back-to-top {
+            position: fixed;
+            bottom: 32px; right: 32px;
+            width: 48px; height: 48px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: var(--shadow-glow);
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            z-index: 999;
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+        .back-to-top:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" id="navbar">
+    <div class="nav-inner">
+        <a href="#" class="nav-logo">
+            <div class="logo-icon">W</div>
+            Warasa
+        </a>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#pendahuluan" class="active">Pendahuluan</a></li>
+            <li><a href="#fitur-utama">Fitur</a></li>
+            <li><a href="#panduan">Panduan</a></li>
+            <li><a href="#admin">Admin</a></li>
+            <li><a href="#faq">FAQ</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+    <div class="hero-content container">
+        <div class="hero-text">
+            <div class="hero-badge">
+                <i class="fas fa-book-open"></i>
+                Panduan Pengguna Lengkap
+            </div>
+            <h1>User Manual <span>Warasa</span></h1>
+            <p>Platform AI-Powered e-commerce assistant untuk membantu Anda generate produk, kalkulasi biaya, analisis kompetitor, dan ekspor produk ke Shopee — semua 100% GRATIS!</p>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="num">10K+</div>
+                    <div class="label">Pengguna Aktif</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="num">100K+</div>
+                    <div class="label">Produk Generated</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="num">12</div>
+                    <div class="label">Fitur Unggulan</div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="hero-visual-inner">
+                <div class="icon-grid">
+                    <div class="icon-item"><i class="fas fa-magic"></i><span>Generator</span></div>
+                    <div class="icon-item"><i class="fas fa-brain"></i><span>AI Smart</span></div>
+                    <div class="icon-item"><i class="fas fa-calculator"></i><span>Kalkulator</span></div>
+                    <div class="icon-item"><i class="fas fa-file-excel"></i><span>Export</span></div>
+                    <div class="icon-item"><i class="fas fa-chart-line"></i><span>ROAS</span></div>
+                    <div class="icon-item"><i class="fas fa-robot"></i><span>Chatbot</span></div>
+                </div>
+            </div>
+            <div class="floating-card">
+                <i class="fas fa-star" style="color:#f5a623"></i>
+                <span style="font-size:13px;font-weight:600;color:var(--gray-700)">AI-Powered</span>
+            </div>
+            <div class="floating-card">
+                <i class="fas fa-shield-alt" style="color:#00aa5e"></i>
+                <span style="font-size:13px;font-weight:600;color:var(--gray-700)">100% Gratis</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== PENDAHULUAN ===== -->
+<section class="section section-alt" id="pendahuluan">
+    <div class="container">
+        <div class="section-header">
+            <div class="badge"><i class="fas fa-info-circle"></i> Pendahuluan</div>
+            <h2>Apa itu Warasa?</h2>
+            <p>Platform all-in-one untuk para seller e-commerce yang ingin meningkatkan produktivitas dan penjualan</p>
+            <div class="divider"></div>
+        </div>
+        <div class="detail-grid" style="margin-top:24px">
+            <div class="detail-content">
+                <p>Warasa adalah platform berbasis web yang dirancang khusus untuk membantu para pelaku e-commerce, terutama seller Shopee, dalam mengelola dan mengoptimalkan bisnis online mereka. Dengan dukungan teknologi AI, Warasa menyediakan berbagai alat canggih yang memudahkan Anda dalam:</p>
+                <div class="feature-list-compact" style="grid-template-columns:1fr;margin-top:16px">
+                    <div class="feature-item-compact">
+                        <div class="ficon"><i class="fas fa-magic"></i></div>
+                        <div><h4>Generate Produk</h4><p>Buat deskripsi produk menarik dengan AI</p></div>
+                    </div>
+                    <div class="feature-item-compact">
+                        <div class="ficon"><i class="fas fa-calculator"></i></div>
+                        <div><h4>Kalkulator Biaya</h4><p>Hitung ROAS dan biaya Shopee dengan akurat</p></div>
+                    </div>
+                    <div class="feature-item-compact">
+                        <div class="ficon"><i class="fas fa-file-export"></i></div>
+                        <div><h4>Export Produk</h4><p>Export langsung ke format Shopee & Excel</p></div>
+                    </div>
+                </div>
+            </div>
+            <div class="detail-content">
+                <div class="tip-box info">
+                    <i class="fas fa-lightbulb"></i>
+                    <div>
+                        <h4>Mulai Menggunakan</h4>
+                        <p>Kunjungi <strong>warasa.vercel.app</strong>, daftar akun gratis, dan langsung bisa menikmati semua fitur tanpa biaya sepeserpun!</p>
+                    </div>
+                </div>
+                <div class="tip-box success">
+                    <i class="fas fa-check-circle"></i>
+                    <div>
+                        <h4>Persyaratan Sistem</h4>
+                        <p>Browser modern (Chrome, Firefox, Edge, Safari) versi terbaru. Koneksi internet stabil. Tidak perlu install software tambahan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== TABLE OF CONTENTS ===== -->
+<section class="section" style="padding:60px 0 20px">
+    <div class="container">
+        <div class="toc">
+            <h3><i class="fas fa-list"></i> Daftar Isi</h3>
+            <div class="toc-grid">
+                <a href="#auth" class="toc-item"><span class="num">1</span> Autentikasi & Akun</a>
+                <a href="#dashboard" class="toc-item"><span class="num">2</span> Dashboard</a>
+                <a href="#generator" class="toc-item"><span class="num">3</span> Product Generator</a>
+                <a href="#products" class="toc-item"><span class="num">4</span> Manajemen Produk</a>
+                <a href="#export" class="toc-item"><span class="num">5</span> Export Produk</a>
+                <a href="#roas" class="toc-item"><span class="num">6</span> ROAS Calculator</a>
+                <a href="#shopee-fee" class="toc-item"><span class="num">7</span> Shopee Fee Calculator</a>
+                <a href="#chatbot" class="toc-item"><span class="num">8</span> AI Chatbot</a>
+                <a href="#profile" class="toc-item"><span class="num">9</span> Profil & Pengaturan</a>
+                <a href="#docs" class="toc-item"><span class="num">10</span> Dokumentasi</a>
+                <a href="#admin" class="toc-item"><span class="num">11</span> Panel Admin</a>
+                <a href="#faq" class="toc-item"><span class="num">12</span> FAQ & Bantuan</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ===== 1. AUTHENTICATION ===== -->
+<section class="section" id="auth">
+    <div class="container">
+        <div class="section-header">
+            <div class="badge"><i class="fas fa-lock"></i> Bab 1</div>
+            <h2>Autentikasi & Manajemen Akun</h2>
+            <p>Cara mendaftar, login, dan mengelola akun Warasa Anda</p>
+            <div class="divider"></div>
+        </div>
+        <div class="detail-grid">
+            <div class="detail-content">
+                <h3><i class="fas fa-user-plus"></i> Registrasi Akun</h3>
+                <p>Untuk mulai menggunakan Warasa, Anda perlu mendaftar akun terlebih dahulu. Proses registrasi cepat dan mudah.</p>
+                <ol class="detail-steps">
+                    <li>
+                        <strong>Buka Halaman Registrasi</strong>
+                        <span>Klik tombol "Daftar" atau "Mulai Gratis" di halaman utama, atau kunjungi langsung halaman <code>/register</code>.</span>
+                    </li>
+                    <li>
+                        <strong>Isi Data Diri</strong>
+                        <span>Masukkan nama lengkap, alamat email, password, dan konfirmasi password. Pastikan password minimal 8 karakter.</span>
+                    </li>
+                    <li>
+                        <strong>Verifikasi Email (Opsional)</strong>
+                        <span>Anda akan menerima email verifikasi. Klik link di email untuk memverifikasi akun. Fitur ini bisa dilewati untuk sementara.</span>
+                    </li>
+                    <li>
+                        <strong>Login & Mulai</strong>
+                        <span>Setelah registrasi berhasil, Anda akan diarahkan ke dashboard. Selamat! Anda siap menggunakan Warasa.</span>
+                    </li>
+                </ol>
+            </div>
+            <div class="detail-content">
+                <h3><i class="fas fa-sign-in-alt"></i> Login & Google OAuth</h3>
+                <p>Warasa mendukung dua metode login untuk kemudahan akses.</p>
+                <ol class="detail-steps">
+                    <li>
+                        <strong>Login Email/Password</strong>
+                        <span>Masukkan email dan password yang telah didaftarkan, lalu klik tombol "Login". Centang "Ingat Saya" untuk tetap login.</span>
+                    </li>
+                    <li>
+                        <strong>Login dengan Google</strong>
+                        <span>Klik tombol "Login dengan Google" untuk masuk menggunakan akun Google Anda. Proses lebih cepat tanpa perlu mengingat password tambahan.</span>
+                    </li>
+                    <li>
+                        <strong>Logout</strong>
+                        <span>Klik ikon profil di pojok kanan atas, lalu pilih "Logout" dari dropdown menu, atau klik tombol logout di sidebar dashboard.</span>
+                    </li>
+                    <li>
+                        <strong>Lupa Password</strong>
+                        <span>Hubungi admin untuk reset password jika mengalami kesulitan masuk ke akun.</span>
+                    </li>
+                </ol>
+                <div class="tip-box warning" style="margin-top:16px">
+                    <i class="fas fa-shield-alt"></i>
+                    <div>
+                        <h4>Keamanan Akun</h4>
+                        <p>Gunakan password yang kuat dan unik. Aktifkan verifikasi email untuk keamanan tambahan. Jangan pernah membagikan password Anda kepada siapapun.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ===== 2. DASHBOARD ===== -->
+<section class="section section-alt" id="dashboard">
+    <div class="container">
+        <div class="section-header">
+            <div class="badge"><i class="fas fa-chart-pie"></i> Bab 2</div>
+            <h2>Dashboard</h2>
+            <p>Pusat kendali untuk memantau performa bisnis e-commerce Anda secara real-time</p>
+            <div class="divider"></div>
+        </div>
+        <div class="features-grid" style="margin-bottom:40px">
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon"><i class="fas fa-box"></i></div>
+                <h3>Statistik Produk</h3>
+                <p>Lihat total produk, jumlah produk published dan draft dalam tampilan kartu statistik yang informatif.</p>
+                <div class="feature-tags">
+                    <span class="tag-primary">Real-time</span>
+                    <span class="tag-green">Akurat</span>
+                </div>
+            </div>
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>Grafik & Analytics</h3>
+                <p>Grafik produk per bulan (6 bulan terakhir) dan pie chart status produk yang divisualisasikan dengan ApexCharts.</p>
+                <div class="feature-tags">
+                    <span class="tag-blue">Visual</span>
+                    <span class="tag-yellow">Interaktif</span>
+                </div>
+            </div>
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                <h3>Quick Actions</h3>
+                <p>Akses cepat ke fitur-fitur utama: Quick Generate, Smart Generate, Manajemen Produk, dan Export Produk.</p>
+                <div class="feature-tags">
+                    <span class="tag-primary">Cepat</span>
+                    <span class="tag-green">Efisien</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-grid">
+            <div class="detail-content">
+                <p>Dashboard adalah halaman utama setelah login yang menampilkan ringkasan aktivitas bisnis Anda. Di sini Anda bisa melihat:</p>
+                <ol class="detail-steps">
+                    <li>
+                        <strong>Kartu Statistik</strong>
+                        <span>Total Produk (dengan breakdown Published/Draft), jumlah Project aktif, dan nilai Portfolio beserta rata-rata harga produk.</span>
+                    </li>
+                    <li>
+                        <strong>Grafik Produk per Bulan</strong>
+                        <span>Line chart yang menampilkan tren penambahan produk dalam 6 bulan terakhir, membantu Anda melihat perkembangan bisnis.</span>
+                    </li>
+                    <li>
+                        <strong>Status Produk</strong>
+                        <span>Donut chart yang menunjukkan komposisi status produk (Published vs Draft) secara visual.</span>
+                    </li>
+                    <li>
+                        <strong>Aktivitas Terkini</strong>
+                        <span>Log aktivitas terbaru seperti pembuatan produk, update, dan export yang dilakukan.</span>
+                    </li>
+                </ol>
+            </div>
+            <div class="detail-visual">
+                <div class="screenshot-placeholder">
+                    <div class="mock-header">
+                        <div class="dots"><span></span><span></span><span></span></div>
+                        <span class="mock-title">Dashboard - Warasa</span>
+                    </div>
+                    <div class="mock-body">
+                        <div class="mock-box" style="height:auto;background:transparent;flex-wrap:wrap;gap:12px;justify-content:flex-start">
+                            <div style="background:var(--gray-50);border-radius:12px;padding:16px;flex:1;min-width:120px;border:1px solid var(--gray-200)">
+                                <div style="font-size:11px;color:var(--gray-400);font-weight:600;text-transform:uppercase">Total Produk</div>
+                                <div style="font-size:28px;font-weight:800;color:var(--gray-900);margin-top:4px">24</div>
+                            </div>
+                            <div style="background:var(--gray-50);border-radius:12px;padding:16px;flex:1;min-width:120px;border:1px solid var(--gray-200)">
+                                <div style="font-size:11px;color:var(--gray-400);font-weight:600;text-transform:uppercase">Project</div>
+                                <div style="font-size:28px;font-weight:800;color:var(--gray-900);margin-top:4px">5</div>
+                            </div>
+                            <div style="background:var(--gray-50);border-radius:12px;padding:16px;flex:1;min-width:120px;border:1px solid var(--gray-200)">
+                                <div style="font-size:11px;color:var(--gray-400);font-weight:600;text-transform:uppercase">Portfolio</div>
+                                <div style="font-size:28px;font-weight:800;color:var(--primary);margin-top:4px">Rp 2,4jt</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ===== 3. PRODUCT GENERATOR ===== -->
+<section class="section" id="generator">
+    <div class="container">
+        <div class="section-header">
+            <div class="badge"><i class="fas fa-magic"></i> Bab 3</div>
+            <h2>Product Generator</h2>
+            <p>Buat deskripsi produk menarik dengan bantuan AI dalam hitungan detik</p>
+            <div class="divider"></div>
+        </div>
+
+        <!-- Quick Generate -->
+        <div class="detail-grid" style="margin-bottom:48px">
+            <div class="detail-content">
+                <h3><i class="fas fa-bolt"></i> Quick Generate</h3>
+                <p>Fitur Quick Generate memungkinkan Anda membuat deskripsi produk secara instan dengan mengisi informasi dasar produk. Cocok untuk pembuatan produk cepat dalam jumlah banyak.</p>
+                <ol class="detail-steps">
+                    <li>
+                        <strong>Isi Informasi Produk</strong>
+                        <span>Masukkan nama produk, kategori, harga, varian (ukuran/warna), dan pilih platform target (Shopee/Tokopedia/Lazada).</span>
+                    </li>
+                    <li>
+                        <strong>Upload CSV (Opsional)</strong>
+                        <span>Untuk pembuatan massal, upload file CSV yang berisi daftar produk. Sistem akan memproses dan menghasilkan deskripsi untuk setiap produk.</span>
+                    </li>
+                    <li>
+                        <strong>Generate dengan AI</strong>
+                        <span>Klik tombol "Generate" dan AI akan menghasilkan judul, deskripsi, keyword, dan poin keunggulan produk secara otomatis.</span>
+                    </li>
+                    <li>
+                        <strong>Review & Simpan</strong>
+                        <span>Tinjau hasil generate, lakukan edit jika diperlukan, lalu simpan produk ke database atau export langsung.</span>
+                    </li>
+                </ol>
+            </div>
+            <div class="detail-content">
+                <h3><i class="fas fa-brain"></i> Smart Generate</h3>
+                <p>Smart Generate adalah versi lanjutan dengan kemampuan analisis kompetitor dan optimasi SEO untuk hasil yang lebih maksimal.</p>
+                <ol class="detail-steps">
+                    <li>
+                        <strong>Upload Gambar (Opsional)</strong>
+                        <span>Upload gambar produk untuk analisis visual. AI akan mengenali produk dan memberikan rekomendasi berdasarkan gambar.</span>
+                    </li>
+                    <li>
+                        <strong>Analisis Kompetitor</strong>
+                        <span>Masukkan URL produk kompetitor atau keyword untuk dianalisis. AI akan memberikan insight tentang strategi kompetitor.</span>
+                    </li>
+                    <li>
+                        <strong>SEO Score</strong>
+                        <span>Fitur ini akan menilai kualitas SEO dari deskripsi produk yang dihasilkan dan memberikan saran perbaikan.</span>
+                    </li>
+                    <li>
+                        <strong>Generate & Optimasi</strong>
+                        <span>AI menghasilkan deskripsi yang sudah dioptimasi untuk SEO dan disesuaikan dengan analisis kompetitor.</span>
+                    </li>
+                </ol>
+                <div class="tip-box success" style="margin-top:16px">
+                    <i class="fas fa-trophy"></i>
+                    <div>
+                        <h4>Tips Penggunaan</h4>
+                        <p>Gunakan <strong>Quick Generate</strong> untuk produksi massal produk dengan kategori yang sudah dikenal. Gunakan <strong>Smart Generate</strong> saat memasuki niche baru atau ingin riset kompetitor.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fitur Pendukung Generator -->
+        <div class="feature-list-compact">
+            <div class="feature-item-compact">
+                <div class="ficon"><i class="fas fa-image"></i></div>
+                <div><h4>Image Tools</h4><p>Upload gambar, terapkan watermark, dan optimasi visual produk untuk toko online.</p></div>
+            </div>
+            <div class="feature-item-compact">
+                <div class="ficon"><i class="fas fa-chart-bar"></i></div>
+                <div><h4>Analisis Kompetitor</h4><p>Analisis produk kompetitor dari URL untuk mendapatkan insight harga, deskripsi, dan strategi.</p></div>
+            </div>
+            <div class="feature-item-compact">
+                <div class="ficon"><i class="fas fa-search"></i></div>
+                <div><h4>SEO Score</h4><p>Cek skor SEO deskripsi produk dan dapatkan rekomendasi perbaikan untuk ranking lebih baik.</p></div>
+            </div>
+            <div class="feature-item-compact">
+                <div class="ficon"><i class="fas fa-water"></i></div>
+                <div><h4>Watermark</h4><p>Apply watermark otomatis pada gambar produk untuk melindungi hak cipta.</p></div>
+            </div>
+            <div class="feature-item-compact">
+                <div class="ficon"><i class="fas fa-upload"></i></div>
+                <div><h4>CSV Upload</h4><p>Upload file CSV untuk generate produk secara massal dalam satu kali proses.</p></div>
+            </div>
+            <div class="feature-item-compact">
+                <div class="ficon"><i class="fas fa-tags"></i></div>
+                <div><h4>Multi-Platform</h4><p>Optimasi deskripsi untuk berbagai platform: Shopee, Tokopedia, Lazada, dan lainnya.</p></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ===== 4. MANAJEMEN PRODUK ===== -->
+<section class="section section-alt" id="products">
+    <div class="container">
+        <div class="section-header">
+            <div class="badge"><i class="fas fa-cubes"></i> Bab 4</div>
+            <h2>Manajemen Produk</h2>
+            <p>Kelola katalog produk dengan fitur CRUD lengkap, kategori, dan import/export</p>
+            <div class="divider"></div>
+        </div>
+        <div class="features-grid" style="margin-bottom:40px">
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon"><i class="fas fa-plus-circle"></i></div>
+                <h3>CRUD Produk</h3>
+                <p>Buat, baca, update, dan hapus produk dengan mudah. Setiap produk memiliki UUID unik untuk identifikasi.</p>
+                <div class="feature-tags">
+                    <span class="tag-primary">Create</span>
+                    <span class="tag-blue">Read</span>
+                    <span class="tag-yellow">Update</span>
+                    <span class="tag-green">Delete</span>
+                </div>
+            </div>
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon"><i class="fas fa-tags"></i></div>
+                <h3>Kategori Produk</h3>
+                <p>Atur produk dalam kategori yang terstruktur. Kategori bisa diatur aktif/non-aktif oleh admin.</p>
+                <div class="feature-tags">
+                    <span class="tag-green">Terstruktur</span>
+                    <span class="tag-blue">Hierarki</span>
+                </div>
+            </div>
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon"><i class="fas fa-tasks"></i></div>
+                <h3>Bulk Actions</h3>
+                <p>Lakukan aksi massal seperti publish, draft, archive, atau delete banyak produk sekaligus.</p>
+                <div class="feature-tags">
+                    <span class="tag-primary">Massal</span>
+                    <span class="tag-yellow">Efisien</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-grid">
+            <div class="detail-content">
+                <h3><i class="fas fa-list-ul"></i> Fitur Detail Produk</h3>
+                <ol class="detail-steps">
+                    <li>
+                        <strong>Daftar Produk</strong>
+                        <span>Lihat semua produk dalam tampilan tabel dengan informasi: nama, kategori, harga, status (Published/Draft), dan aksi.</span>
+                    </li>
+                    <li>
+                        <strong>Detail Produk</strong>
+                        <span>Halaman detail menampilkan informasi lengkap produk termasuk gambar, deskripsi, harga, varian, dan status.</span>
+                    </li>
+                    <li>
+                        <strong>Edit Produk</strong>
+                        <span>Ubah informasi produk kapan saja. Sistem akan mencatat riwayat perubahan produk.</span>
+                    </li>
+                    <li>
+                        <strong>Duplicate Produk</strong>
+                        <span>Duplikat produk yang sudah ada untuk membuat variasi tanpa harus mengisi dari awal.</span>
+                    </li>
+                    <li>
+                        <strong>Archive / Toggle Status</strong>
+                        <span>Arsipkan produk yang tidak aktif atau toggle status antara Published dan Draft dengan satu klik.</span>
+                    </li>
+                    <li>
+                        <strong>Filter & Pencarian</strong>
+                        <span>Cari produk berdasarkan nama, filter berdasarkan kategori, atau urutkan berdasarkan harga/status.</span>
+                    </li>
+                </ol>
+            </div>
+            <div class="detail-content">
+                <div class="tip-box info">
+                    <i class="fas fa-lightbulb"></i>
+                    <div>
+                        <h4>Tips Manajemen Produk</h4>
+                        <p>Gunakan kategori untuk mengelompokkan produk sejenis. Manfaatkan fitur duplicate untuk membuat variasi ukuran/warna. Archive produk yang habis daripada menghapusnya agar data tetap tersimpan.</p>
+                    </div>
+                </div>
+                <h3 style="margin-top:24px"><i class="fas fa-folder"></i> Manajemen Kategori</h3>
+                <p>Kategori produk dikelola oleh admin melalui panel admin. Pengguna bisa memilih kategori saat membuat atau mengedit produk. Kategori yang dinonaktifkan tidak akan muncul di pilihan.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ===== 5. EXPORT PRODUK ===== -->
+<section class="section" id="export">
+    <div class="container">
+        <div class="section-header">
+            <div class="badge"><i class="fas fa-file-export"></i> Bab 5</div>
+            <h2>Export Produk</h2>
+            <p>Export produk Anda ke berbagai format yang kompatibel dengan platform e-commerce</p>
+            <div class="divider"></div>
+        </div>
+        <div class="detail-grid">
+            <div class="detail-content">
+                <h3><i class="fas fa-file-excel"></i> Export ke Excel & Shopee</h3>
+                <p>Warasa menyediakan fitur export yang fleksibel untuk memudahkan Anda mengelola data produk di luar platform.</p>
+                <ol class="detail-steps">
+                    <li>
+                        <strong>Export ke Excel</strong>
+                        <span>Export seluruh produk atau produk terpilih ke format Excel (.xlsx) yang bisa dibuka di Microsoft Excel, Google Sheets, atau LibreOffice.</span>
+                    </li>
+                    <li>
+                        <strong>Export ke Shopee</strong>
+                        <span>Export produk langsung ke format yang kompatibel dengan Shopee Mass Upload. Format ini sudah disesuaikan dengan template resmi Shopee.</span>
+                    </li>
+                    <li>
+                        <strong>Export Single Produk</strong>
+                        <span>Export satu produk tertentu ke format Shopee Single Upload untuk pengaturan yang lebih detail per produk.</span>
+                    </li>
+                    <li>
+                        <strong>Filter Export</strong>
+                        <span>Pilih produk berdasarkan kategori, status, atau range harga sebelum melakukan export untuk hasil yang lebih spesifik.</span>
+                    </li>
+                </ol>
+                <div class="tip-box success" style="margin-top:16px">
+                    <i class="fas fa-check-circle"></i>
+                    <div>
+                        <h4>Format Didukung</h4>
+                        <p>Excel (.xlsx) untuk backup data dan analisis. Format Shopee CSV untuk upload massal ke Seller Center Shopee.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="detail-visual">
+                <div class="screenshot-placeholder">
+                    <div class="mock-header">
+                        <div class="dots"><span></span><span></span><span></span></div>
+                        <span class="mock-title">Product Export</span>
+                    </div>
+                    <div class="mock-body">
+                        <div class="mock-box" style="background:var(--gray-50);flex-direction:column;gap:8px;height:auto;padding:16px">
+                            <div style="display:flex;gap:10px;width:100%">
+                                <div style="flex:1;padding:10px;background:white;border-radius:8px;border:1px solid var(--gray-200);display:flex;align-items:center;gap:8px">
+                                    <i class="fas fa-file-excel" style="color:#10b981;font-size:18px"></i>
+                                    <div style="text-align:left"><div style="font-size:13px;font-weight:600;color:var(--gray-800)">Excel</div><div style="font-size:11px;color:var(--gray-400)">.xlsx</div></div>
+                                </div>
+                                <div style="flex:1;padding:10px;background:white;border-radius:8px;border:1px solid var(--gray-200);display:flex;align-items:center;gap:8px">
+                                    <i class="fas fa-shopping-cart" style="color:#ee4d2d;font-size:18px"></i>
+                                    <div style="text-align:left"><div style="font-size:13px;font-weight:600;color:var(--gray-800)">Shopee</div><div style="font-size:11px;color:var(--gray-400)">CSV</div></div>
+                                </div>
+                            </div>
+                            <div style="width:100%;padding:8px 12px;background:white;border-radius:8px;border:1px solid var(--gray-200);display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray-600)">
+                                <i class="fas fa-filter" style="color:var(--gray-400)"></i> Filter: Semua Kategori
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ===== 6. ROAS CALCULATOR ===== -->
+<section class="section section-alt" id="roas">
+    <div class="container">
+        <div class="section-header">
+            <div class="badge"><i class="fas fa-file-excel"></i> Bab 6</div>
+            <h2>ROAS Calculator</h2>
+            <p>Kalkulasi Return on Ad Spend untuk mengukur efektivitas iklan Anda</p>
+            <div class="divider"></div>
+        </div>
+        <div class="detail-grid">
+            <div class="detail-content">
+                <h3><i class="fas fa-chart-line"></i> Apa itu ROAS?</h3>
+                <p>ROAS (Return on Ad Spend) adalah metrik yang mengukur pendapatan yang dihasilkan untuk setiap rupiah yang dibelanjakan pada iklan. ROAS Calculator Warasa membantu Anda menghitung dan menganalisis performa iklan dengan mudah.</p>
+                <ol class="detail-steps">
+                    <li>
+                        <strong>Masukkan Data Iklan</strong>
+                        <span>Input total biaya iklan yang telah dikeluarkan dan total pendapatan yang dihasilkan dari iklan tersebut.</span>
+                    </li>
+                    <li>
+                        <strong>Kalkulasi Otomatis</strong>
+                        <span>Sistem akan menghitung ROAS secara otomatis dengan rumus: ROAS = Pendapatan ÷ Biaya Iklan.</span>
+                    </li>
+                    <li>
+                        <strong>Analisis Hasil</strong>
+                        <span>Lihat hasil kalkulasi lengkap dengan indikator performa. ROAS > 1 berarti menguntungkan, ROAS < 1 berarti merugi.</span>
+                    </li>
+                    <li>
+                        <strong>Rekomendasi</strong>
+                        <span>Dapatkan saran optimasi berdasarkan hasil kalkulasi untuk meningkatkan efektivitas iklan Anda.</span>
+                    </li>
+                </ol>
+            </div>
+            <div class="detail-content">
+                <div class="tip-box info">
+                    <i class="fas fa-calculator"></i>
+                    <div>
+                        <h4>Rumus ROAS</h4>
+                        <p><strong>ROAS = Total Pendapatan ÷ Total Biaya Iklan</strong><br>Contoh: Rp 5.000.000 ÷ Rp 1.000.000 = 5x (setiap Rp 1 menghasilkan Rp 5)</p>
+                    </div>
+                </div>
+                <div class="tip-box warning">
+                    <i class="fas fa-chart-simple"></i>
+                    <div>
+                        <h4>Interpretasi ROAS</h4>
+                        <p><strong>1x - 3x:</strong> Perlu optimasi &nbsp;|&nbsp; <strong>3x - 5x:</strong> Cukup baik &nbsp;|&nbsp; <strong>5x+:</strong> Sangat baik</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ===== 7. SHOPEE FEE CALCULATOR ===== -->
+<section class="section" id="shopee-fee">
+    <div class="container">
+        <div class="section-header">
+            <div class="badge"><i class="fas fa-calculator"></i> Bab 7</div>
+            <h2>Shopee Fee Calculator</h2>
+            <p>Hitung semua biaya yang terkait dengan penjualan di Shopee secara detail</p>
+            <div class="divider"></div>
+        </div>
+        <div class="detail-grid">
+            <div class="detail-content">
+                <h3><i class="fas fa-percent"></i> Kalkulasi Biaya Lengkap</h3>
+                <p>Shopee Fee Calculator membantu Anda menghitung estimasi biaya penjualan di Shopee termasuk komisi, biaya layanan, biaya promo, dan pajak.</p>
+                <ol class="detail-steps">
+                    <li>
+                        <strong>Masukkan Harga Produk</strong>
+                        <span>Input harga jual produk yang akan dihitung estimasi biayanya.</span>
+                    </li>
+                    <li>
+                        <strong>Pilih Kategori</strong>
+                        <span>Pilih kategori produk karena setiap kategori memiliki persentase komisi yang berbeda di Shopee.</span>
+                    </li>
+                    <li>
+                        <strong>Hitung Biaya</strong>
+                        <span>Sistem akan menghitung secara detail: Komisi Shopee, Biaya Layanan, Biaya Promo (jika ada), Pajak, dan biaya lainnya.</span>
+                    </li>
+                    <li>
+                        <strong>Lihat Rincian</strong>
+                        <span>Dapatkan breakdown lengkap biaya per komponen dan estimasi pendapatan bersih yang akan Anda terima.</span>
+                    </li>
+                </ol>
+            </div>
+            <div class="detail-content">
+                <div class="tip-box success">
+                    <i class="fas fa-database"></i>
+                    <div>
+                        <h4>Konfigurasi Fee Fleksibel</h4>
+                        <p>Persentase fee bisa dikonfigurasi oleh admin melalui panel admin. Admin bisa mengupdate persentase komisi, biaya layanan, dan biaya lainnya sesuai kebijakan Shopee terbaru.</p>
+                    </div>
+                </div>
+                <div class="feature-list-compact" style="grid-template-columns:1fr;margin-top:16px">
+                    <div class="feature-item-compact">
+                        <div class="ficon"><i class="fas fa-percentage"></i></div>
+                        <div><h4>Komisi Shopee</h4><p>Bervariasi per kategori produk</p></div>
+                    </div>
+                    <div class="feature-item-compact">
+                        <div class="ficon"><i class="fas fa-hand-holding-usd"></i></div>
+                        <div><h4>Biaya Layanan</h4><p>Biaya tetap per transaksi</p></div>
+                    </div>
+                    <div class="feature-item-compact">
+                        <div class="ficon"><i class="fas fa-receipt"></i></div>
+                        <div><h4>Pajak</h4><p>PPN dan PPh sesuai ketentuan</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ===== 8. AI CHATBOT ===== -->
+<section class="section section-alt" id="chatbot">
+    <div class="container">
+        <div class="section-header">
+            <div class="badge"><i class="fas fa-robot"></i> Bab 8</div>
+            <h2>AI Chatbot Assistant</h2>
+            <p>Asisten AI yang siap membantu Anda kapan saja dengan berbagai pertanyaan seputar e-commerce</p>
+            <div class="divider"></div>
+        </div>
+        <div class="detail-grid">
+            <div class="detail-content">
+                <h3><i class="fas fa-comment-dots"></i> Fitur Chatbot</h3>
+                <p>Chatbot Warasa adalah asisten virtual berbasis AI yang dapat membantu Anda menjawab pertanyaan, memberikan saran, dan membantu menyelesaikan masalah seputar bisnis online.</p>
+                <ol class="detail-steps">
+                    <li>
+                        <strong>Mulai Chat</strong>
+                        <span>Buka halaman Chatbot dari sidebar dashboard. Tanyakan apapun seputar e-commerce, strategi penjualan, atau cara menggunakan fitur Warasa.</span>
+                    </li>
+                    <li>
+                        <strong>Riwayat Sesi</strong>
+                        <span>Chatbot menyimpan riwayat percakapan dalam sesi-sesi. Anda bisa melanjutkan percakapan sebelumnya kapan saja.</span>
+                    </li>
+                    <li>
+                        <strong>Manajemen Sesi</strong>
+                        <span>Lihat daftar sesi chat, load sesi tertentu untuk melanjutkan percakapan, hapus sesi yang tidak diperlukan, atau export riwayat chat.</span>
+                    </li>
+                    <li>
+                        <strong>Export Chat</strong>
+                        <span>Export seluruh riwayat percakapan dalam sesi tertentu untuk dokumentasi atau referensi di kemudian hari.</span>
+                    </li>
+                </ol>
+            </div>
+            <div class="detail-content">
+                <div class="tip-box info">
+                    <i class="fas fa-lightbulb"></i>
+                    <div>
+                        <h4>Contoh Pertanyaan</h4>
+                        <p>"Bagaimana cara optimasi deskripsi produk?" • "Tips meningkatkan rating toko" • "Strategi harga kompetitif" • "Cara hitung biaya Shopee" • dll.</p>
+                    </div>
+                </div>
+                <h3 style="margin-top:24px"><i class="fas fa-clock"></i> Riwayat & Sesi</h3>
+                <p>Setiap percakapan dengan chatbot disimpan dalam sesi terpisah. Anda bisa memiliki banyak sesi untuk topik yang berbeda. Fitur ini memudahkan Anda untuk kembali ke diskusi sebelumnya tanpa harus mengulang dari awal.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ===== 9. PROFILE ===== -->
+<section class="section" id="profile">
+    <div class="container">
+        <div class="section-header">
+            <div class="badge"><i class="fas fa-user-cog"></i> Bab 9</div>
+            <h2>Profil & Pengaturan</h2>
+            <p>Kelola data diri dan pengaturan akun Anda</p>
+            <div class="divider"></div>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon"><i class="fas fa-user-edit"></i></div>
+                <h3>Edit Profil</h3>
+                <p>Ubah nama, email, dan informasi profil lainnya. Perubahan akan langsung tersimpan dan tampil di seluruh platform.</p>
+                <div class="feature-tags"><span class="tag-primary">Profil</span></div>
+            </div>
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon"><i class="fas fa-key"></i></div>
+                <h3>Ubah Password</h3>
+                <p>Perbarui password akun Anda kapan saja demi keamanan. Masukkan password lama dan password baru untuk mengubah.</p>
+                <div class="feature-tags"><span class="tag-yellow">Keamanan</span></div>
+            </div>
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon"><i class="fas fa-camera"></i></div>
+                <h3>Upload Avatar</h3>
+                <p>Upload foto profil atau avatar untuk personalisasi akun. Avatar akan ditampilkan di navbar dan sidebar dashboard.</p>
+                <div class="feature-tags"><span class="tag-blue">Avatar</span></div>
+            </div>
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon"><i class="fas fa-envelope"></i></div>
+                <h3>Verifikasi Email</h3>
+                <p>Kirim ulang email verifikasi jika belum menerima atau kehilangan email verifikasi sebelumnya.</p>
+                <div class="feature-tags"><span class="tag-green">Verifikasi</span></div>
+            </div>
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon"><i class="fas fa-trash-alt"></i></div>
+                <h3>Hapus Akun</h3>
+                <p>Hapus akun dan seluruh data Anda secara permanen. Tindakan ini tidak dapat dibatalkan.</p>
+                <div class="feature-tags"><span class="tag-yellow">Destruktif</span></div>
+            </div>
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon"><i class="fas fa-bell"></i></div>
+                <h3>Notifikasi</h3>
+                <p>Dapatkan notifikasi tentang aktivitas akun, perubahan status produk, dan informasi penting lainnya.</p>
+                <div class="feature-tags"><span class="tag-blue">Notifikasi</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ===== 10. DOKUMENTASI ===== -->
+<section class="section section-alt" id="docs">
+    <div class="container">
+        <div class="section-header">
+            <div class="badge"><i class="fas fa-book"></i> Bab 10</div>
+            <h2>Dokumentasi Publik</h2>
+            <p>Pusat dokumentasi dan panduan penggunaan fitur-fitur Warasa</p>
+            <div class="divider"></div>
+        </div>
+        <div class="detail-grid">
+            <div class="detail-content">
+                <h3><i class="fas fa-book-open"></i> Halaman Dokumentasi</h3>
+                <p>Warasa menyediakan halaman dokumentasi publik yang dapat diakses oleh semua pengguna (tanpa perlu login) melalui menu "Dokumentasi" di navbar utama.</p>
+                <ol class="detail-steps">
+                    <li>
+                        <strong>Akses Dokumentasi</strong>
+                        <span>Klik menu "Dokumentasi" di navbar utama atau kunjungi halaman <code>/docs</code>. Tersedia untuk umum tanpa login.</span>
+                    </li>
+                    <li>
+                        <strong>Jelajahi Artikel</strong>
+                        <span>Daftar artikel dokumentasi ditampilkan dalam format yang rapi dan mudah dinavigasi. Setiap artikel bisa memiliki status published atau draft.</span>
+                    </li>
+                    <li>
+                        <strong>Baca Detail</strong>
+                        <span>Klik judul artikel untuk membaca konten lengkap. Artikel bisa berisi teks, gambar, dan kode contoh.</span>
+                    </li>
+                    <li>
+                        <strong>Admin Mengelola</strong>
+                        <span>Admin dapat membuat, mengedit, dan mengatur status publikasi dokumentasi melalui panel admin.</span>
+                    </li>
+                </ol>
+            </div>
+            <div class="detail-content">
+                <div class="tip-box success">
+                    <i class="fas fa-star"></i>
+                    <div>
+                        <h4>Dokumentasi Interaktif</h4>
+                        <p>Dokumentasi Warasa dirancang interaktif dengan navigasi yang intuitif. Admin dapat menambahkan konten multimedia seperti gambar, tabel, dan cuplikan kode untuk memperjelas panduan.</p>
+                    </div>
+                </div>
+                <h3 style="margin-top:24px"><i class="fas fa-pen-fancy"></i> Manajemen oleh Admin</h3>
+                <p>Admin dapat mengelola konten dokumentasi melalui panel admin dengan fitur:</p>
+                <ul style="list-style:none;margin-top:12px">
+                    <li style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--gray-100);font-size:14px;color:var(--gray-600)">
+                        <i class="fas fa-plus-circle" style="color:var(--primary)"></i> Tambah artikel baru
+                    </li>
+                    <li style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--gray-100);font-size:14px;color:var(--gray-600)">
+                        <i class="fas fa-edit" style="color:var(--accent-yellow)"></i> Edit konten dengan editor rich-text
+                    </li>
+                    <li style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--gray-100);font-size:14px;color:var(--gray-600)">
+                        <i class="fas fa-toggle-on" style="color:var(--accent-green)"></i> Toggle published/draft
+                    </li>
+                    <li style="display:flex;align-items:center;gap:10px;padding:8px 0;font-size:14px;color:var(--gray-600)">
+                        <i class="fas fa-image" style="color:var(--accent-blue)"></i> Upload gambar untuk konten
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ===== 11. ADMIN PANEL ===== -->
+<section class="section" id="admin">
+    <div class="container">
+        <div class="section-header">
+            <div class="badge"><i class="fas fa-shield-alt"></i> Bab 11</div>
+            <h2>Panel Admin</h2>
+            <p>Fitur-fitur khusus untuk administrator dalam mengelola platform Warasa</p>
+            <div class="divider"></div>
+        </div>
+
+        <!-- Admin Cards -->
+        <div class="features-grid" style="margin-bottom:40px">
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon" style="background:#fef2f2;color:#ef4444"><i class="fas fa-users-cog"></i></div>
+                <h3>Manajemen User</h3>
+                <p>Lihat daftar user, detail pengguna, suspend/activate akun, dan hapus akun pengguna jika diperlukan.</p>
+                <div class="feature-tags"><span class="tag-primary">User</span><span class="tag-yellow">Suspend</span></div>
+            </div>
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon" style="background:#eff6ff;color:#3b82f6"><i class="fas fa-tags"></i></div>
+                <h3>Kategori Produk</h3>
+                <p>CRUD kategori produk. Atur urutan, aktif/non-aktifkan kategori. Kategori non-aktif tidak muncul di pilihan user.</p>
+                <div class="feature-tags"><span class="tag-blue">Kategori</span><span class="tag-green">CRUD</span></div>
+            </div>
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon" style="background:#fffbeb;color:#f59e0b"><i class="fas fa-key"></i></div>
+                <h3>API Keys</h3>
+                <p>Kelola API key untuk layanan AI. Tambah, edit, hapus key, dan cek status key (aktif/tidak) secara real-time.</p>
+                <div class="feature-tags"><span class="tag-yellow">API</span><span class="tag-blue">AI</span></div>
+            </div>
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon" style="background:#ecfdf5;color:#10b981"><i class="fas fa-eye"></i></div>
+                <h3>Menu Visibility</h3>
+                <p>Atur visibilitas menu sidebar untuk user. Toggle menu mana yang muncul atau disembunyikan, atur urutan tampilan.</p>
+                <div class="feature-tags"><span class="tag-green">Menu</span><span class="tag-primary">Visibilitas</span></div>
+            </div>
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon" style="background:#fef2f2;color:#ef4444"><i class="fas fa-calculator"></i></div>
+                <h3>Shopee Fee Config</h3>
+                <p>Atur persentase komisi Shopee per kategori, biaya layanan, biaya promo, dan parameter fee lainnya. Reset ke default jika perlu.</p>
+                <div class="feature-tags"><span class="tag-yellow">Fee</span><span class="tag-blue">Shopee</span></div>
+            </div>
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon" style="background:#eff6ff;color:#3b82f6"><i class="fas fa-cog"></i></div>
+                <h3>System Settings</h3>
+                <p>Konfigurasi pengaturan sistem seperti nama aplikasi, deskripsi, logo, favicon, dan parameter global lainnya.</p>
+                <div class="feature-tags"><span class="tag-primary">Sistem</span><span class="tag-green">Konfigurasi</span></div>
+            </div>
+        </div>
+
+        <!-- Admin Detail Sections -->
+        <div class="detail-grid" style="margin-bottom:32px">
+            <div class="detail-content">
+                <h3><i class="fas fa-users"></i> Manajemen User</h3>
+                <p>Panel admin menyediakan kontrol penuh atas pengguna platform:</p>
+                <ol class="detail-steps">
+                    <li><strong>Daftar User</strong><span>Tabel lengkap semua pengguna terdaftar dengan informasi nama, email, status, dan tanggal daftar.</span></li>
+                    <li><strong>Detail User</strong><span>Lihat informasi detail pengguna termasuk produk yang dimiliki dan aktivitas terkini.</span></li>
+                    <li><strong>Suspend / Activate</strong><span>Non-aktifkan sementara akun pengguna yang melanggar aturan, atau aktifkan kembali.</span></li>
+                    <li><strong>Hapus User</strong><span>Hapus akun pengguna secara permanen dari sistem (tidak bisa dibatalkan).</span></li>
+                </ol>
+            </div>
+            <div class="detail-content">
+                <h3><i class="fas fa-key"></i> Manajemen API Keys</h3>
+                <p>API Keys digunakan untuk mengakses layanan AI (seperti OpenAI, Gemini, dll):</p>
+                <ol class="detail-steps">
+                    <li><strong>Tambah API Key</strong><span>Masukkan nama layanan (misal: OpenAI) dan key value. Pilih provider yang sesuai.</span></li>
+                    <li><strong>Cek Status</strong><span>Fitur "Check Now" akan menguji apakah API key masih valid dan aktif bekerja.</span></li>
+                    <li><strong>Edit / Hapus</strong><span>Update key jika expired atau hapus key yang tidak lagi digunakan.</span></li>
+                </ol>
+                <div class="tip-box warning" style="margin-top:16px">
+                    <i class="fas fa-shield-alt"></i>
+                    <div><h4>Keamanan API Key</h4><p>Simpan API key dengan aman. Jangan pernah membagikan key kepada pihak yang tidak berwenang.</p></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-grid" style="margin-bottom:32px">
+            <div class="detail-content">
+                <h3><i class="fas fa-eye"></i> Menu Visibility</h3>
+                <p>Kontrol tampilan menu di sidebar dashboard pengguna. Fitur ini memungkinkan admin untuk:</p>
+                <ul style="list-style:none;margin-top:12px">
+                    <li style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--gray-100);font-size:14px;color:var(--gray-600)">
+                        <i class="fas fa-toggle-on" style="color:var(--accent-green)"></i> Toggle visibilitas setiap menu (show/hide)
+                    </li>
+                    <li style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--gray-100);font-size:14px;color:var(--gray-600)">
+                        <i class="fas fa-arrows-alt-v" style="color:var(--primary)"></i> Atur urutan tampilan menu (sort order)
+                    </li>
+                    <li style="display:flex;align-items:center;gap:10px;padding:8px 0;font-size:14px;color:var(--gray-600)">
+                        <i class="fas fa-save" style="color:var(--accent-blue)"></i> Simpan perubahan secara massal
+                    </li>
+                </ul>
+            </div>
+            <div class="detail-content">
+                <h3><i class="fas fa-calculator"></i> Shopee Fee Configuration</h3>
+                <p>Atur parameter fee Shopee yang digunakan oleh Shopee Fee Calculator:</p>
+                <ol class="detail-steps">
+                    <li><strong>Komisi per Kategori</strong><span>Atur persentase komisi untuk setiap kategori produk (misal: Fashion 5%, Elektronik 3%).</span></li>
+                    <li><strong>Biaya Layanan</strong><span>Konfigurasi biaya layanan tetap per transaksi.</span></li>
+                    <li><strong>Biaya Promo & Pajak</strong><span>Atur persentase biaya promo dan pajak yang berlaku.</span></li>
+                    <li><strong>Reset ke Default</strong><span>Kembalikan semua konfigurasi fee ke nilai default jika terjadi kesalahan pengaturan.</span></li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="detail-grid">
+            <div class="detail-content">
+                <h3><i class="fas fa-cog"></i> System Settings</h3>
+                <p>Pengaturan global untuk aplikasi Warasa:</p>
+                <ol class="detail-steps">
+                    <li><strong>Nama Aplikasi</strong><span>Ubah nama aplikasi yang tampil di title bar dan header.</span></li>
+                    <li><strong>Deskripsi</strong><span>Atur meta deskripsi untuk SEO halaman utama.</span></li>
+                    <li><strong>Logo & Favicon</strong><span>Upload logo dan favicon untuk branding aplikasi.</span></li>
+                    <li><strong>Pengaturan Lainnya</strong><span>Konfigurasi parameter global seperti pagination, default status, dll.</span></li>
+                </ol>
+            </div>
+            <div class="detail-content">
+                <h3><i class="fas fa-book"></i> Dokumentasi Management</h3>
+                <p>Admin dapat mengelola konten dokumentasi publik melalui panel admin:</p>
+                <ol class="detail-steps">
+                    <li><strong>Tambah Artikel</strong><span>Buat artikel dokumentasi baru dengan judul, slug, konten (rich text), dan gambar.</span></li>
+                    <li><strong>Edit / Hapus</strong><span>Ubah konten artikel yang sudah ada atau hapus jika tidak relevan.</span></li>
+                    <li><strong>Published / Draft</strong><span>Atur status artikel. Hanya artikel published yang tampil di halaman publik.</span></li>
+                    <li><strong>Upload Gambar</strong><span>Sisipkan gambar ke dalam konten dokumentasi untuk ilustrasi yang lebih jelas.</span></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ===== 12. FAQ ===== -->
+<section class="section section-alt" id="faq">
+    <div class="container">
+        <div class="section-header">
+            <div class="badge"><i class="fas fa-question-circle"></i> Bab 12</div>
+            <h2>FAQ & Bantuan</h2>
+            <p>Pertanyaan yang sering diajukan seputar penggunaan Warasa</p>
+            <div class="divider"></div>
+        </div>
+        <div class="features-grid" style="grid-template-columns:1fr 1fr">
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon"><i class="fas fa-question"></i></div>
+                <h3>Apakah Warasa benar-benar gratis?</h3>
+                <p>Ya! Warasa 100% gratis untuk semua fitur. Tidak ada biaya tersembunyi atau batasan fitur untuk pengguna free.</p>
+            </div>
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon"><i class="fas fa-question"></i></div>
+                <h3>Bagaimana cara mulai menggunakan?</h3>
+                <p>Daftar akun gratis, login, dan langsung bisa mengakses semua fitur dari dashboard. Tidak perlu instalasi apapun.</p>
+            </div>
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon"><i class="fas fa-question"></i></div>
+                <h3>Apakah data saya aman?</h3>
+                <p>Ya, data Anda disimpan dengan aman di database terenkripsi. Kami tidak membagikan data pengguna ke pihak ketiga.</p>
+            </div>
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon"><i class="fas fa-question"></i></div>
+                <h3>Bisa export ke Shopee langsung?</h3>
+                <p>Ya, format export sudah disesuaikan dengan template Shopee Mass Upload. Tinggal upload ke Seller Center Shopee.</p>
+            </div>
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon"><i class="fas fa-question"></i></div>
+                <h3>Browser apa yang didukung?</h3>
+                <p>Chrome, Firefox, Safari, dan Edge versi terbaru. Pastikan JavaScript aktif untuk pengalaman terbaik.</p>
+            </div>
+            <div class="feature-card" style="margin:0">
+                <div class="feature-icon"><i class="fas fa-question"></i></div>
+                <h3>Bagaimana cara menghubungi admin?</h3>
+                <p>Kunjungi halaman Kontak melalui menu FAQ atau hubungi langsung melalui email yang tercantum di halaman tersebut.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="nav-logo" style="color:white">
+                    <div class="logo-icon">W</div>
+                    Warasa
+                </div>
+                <p>Platform AI-Powered e-commerce assistant untuk membantu para seller meningkatkan produktivitas dan penjualan. 100% GRATIS!</p>
+            </div>
+            <div>
+                <h4>Fitur</h4>
+                <ul>
+                    <li><a href="#generator">Product Generator</a></li>
+                    <li><a href="#roas">ROAS Calculator</a></li>
+                    <li><a href="#shopee-fee">Shopee Fee Calc.</a></li>
+                    <li><a href="#chatbot">AI Chatbot</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Bantuan</h4>
+                <ul>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#docs">Dokumentasi</a></li>
+                    <li><a href="#pendahuluan">Panduan</a></li>
+                    <li><a href="#admin">Admin Panel</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Kontak</h4>
+                <ul>
+                    <li><a href="#"><i class="fas fa-envelope"></i> support@warasa.com</a></li>
+                    <li><a href="#"><i class="fas fa-globe"></i> warasa.vercel.app</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 Warasa. All rights reserved. Made with <i class="fas fa-heart" style="color:#ef4444"></i> for sellers.</span>
+            <div class="footer-socials">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- BACK TO TOP -->
+<button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<script>
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 20);
+        const btn = document.getElementById('backToTop');
+        btn.classList.toggle('visible', window.scrollY > 500);
+    });
+
+    // Back to top
+    document.getElementById('backToTop').addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Mobile nav toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    navToggle.addEventListener('click', () => {
+        navToggle.classList.toggle('active');
+        navLinks.classList.toggle('open');
+    });
+    // Close nav on link click
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            navToggle.classList.remove('active');
+            navLinks.classList.remove('open');
+        });
+    });
+
+    // Active nav link on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navAnchors = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const top = section.offsetTop - 120;
+            if (window.scrollY >= top) current = section.getAttribute('id');
+        });
+        navAnchors.forEach(a => {
+            a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+        });
+    });
+
+    // Fade-in animation on scroll
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Add fade-in to feature cards
+    document.querySelectorAll('.feature-card, .feature-item-compact, .detail-grid').forEach(el => {
+        el.classList.add('fade-in');
+        observer.observe(el);
+    });
+
+    // Smooth scroll for all anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
